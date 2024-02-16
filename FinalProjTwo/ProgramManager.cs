@@ -1,4 +1,4 @@
-namespace MyGame;
+namespace DrawingProgram;
 
 public class ProgramManager
 {
@@ -26,13 +26,16 @@ public class ProgramManager
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.White);
-        Raylib.DrawTexture(Raylib.LoadTextureFromImage(canvas), 0, 0, Color.White);
+        Texture2D canvasTexture = Raylib.LoadTextureFromImage(canvas);
+        Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
         Raylib.EndDrawing();
+        Raylib.UnloadTexture(canvasTexture);
     }
 
     private void Logic()
     {
         pencil.Draw(Color.Black);
+        pencil.UndoStroke();
     }
 
     public void Run()

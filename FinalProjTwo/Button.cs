@@ -1,4 +1,4 @@
-namespace MyGame;
+namespace DrawingProgram;
 
 public class Button : IClickListener
 {
@@ -6,6 +6,6 @@ public class Button : IClickListener
     
     public void OnClick()
     {
-        
+
     }
 }

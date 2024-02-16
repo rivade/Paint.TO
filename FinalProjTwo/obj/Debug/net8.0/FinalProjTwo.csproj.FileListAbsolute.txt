@@ -20,3 +20,4 @@ C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\ob
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\obj\Debug\net8.0\FinalProjTwo.pdb
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\obj\Debug\net8.0\FinalProjTwo.genruntimeconfig.cache
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\obj\Debug\net8.0\ref\FinalProjTwo.dll
+c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\obj\Debug\net8.0\FinalProjTwo.sourcelink.json

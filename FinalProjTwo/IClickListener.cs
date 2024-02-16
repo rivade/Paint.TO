@@ -1,4 +1,4 @@
-namespace MyGame;
+namespace DrawingProgram;
 
 public interface IClickListener
 {

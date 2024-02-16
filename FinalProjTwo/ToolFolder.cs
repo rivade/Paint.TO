@@ -1,4 +1,4 @@
-namespace MyGame;
+namespace DrawingProgram;
 
 public abstract class ToolFolder
 {
