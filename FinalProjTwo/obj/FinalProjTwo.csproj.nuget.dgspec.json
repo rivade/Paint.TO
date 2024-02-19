@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj": {}
+    "C:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj": {}
   },
   "projects": {
-    "c:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj": {
+    "C:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj",
+        "projectUniqueName": "C:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj",
         "projectName": "FinalProjTwo",
-        "projectPath": "c:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj",
+        "projectPath": "C:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\FinalProjTwo.csproj",
         "packagesPath": "C:\\Users\\theo.lindqvist\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\obj\\",
+        "outputPath": "C:\\Users\\theo.lindqvist\\Documents\\NTI Programmering\\FinalProjTwo\\FinalProjTwo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

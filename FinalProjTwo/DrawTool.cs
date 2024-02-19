@@ -6,51 +6,49 @@ public abstract class DrawTool
     protected Vector2 lastMousePos;
     protected Image canvasMemory;
     //protected Button
-    public virtual void Draw(Color drawingColor)
+    public virtual void Draw(Color drawingColor, Image canvas)
     {
-
+        mousePos = Raylib.GetMousePosition();
     }
 
-    protected void SavePrevCanvas()
+    protected void SavePrevCanvas(Image canvas)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
-            canvasMemory = ProgramManager.canvas;
+            canvasMemory = canvas;
     }
 
-    public void UndoStroke()
+    public Image UndoStroke(Image canvas)
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Z))
-            ProgramManager.canvas = canvasMemory;
+        return Raylib.IsKeyPressed(KeyboardKey.Z) ? canvasMemory : canvas;
     }
 }
 
 public class Pencil : DrawTool
 {
-    public override void Draw(Color drawingColor)
+    public override void Draw(Color drawingColor, Image canvas)
     {
-        base.Draw(drawingColor);
-
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            mousePos = Raylib.GetMousePosition();
-            Raylib.ImageDrawLine(ref ProgramManager.canvas,
+            base.Draw(drawingColor, canvas);
+            Raylib.ImageDrawLine(ref canvas,
             (int)lastMousePos.X, (int)lastMousePos.Y,
             (int)mousePos.X, (int)mousePos.Y,
             drawingColor);
 
             lastMousePos = mousePos;
         }
-        else 
+        else
         {
-            SavePrevCanvas();
             lastMousePos = Raylib.GetMousePosition();
+            if (Raylib.IsMouseButtonReleased(MouseButton.Left))
+                SavePrevCanvas(canvas);
         }
     }
 }
 
 public class Eraser : DrawTool
 {
-    public override void Draw(Color drawingColor)
+    public override void Draw(Color drawingColor, Image canvas)
     {
 
     }

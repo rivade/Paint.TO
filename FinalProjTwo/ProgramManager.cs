@@ -12,8 +12,9 @@ public class ProgramManager
     }
     private State _currentstate;
 
-    public static Image canvas;
+    private Image canvas;
     Pencil pencil = new();
+    private List<IClickListener> clickables;
 
     public ProgramManager()
     {
@@ -34,8 +35,9 @@ public class ProgramManager
 
     private void Logic()
     {
-        pencil.Draw(Color.Black);
-        pencil.UndoStroke();
+        pencil.Draw(Color.Black, canvas);
+        canvas = pencil.UndoStroke(canvas);
+        //clickables.ForEach(c => c.OnClick());
     }
 
     public void Run()
