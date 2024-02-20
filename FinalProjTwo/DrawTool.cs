@@ -66,13 +66,13 @@ public class Pen : DrawTool
 
 public class Eraser : DrawTool
 {
-    public override void Draw(Color bgColor, Image canvas, int radius)
+    public override void Draw(Color c, Image canvas, int radius)
     {
-        base.Draw(bgColor, canvas, radius);
+        base.Draw(c, canvas, radius);
 
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            Raylib.ImageDrawCircleV(ref canvas, mousePos, radius, bgColor);
+            Raylib.ImageDrawCircleV(ref canvas, mousePos, radius, Color.White);
         }
     }
 }
@@ -87,11 +87,11 @@ public class Checker : DrawTool
 
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            Checkerboard(mousePos, canvas, 20, Color.Black);
+            SetCheckers(mousePos, canvas, 20, Color.Black);
         }
     }
 
-    private void Checkerboard(Vector2 mousePos, Image canvas, int brushRadius, Color color)
+    private void SetCheckers(Vector2 mousePos, Image canvas, int brushRadius, Color color)
     {
         int rows = (int)Math.Ceiling((double)canvas.Height / pixelSize);
         int cols = (int)Math.Ceiling((double)canvas.Width / pixelSize);
@@ -117,6 +117,4 @@ public class Checker : DrawTool
             }
         }
     }
-
-
 }

@@ -2,8 +2,8 @@ namespace DrawingProgram;
 
 public class ProgramManager
 {
-    public const int screenWidth = 1500;
-    public const int screenHeight = 900;
+    public const int screenWidth = 1920;
+    public const int screenHeight = 1080;
 
     public enum State
     {
@@ -20,6 +20,8 @@ public class ProgramManager
     public ProgramManager()
     {
         Raylib.InitWindow(screenWidth, screenHeight, "GenericDrawingProgram");
+        Raylib.SetTargetFPS(360);
+        Raylib.ToggleFullscreen();
         _currentstate = State.Drawing;
         canvas = Raylib.GenImageColor(screenWidth, screenHeight, Color.White);
 
