@@ -5,7 +5,7 @@ public class Button
     public Rectangle buttonRect {get; set;}
 }
 
-public class ToolButton : Button, IClickListener
+public class ToolButton : Button, IClickable
 {
     public DrawTool drawTool;
 

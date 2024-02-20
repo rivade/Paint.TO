@@ -1,6 +1,6 @@
 namespace DrawingProgram;
 
-public interface IClickListener
+public interface IClickable
 {
     public void OnClick();
 }

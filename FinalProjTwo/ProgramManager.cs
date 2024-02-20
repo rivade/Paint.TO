@@ -13,14 +13,17 @@ public class ProgramManager
     private State _currentstate;
 
     private Image canvas;
-    Pencil pencil = new();
-    private List<IClickListener> clickables;
+    private List<ToolFolder> toolFolders = [new Drawing(), new Erase(), new Favorites()];
+    DrawTool currentTool;
+
 
     public ProgramManager()
     {
         Raylib.InitWindow(screenWidth, screenHeight, "GenericDrawingProgram");
         _currentstate = State.Drawing;
         canvas = Raylib.GenImageColor(screenWidth, screenHeight, Color.White);
+
+        currentTool = toolFolders[0].drawTools[0];
     }
 
     private void DrawGraphics()
@@ -35,8 +38,9 @@ public class ProgramManager
 
     private void Logic()
     {
-        pencil.Draw(Color.Black, canvas);
-        canvas = pencil.UndoStroke(canvas);
+        DrawTool.SavePrevCanvas(canvas);
+        currentTool.Draw(Color.Black, canvas);
+        canvas = currentTool.UndoStroke(canvas);
         //clickables.ForEach(c => c.OnClick());
     }
 
@@ -52,6 +56,7 @@ public class ProgramManager
                 case State.Drawing:
                     Logic();
                     DrawGraphics();
+                    System.Console.WriteLine(DrawTool.strokes.Count());
                     break;
             }
         }
