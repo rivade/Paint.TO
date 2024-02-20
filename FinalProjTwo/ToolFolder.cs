@@ -16,13 +16,18 @@ public class Drawing : ToolFolder
 {
     public Drawing()
     {
-        drawTools.Add(GetDrawTool<Pencil>());
+        drawTools.Add(new Pencil());
+        drawTools.Add(new Pen());
+        drawTools.Add(new Checker());
     }
 }
 
-public class Erase : ToolFolder
+public class Erasing : ToolFolder
 {
-
+    public Erasing()
+    {
+        drawTools.Add(new Eraser());
+    }
 }
 
 public class Favorites : ToolFolder
@@ -31,7 +36,7 @@ public class Favorites : ToolFolder
 
     public void ChangeFavorites(DrawTool d)
     {
-        
+
         //favTools.Push(GetDrawTool<DrawTool>());
     }
 }
