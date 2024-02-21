@@ -1,21 +1,17 @@
 namespace DrawingProgram;
 
-public class Button
+public abstract class Button
 {
     public Rectangle buttonRect {get; set;}
 }
 
 public class ToolButton : Button, IClickable
 {
-    public DrawTool drawTool;
-
-    public DrawTool ChangeTool(DrawTool prevTool)
-    {
-        return drawTool != prevTool ? drawTool : prevTool;
-    }
+    public DrawTool DrawTool { get; set; }
 
     public void OnClick()
     {
-        
+        ProgramManager.currentTool = (DrawTool != ProgramManager.currentTool) ? DrawTool : ProgramManager.currentTool;
     }
+
 }

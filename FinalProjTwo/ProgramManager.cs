@@ -2,8 +2,8 @@ namespace DrawingProgram;
 
 public class ProgramManager
 {
-    public const int screenWidth = 1920;
-    public const int screenHeight = 1080;
+    public const int screenWidth = 1920 - 100;
+    public const int screenHeight = 1080 - 100;
 
     public enum State
     {
@@ -14,7 +14,9 @@ public class ProgramManager
 
     private Image canvas;
     private List<ToolFolder> toolFolders = [new Drawing(), new Erasing(), new Favorites()];
-    DrawTool currentTool;
+    private List<IClickable> clickables;
+    private List<Button> buttons;
+    public static DrawTool currentTool;
 
 
     public ProgramManager()
@@ -25,15 +27,19 @@ public class ProgramManager
         _currentstate = State.Drawing;
         canvas = Raylib.GenImageColor(screenWidth, screenHeight, Color.White);
 
+        buttons = ButtonGenerator.GenerateButtons(toolFolders);
+        //buttons.ForEach(b => clickables.Add((IClickable)b));
+
         currentTool = toolFolders[0].drawTools[2];
     }
 
     private void DrawGraphics()
     {
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.White);
+        Raylib.ClearBackground(Color.Gray);
         Texture2D canvasTexture = Raylib.LoadTextureFromImage(canvas);
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
+        buttons.ForEach(b => Raylib.DrawRectangleRec(b.buttonRect, Color.Red));
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvasTexture);
     }
@@ -43,7 +49,8 @@ public class ProgramManager
         DrawTool.SavePrevCanvas(canvas);
         currentTool.Draw(Color.Black, canvas, 10);
         canvas = DrawTool.UndoStroke(canvas);
-        //clickables.ForEach(c => c.OnClick());
+
+        clickables.ForEach(c => c.OnClick());
 
         switch (Raylib.GetKeyPressed())
         {
