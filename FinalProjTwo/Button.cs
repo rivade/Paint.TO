@@ -2,14 +2,18 @@ namespace DrawingProgram;
 
 public abstract class Button
 {
-    public Rectangle buttonRect { get; set; }
-    public Color buttonColor { get; set; }
+    public Rectangle buttonRect;
+    protected Color buttonColor;
     protected bool isHoveredOn;
 }
 
 public class ToolButton : Button, IMouseInteractable, IDrawable
 {
+    public const int buttonSize = 80;
+
     public DrawTool DrawTool { get; set; }
+
+    private bool IsActiveTool() => ProgramManager.currentTool == DrawTool;
 
     public void OnHover(Vector2 mousePos)
     {
@@ -25,7 +29,8 @@ public class ToolButton : Button, IMouseInteractable, IDrawable
 
     public void OnClick()
     {
-        ProgramManager.currentTool = (DrawTool != ProgramManager.currentTool) ? DrawTool : ProgramManager.currentTool;
+        if (!IsActiveTool())
+            ProgramManager.currentTool = DrawTool;
     }
 
     public void Draw()
@@ -34,11 +39,15 @@ public class ToolButton : Button, IMouseInteractable, IDrawable
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
     }
 
+
     private void GetButtonColor()
     {
-        buttonColor = Color.Red;
+        buttonColor = Color.Lime;
 
-        if (isHoveredOn)
-            buttonColor = Color.Brown;
+        if (isHoveredOn && !IsActiveTool())
+            buttonColor = Color.Green;
+
+        else if (IsActiveTool())
+            buttonColor = Color.DarkGreen;
     }
 }

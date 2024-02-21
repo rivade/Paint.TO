@@ -6,10 +6,8 @@ public abstract class DrawTool
     protected Vector2 lastMousePos;
     public static Stack<Image> strokes = new();
 
-    public virtual void Draw(Color color, Image canvas, int numberData)
-    {
-        mousePos = Raylib.GetMousePosition();
-    }
+    public virtual void Draw(Color color, Image canvas, int numberData, Vector2 mousePos)
+    {}
 
     public static void SavePrevCanvas(Image canvas)
     {
@@ -32,10 +30,8 @@ public abstract class DrawTool
 
 public class Pencil : DrawTool
 {
-    public override void Draw(Color drawingColor, Image canvas, int brushRadius)
+    public override void Draw(Color drawingColor, Image canvas, int brushRadius, Vector2 mousePos)
     {
-        base.Draw(drawingColor, canvas, brushRadius);
-
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             Raylib.ImageDrawLine(ref canvas,
@@ -50,10 +46,8 @@ public class Pencil : DrawTool
 
 public class Pen : DrawTool
 {
-    public override void Draw(Color drawingColor, Image canvas, int brushRadius)
+    public override void Draw(Color drawingColor, Image canvas, int brushRadius, Vector2 mousePos)
     {
-        base.Draw(drawingColor, canvas, brushRadius);
-
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             Raylib.ImageDrawCircleV(ref canvas, mousePos, brushRadius, drawingColor);
@@ -66,10 +60,8 @@ public class Pen : DrawTool
 
 public class Eraser : DrawTool
 {
-    public override void Draw(Color c, Image canvas, int brushRadius)
+    public override void Draw(Color c, Image canvas, int brushRadius, Vector2 mousePos)
     {
-        base.Draw(c, canvas, brushRadius);
-
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             Raylib.ImageDrawCircleV(ref canvas, mousePos, brushRadius, Color.White);
@@ -81,10 +73,8 @@ public class Checker : DrawTool
 {
     private const int pixelSize = 5;
 
-    public override void Draw(Color color, Image canvas, int brushRadius)
+    public override void Draw(Color color, Image canvas, int brushRadius, Vector2 mousePos)
     {
-        base.Draw(color, canvas, brushRadius);
-
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             SetCheckers(mousePos, canvas, 20, Color.Black);

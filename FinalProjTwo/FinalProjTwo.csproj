@@ -10,4 +10,11 @@
     <PackageReference Include="Raylib-cs" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Sprites\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Backgrounds\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Sounds\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="*.png" CopyToOutputDirectory="Always"/>
+  </ItemGroup>
+
 </Project>

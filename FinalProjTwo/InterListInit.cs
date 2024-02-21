@@ -8,9 +8,8 @@ public abstract class InterListInit
         for (int i = 0; i < inputTools[0].drawTools.Count(); i++)
         {
             interactableList.Add(new ToolButton()
-            { buttonRect = new Rectangle(i*90 + 10, ProgramManager.CanvasHeight + 10, 80, 80), 
-            DrawTool = inputTools[0].drawTools[i],
-            buttonColor = Color.Red}
+            { buttonRect = new Rectangle(i*90 + 10, ProgramManager.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize), 
+            DrawTool = inputTools[0].drawTools[i]}
             );
         }
 

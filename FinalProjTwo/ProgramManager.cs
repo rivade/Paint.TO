@@ -13,6 +13,7 @@ public class ProgramManager
     private State _currentstate;
 
     private Image canvas;
+    private Icons icons;
     private List<ToolFolder> toolFolders = [new Drawing(), new Erasing(), new Favorites()];
 
     //interface listor
@@ -28,12 +29,13 @@ public class ProgramManager
         Raylib.ToggleFullscreen();
         _currentstate = State.Drawing;
         canvas = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White);
+        icons = new();
 
         interactables = InterListInit.GenerateInteractables(toolFolders);
         drawables = [.. interactables.Where(i => i is IDrawable).Cast<IDrawable>()];
 
 
-        currentTool = toolFolders[0].drawTools[2];
+        currentTool = toolFolders[0].drawTools[0];
     }
 
     private void DrawGraphics()
@@ -44,6 +46,7 @@ public class ProgramManager
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
 
         drawables.ForEach(b => b.Draw());
+        icons.DrawIcons(true);
 
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvasTexture);
@@ -53,12 +56,15 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
-        DrawTool.SavePrevCanvas(canvas);
-        currentTool.Draw(Color.Black, canvas, 10);
+        if (Canvas.IsCursorOnCanvas(mousePos))
+        {
+            DrawTool.SavePrevCanvas(canvas);
+            currentTool.Draw(Color.Black, canvas, 10, mousePos);
+        }
+        
         canvas = DrawTool.UndoStroke(canvas);
 
         interactables.ForEach(c => c.OnHover(mousePos));
-
     }
 
     public void Run()
@@ -73,7 +79,6 @@ public class ProgramManager
                 case State.Drawing:
                     Logic();
                     DrawGraphics();
-                    System.Console.WriteLine(DrawTool.strokes.Count());
                     break;
             }
         }
