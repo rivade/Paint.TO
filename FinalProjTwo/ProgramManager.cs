@@ -21,6 +21,7 @@ public class ProgramManager
     public List<IDrawable> drawables;
 
     public static DrawTool currentTool;
+    public static Color currentColor;
 
 
     public ProgramManager()
