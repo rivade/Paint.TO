@@ -3,7 +3,8 @@ namespace DrawingProgram;
 public abstract class Button
 {
     public Rectangle buttonRect { get; set; }
-    public Color buttonColor = Color.Red;
+    public Color buttonColor { get; set; }
+    protected bool isHoveredOn;
 }
 
 public class ToolButton : Button, IMouseInteractable, IDrawable
@@ -12,9 +13,13 @@ public class ToolButton : Button, IMouseInteractable, IDrawable
 
     public void OnHover(Vector2 mousePos)
     {
-        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
+        isHoveredOn = false;
+        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
         {
-            OnClick();
+            isHoveredOn = true;
+
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+                OnClick();
         }
     }
 
@@ -25,6 +30,15 @@ public class ToolButton : Button, IMouseInteractable, IDrawable
 
     public void Draw()
     {
+        GetButtonColor();
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
+    }
+
+    private void GetButtonColor()
+    {
+        buttonColor = Color.Red;
+
+        if (isHoveredOn)
+            buttonColor = Color.Brown;
     }
 }
