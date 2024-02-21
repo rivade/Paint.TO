@@ -3,7 +3,7 @@ namespace DrawingProgram;
 public abstract class ToolFolder
 {
     public List<DrawTool> drawTools = new();
-    public List<IClickable> toolButtons = new();
+    public List<Button> toolButtons = new();
 
     public T GetDrawTool<T>() where T : DrawTool, new()
     {

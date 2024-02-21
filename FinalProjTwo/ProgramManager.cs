@@ -14,21 +14,23 @@ public class ProgramManager
 
     private Image canvas;
     private List<ToolFolder> toolFolders = [new Drawing(), new Erasing(), new Favorites()];
-    private List<IClickable> clickables;
-    private List<Button> buttons;
+
+    //interface listor
+    public List<IMouseInteractable> interactables;
+    public List<IDrawable> drawables;
+
     public static DrawTool currentTool;
 
 
     public ProgramManager()
     {
         Raylib.InitWindow(screenWidth, screenHeight, "GenericDrawingProgram");
-        Raylib.SetTargetFPS(360);
         Raylib.ToggleFullscreen();
         _currentstate = State.Drawing;
         canvas = Raylib.GenImageColor(screenWidth, screenHeight, Color.White);
 
-        buttons = ButtonGenerator.GenerateButtons(toolFolders);
-        //buttons.ForEach(b => clickables.Add((IClickable)b));
+        interactables = InterListInit.GenerateInteractables(toolFolders);
+        drawables = InterListInit.GenerateDrawables(toolFolders);
 
         currentTool = toolFolders[0].drawTools[2];
     }
@@ -39,29 +41,23 @@ public class ProgramManager
         Raylib.ClearBackground(Color.Gray);
         Texture2D canvasTexture = Raylib.LoadTextureFromImage(canvas);
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
-        buttons.ForEach(b => Raylib.DrawRectangleRec(b.buttonRect, Color.Red));
+        
+        drawables.ForEach(b => b.Draw());
+
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvasTexture);
     }
 
     private void Logic()
     {
+        Vector2 mousePos = Raylib.GetMousePosition();
+
         DrawTool.SavePrevCanvas(canvas);
         currentTool.Draw(Color.Black, canvas, 10);
         canvas = DrawTool.UndoStroke(canvas);
 
-        clickables.ForEach(c => c.OnClick());
+        interactables.ForEach(c => c.OnHover(mousePos));
 
-        switch (Raylib.GetKeyPressed())
-        {
-            case (int)KeyboardKey.One:
-                currentTool = toolFolders[0].drawTools[0];
-            break;
-
-            case (int)KeyboardKey.Two:
-                currentTool = toolFolders[0].drawTools[2];
-            break;
-        }
     }
 
     public void Run()
