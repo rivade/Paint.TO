@@ -14,7 +14,7 @@ public class ProgramManager
 
     private Canvas canvas;
     private Icons icons;
-    private List<ToolFolder> toolFolders = [new Drawing(), new Favorites()];
+    private ToolFolder toolFolder = new Drawing();
 
     //interface listor
     public List<IHoverable> interactables;
@@ -33,13 +33,13 @@ public class ProgramManager
         canvas = new();
         icons = new();
 
-        interactables = InterListInit.GenerateInteractables(toolFolders);
+        interactables = InterListInit.GenerateInteractables(toolFolder);
         drawables = [.. interactables.Where(i => i is IDrawable).Cast<IDrawable>()];
         drawables.Add(icons);
         drawables.Add(canvas);
 
 
-        currentTool = toolFolders[0].drawTools[0];
+        currentTool = toolFolder.drawTools[0];
     }
 
     private void DrawGraphics()
@@ -48,7 +48,6 @@ public class ProgramManager
         Raylib.ClearBackground(Color.Gray);
 
         drawables.ForEach(d => d.Draw());
-        Raylib.DrawText("Color", CanvasWidth + 12, CanvasHeight - 20, 30, Color.Black);
 
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);

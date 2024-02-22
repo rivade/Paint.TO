@@ -24,7 +24,21 @@ public abstract class DrawTool
         set {}
     }
 
-    public static int brushRadius = 10;
+    public static int brushRadiusSelectorInt = 0;
+    private static int[] radiuses = [ 5, 10, 20 ];
+    public static int brushRadius
+    {
+        get
+        {
+            if (brushRadiusSelectorInt >= radiuses.Length)
+                brushRadiusSelectorInt = 0;
+            
+            return radiuses[brushRadiusSelectorInt];
+        }
+
+        set {}
+    }
+
 
     public virtual void Draw(Image canvas, Vector2 mousePos)
     {
@@ -66,7 +80,7 @@ public class Pencil : DrawTool
     }
 }
 
-public class Pen : DrawTool
+public class PaintBrush : DrawTool
 {
     public override void Draw(Image canvas, Vector2 mousePos)
     {

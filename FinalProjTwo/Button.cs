@@ -69,8 +69,30 @@ public class ColorSelectorButton : Button, IHoverable, IClickable, IDrawable
 
     public void Draw()
     {
+        Raylib.DrawText("Color", ProgramManager.CanvasWidth + 12, (int)buttonRect.Y - 35, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
         Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, DrawTool.DrawingColor);
+    }
+
+}
+
+public class BrushRadiusButton : Button, IHoverable, IClickable, IDrawable
+{
+    public const int buttonSize = 80;
+
+    
+
+    public override void OnClick()
+    {
+        DrawTool.brushRadiusSelectorInt++;
+    }
+
+    public void Draw()
+    {
+        Raylib.DrawText("Size", ProgramManager.CanvasWidth + 17, (int)buttonRect.Y - 35, 30, Color.Black);
+        Raylib.DrawRectangleRec(buttonRect, Color.Black);
+        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
+        Raylib.DrawText($"{DrawTool.brushRadius}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
     }
 
 }
