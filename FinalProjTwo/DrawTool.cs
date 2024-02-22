@@ -8,7 +8,22 @@ public abstract class DrawTool
     protected Vector2 lastMousePos;
     public static Stack<Image> strokes = new();
 
-    public static Color drawingColor = Color.Black;
+
+    public static int colorInt = 0;
+    private static Color[] colors = [ Color.Black, Color.Red, Color.Blue ];
+    public static Color DrawingColor
+    {
+        get
+        {
+            if (colorInt >= colors.Length)
+                colorInt = 0;
+            
+            return colors[colorInt];
+        }
+
+        set {}
+    }
+
     public static int brushRadius = 10;
 
     public virtual void Draw(Image canvas, Vector2 mousePos)
@@ -44,7 +59,7 @@ public class Pencil : DrawTool
             Raylib.ImageDrawLine(ref canvas,
                 (int)lastMousePos.X, (int)lastMousePos.Y,
                 (int)mousePos.X, (int)mousePos.Y,
-                drawingColor);
+                DrawingColor);
         }
 
         lastMousePos = mousePos;
@@ -57,7 +72,7 @@ public class Pen : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            Raylib.ImageDrawCircleV(ref canvas, mousePos, brushRadius, drawingColor);
+            Raylib.ImageDrawCircleV(ref canvas, mousePos, brushRadius, DrawingColor);
         }
     }
 }
@@ -83,10 +98,10 @@ public class Checker : DrawTool
     public override void Draw(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
-            SetCheckers(mousePos, canvas, 20, Color.Black);
+            SetCheckers(canvas, mousePos);
     }
 
-    private void SetCheckers(Vector2 mousePos, Image canvas, int brushRadius, Color color)
+    private void SetCheckers(Image canvas, Vector2 mousePos)
     {
         int rows = (int)Math.Ceiling((double)canvas.Height / pixelSize);
         int cols = (int)Math.Ceiling((double)canvas.Width / pixelSize);
@@ -105,7 +120,7 @@ public class Checker : DrawTool
                 if (distanceToMouse <= brushRadius)
                 {
                     if ((row + col) % 2 == 0)
-                        Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, color);
+                        Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, DrawingColor);
                     
                 }
             }

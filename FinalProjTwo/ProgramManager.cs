@@ -48,6 +48,7 @@ public class ProgramManager
         Raylib.ClearBackground(Color.Gray);
 
         drawables.ForEach(d => d.Draw());
+        Raylib.DrawText("Color", CanvasWidth + 12, CanvasHeight - 20, 30, Color.Black);
 
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);

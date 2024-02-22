@@ -13,6 +13,14 @@ public abstract class InterListInit
             );
         }
 
+        interactableList.Add(new ColorSelectorButton() { buttonRect = 
+        new Rectangle(
+        ProgramManager.CanvasWidth + 10,
+        ProgramManager.CanvasHeight + 10,
+        ColorSelectorButton.buttonSize,
+        ColorSelectorButton.buttonSize
+        )});
+
         return interactableList;
     }
 }

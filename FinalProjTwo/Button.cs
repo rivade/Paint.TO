@@ -56,15 +56,26 @@ public class ToolButton : Button, IHoverable, IClickable, IDrawable
     }
 }
 
-/* public class ColorSelectorButton : Button, IMouseInteractable, IDrawable
+public class ColorSelectorButton : Button, IHoverable, IClickable, IDrawable
 {
     public const int buttonSize = 80;
-    public Color[] colors = { Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.DarkBlue, Color.Violet, Color.Beige, Color.Brown};
 
-    public void OnClick => Progra
-} */
+    
 
-public class SaveCanvasButton : Button, IHoverable, IClickable, IDrawable
+    public override void OnClick()
+    {
+        DrawTool.colorInt++;
+    }
+
+    public void Draw()
+    {
+        Raylib.DrawRectangleRec(buttonRect, Color.Black);
+        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, DrawTool.DrawingColor);
+    }
+
+}
+
+/* public class SaveCanvasButton : Button, IHoverable, IClickable, IDrawable
 {
     public const int buttonSize = 80;
 
@@ -78,4 +89,4 @@ public class SaveCanvasButton : Button, IHoverable, IClickable, IDrawable
     {
         GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
     }
-}
+} */
