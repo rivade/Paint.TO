@@ -1,6 +1,6 @@
 namespace DrawingProgram;
 
-public abstract class Button : IMouseInteractable
+public abstract class Button : IHoverable, IClickable
 {
     public Rectangle buttonRect;
     protected Color buttonColor;
@@ -22,9 +22,20 @@ public abstract class Button : IMouseInteractable
     {
 
     }
+
+    protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool condition) //Condition lämnas false om knappen ej kan vara aktiv
+    {
+        buttonColor = defaultColor;
+
+        if (isHoveredOn && !condition)
+            buttonColor = hoverColor;
+
+        else if (condition)
+            buttonColor = activeColor;
+    }
 }
 
-public class ToolButton : Button, IMouseInteractable, IDrawable
+public class ToolButton : Button, IHoverable, IClickable, IDrawable
 {
     public const int buttonSize = 80;
 
@@ -40,20 +51,8 @@ public class ToolButton : Button, IMouseInteractable, IDrawable
 
     public void Draw()
     {
-        GetButtonColor();
+        GetButtonColor(Color.Lime, Color.Green, Color.DarkGreen, IsActiveTool());
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
-    }
-
-
-    private void GetButtonColor()
-    {
-        buttonColor = Color.Lime;
-
-        if (isHoveredOn && !IsActiveTool())
-            buttonColor = Color.Green;
-
-        else if (IsActiveTool())
-            buttonColor = Color.DarkGreen;
     }
 }
 
@@ -65,16 +64,11 @@ public class ToolButton : Button, IMouseInteractable, IDrawable
     public void OnClick => Progra
 } */
 
-public class SaveCanvasButton : Button, IMouseInteractable, IDrawable
+public class SaveCanvasButton : Button, IHoverable, IClickable, IDrawable
 {
     public const int buttonSize = 80;
 
-    public void SaveProject(Image canvas)
-    {
-        string fileName = "drawing.png";
-        Raylib.ExportImage(canvas, fileName); // Save canvas as PNG file
-        Console.WriteLine($"Canvas saved as {fileName}");
-    }
+    
 
     public override void OnClick()
     {
@@ -82,6 +76,6 @@ public class SaveCanvasButton : Button, IMouseInteractable, IDrawable
     }
     public void Draw()
     {
-        
+        GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
     }
 }

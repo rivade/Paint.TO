@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace DrawingProgram;
 
 public abstract class DrawTool
@@ -6,10 +8,15 @@ public abstract class DrawTool
     protected Vector2 lastMousePos;
     public static Stack<Image> strokes = new();
 
-    public virtual void Draw(Color color, Image canvas, int numberData, Vector2 mousePos)
-    {}
+    public static Color drawingColor = Color.Black;
+    public static int brushRadius = 10;
 
-    public static void SavePrevCanvas(Image canvas)
+    public virtual void Draw(Image canvas, Vector2 mousePos)
+    {
+        
+    }
+
+    public static void PreStrokeSaveCanvas(Image canvas)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
             strokes.Push(Raylib.ImageCopy(canvas));
@@ -30,7 +37,7 @@ public abstract class DrawTool
 
 public class Pencil : DrawTool
 {
-    public override void Draw(Color drawingColor, Image canvas, int brushRadius, Vector2 mousePos)
+    public override void Draw(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
@@ -46,7 +53,7 @@ public class Pencil : DrawTool
 
 public class Pen : DrawTool
 {
-    public override void Draw(Color drawingColor, Image canvas, int brushRadius, Vector2 mousePos)
+    public override void Draw(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
@@ -60,7 +67,7 @@ public class Pen : DrawTool
 
 public class Eraser : DrawTool
 {
-    public override void Draw(Color c, Image canvas, int brushRadius, Vector2 mousePos)
+    public override void Draw(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
@@ -73,12 +80,10 @@ public class Checker : DrawTool
 {
     private const int pixelSize = 5;
 
-    public override void Draw(Color color, Image canvas, int brushRadius, Vector2 mousePos)
+    public override void Draw(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
-        {
             SetCheckers(mousePos, canvas, 20, Color.Black);
-        }
     }
 
     private void SetCheckers(Vector2 mousePos, Image canvas, int brushRadius, Color color)
@@ -100,9 +105,8 @@ public class Checker : DrawTool
                 if (distanceToMouse <= brushRadius)
                 {
                     if ((row + col) % 2 == 0)
-                    {
                         Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, color);
-                    }
+                    
                 }
             }
         }

@@ -2,9 +2,9 @@ namespace DrawingProgram;
 
 public abstract class InterListInit
 {
-    public static List<IMouseInteractable> GenerateInteractables(List<ToolFolder> inputTools)
+    public static List<IHoverable> GenerateInteractables(List<ToolFolder> inputTools)
     {
-        List<IMouseInteractable> interactableList = new();
+        List<IHoverable> interactableList = new();
         for (int i = 0; i < inputTools[0].drawTools.Count(); i++)
         {
             interactableList.Add(new ToolButton()

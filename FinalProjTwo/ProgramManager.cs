@@ -12,12 +12,12 @@ public class ProgramManager
     }
     private State _currentstate;
 
-    private Image canvas;
+    private Canvas canvas;
     private Icons icons;
-    private List<ToolFolder> toolFolders = [new Drawing(), new Erasing(), new Favorites()];
+    private List<ToolFolder> toolFolders = [new Drawing(), new Favorites()];
 
     //interface listor
-    public List<IMouseInteractable> interactables;
+    public List<IHoverable> interactables;
     public List<IDrawable> drawables;
 
     public static DrawTool currentTool;
@@ -27,13 +27,16 @@ public class ProgramManager
     public ProgramManager()
     {
         Raylib.InitWindow(CanvasWidth, CanvasHeight, "GenericDrawingProgram");
+        Raylib.SetTargetFPS(1000);
         Raylib.ToggleFullscreen();
         _currentstate = State.Drawing;
-        canvas = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White);
+        canvas = new();
         icons = new();
 
         interactables = InterListInit.GenerateInteractables(toolFolders);
         drawables = [.. interactables.Where(i => i is IDrawable).Cast<IDrawable>()];
+        drawables.Add(icons);
+        drawables.Add(canvas);
 
 
         currentTool = toolFolders[0].drawTools[0];
@@ -43,27 +46,19 @@ public class ProgramManager
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Gray);
-        Texture2D canvasTexture = Raylib.LoadTextureFromImage(canvas);
-        Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
 
-        drawables.ForEach(b => b.Draw());
-        icons.DrawIcons(true);
+        drawables.ForEach(d => d.Draw());
 
         Raylib.EndDrawing();
-        Raylib.UnloadTexture(canvasTexture);
+        Raylib.UnloadTexture(canvas.canvasTexture);
+
     }
 
     private void Logic()
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
-        if (Canvas.IsCursorOnCanvas(mousePos))
-        {
-            DrawTool.SavePrevCanvas(canvas);
-            currentTool.Draw(Color.Black, canvas, 10, mousePos);
-        }
-        
-        canvas = DrawTool.UndoStroke(canvas);
+        canvas.Update(mousePos, currentTool);
 
         interactables.ForEach(c => c.OnHover(mousePos));
     }
