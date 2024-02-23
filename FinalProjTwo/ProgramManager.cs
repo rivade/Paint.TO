@@ -46,11 +46,7 @@ public class ProgramManager
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Gray);
 
-        drawables.ForEach(d =>
-        {
-            System.Console.WriteLine(d);
-            d.Draw();
-        });
+        drawables.ForEach(d => d.Draw());
 
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);

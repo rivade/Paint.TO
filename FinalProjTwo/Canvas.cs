@@ -41,6 +41,5 @@ public class Canvas : IDrawable
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
         Raylib.DrawRectangle(CanvasWidth, 0, 200, ProgramManager.ScreenHeight, Color.Gray);
         Raylib.DrawRectangle(0, CanvasHeight, ProgramManager.ScreenWidth, 100, Color.Gray);
-        Console.WriteLine(CanvasHeight);
     }
 }
