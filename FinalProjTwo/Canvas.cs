@@ -2,12 +2,15 @@ namespace DrawingProgram;
 
 public class Canvas : IDrawable
 {
+    public const int CanvasWidth = ProgramManager.ScreenWidth - 200;
+    public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
+
     public Image canvasImg;
     public Texture2D canvasTexture;
 
     public Canvas()
     {
-        canvasImg = Raylib.GenImageColor(ProgramManager.CanvasWidth, ProgramManager.CanvasHeight, Color.White);
+        canvasImg = Raylib.GenImageColor(ProgramManager.ScreenWidth, ProgramManager.ScreenHeight, Color.White);
     }
 
     public void Update(Vector2 mousePos, DrawTool tool)
@@ -23,7 +26,7 @@ public class Canvas : IDrawable
 
     private bool IsCursorOnCanvas(Vector2 cursor)
     {
-        return cursor.X < ProgramManager.CanvasWidth && cursor.Y < ProgramManager.CanvasHeight;
+        return cursor.X < CanvasWidth && cursor.Y < CanvasHeight;
     }
 
     public void SaveProject()
@@ -36,5 +39,8 @@ public class Canvas : IDrawable
     {
         canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
+        Raylib.DrawRectangle(CanvasWidth, 0, 200, ProgramManager.ScreenHeight, Color.Gray);
+        Raylib.DrawRectangle(0, CanvasHeight, ProgramManager.ScreenWidth, 100, Color.Gray);
+        Console.WriteLine(CanvasHeight);
     }
 }

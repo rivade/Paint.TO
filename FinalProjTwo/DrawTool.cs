@@ -4,45 +4,44 @@ namespace DrawingProgram;
 
 public abstract class DrawTool
 {
-    protected Vector2 mousePos;
     protected Vector2 lastMousePos;
     public static Stack<Image> strokes = new();
 
 
     public static int colorInt = 0;
-    private static Color[] colors = [ Color.Black, Color.Red, Color.Blue ];
+    private static Color[] colors = [Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Violet];
     public static Color DrawingColor
     {
         get
         {
             if (colorInt >= colors.Length)
                 colorInt = 0;
-            
+
             return colors[colorInt];
         }
 
-        set {}
+        set { }
     }
 
     public static int brushRadiusSelectorInt = 0;
-    private static int[] radiuses = [ 5, 10, 20 ];
+    private static int[] radiuses = [5, 10, 20];
     public static int brushRadius
     {
         get
         {
             if (brushRadiusSelectorInt >= radiuses.Length)
                 brushRadiusSelectorInt = 0;
-            
+
             return radiuses[brushRadiusSelectorInt];
         }
 
-        set {}
+        set { }
     }
 
 
     public virtual void Draw(Image canvas, Vector2 mousePos)
     {
-        
+        lastMousePos = mousePos;
     }
 
     public static void PreStrokeSaveCanvas(Image canvas)
@@ -62,6 +61,50 @@ public abstract class DrawTool
             return canvas;
         }
     }
+
+    // vvvv Tack chatgpt, youtube, stackoverflow och gud för denna algoritm nedan vvvv
+    protected void DrawThickLine(Image canvas, Vector2 startPos, Vector2 endPos, Color color)
+    {
+        // Avgör var på linjen den itererar, börjar på startpos
+        int x = (int)startPos.X;
+        int y = (int)startPos.Y;
+
+        // Beräkna förändringen i x och y
+        int dx = Math.Abs((int)endPos.X - x);
+        int dy = Math.Abs((int)endPos.Y - y);
+        // Definiera stepsize för x och y
+        int sx = x < (int)endPos.X ? 1 : -1;
+        int sy = y < (int)endPos.Y ? 1 : -1;
+        // Initiera felmarginal (för att kunna hantera tjockleken på linjen)
+        int error = dx - dy;
+
+        // Loopa genom alla punkter på linjen med hjälp av Bresenham's algoritm
+        while (true)
+        {
+            // Rita en cirkel med angiven radie på den aktuella punkten
+            Raylib.ImageDrawCircleV(ref canvas, new Vector2(x, y), brushRadius, color);
+
+            // Om slutet av linjen har nåtts bryts loopen
+            if (x == (int)endPos.X && y == (int)endPos.Y)
+                break;
+
+            // Beräkna nästa punkt på linjen baserat på felmarginalen
+            int doubleError = 2 * error;
+            if (doubleError > -dy)
+            {
+                error -= dy;
+                x += sx;
+            }
+            if (doubleError < dx)
+            {
+                error += dx;
+                y += sy;
+            }
+        }
+    }
+
+
+
 }
 
 public class Pencil : DrawTool
@@ -76,7 +119,7 @@ public class Pencil : DrawTool
                 DrawingColor);
         }
 
-        lastMousePos = mousePos;
+        base.Draw(canvas, mousePos);
     }
 }
 
@@ -86,13 +129,12 @@ public class PaintBrush : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            Raylib.ImageDrawCircleV(ref canvas, mousePos, brushRadius, DrawingColor);
+            DrawThickLine(canvas, lastMousePos, mousePos, DrawingColor);
         }
+
+        base.Draw(canvas, mousePos);
     }
 }
-
-
-//Erasing
 
 public class Eraser : DrawTool
 {
@@ -100,8 +142,10 @@ public class Eraser : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            Raylib.ImageDrawCircleV(ref canvas, mousePos, brushRadius, Color.White);
+            DrawThickLine(canvas, lastMousePos, mousePos, Color.White);
         }
+
+        base.Draw(canvas, mousePos);
     }
 }
 
@@ -135,9 +179,13 @@ public class Checker : DrawTool
                 {
                     if ((row + col) % 2 == 0)
                         Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, DrawingColor);
-                    
                 }
             }
         }
     }
+}
+
+public class Bucket : DrawTool
+{
+
 }

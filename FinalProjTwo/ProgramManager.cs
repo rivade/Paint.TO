@@ -2,8 +2,8 @@ namespace DrawingProgram;
 
 public class ProgramManager
 {
-    public const int CanvasWidth = 1920 - 100;
-    public const int CanvasHeight = 1080 - 100;
+    public const int ScreenWidth = 1920;
+    public const int ScreenHeight = 1080;
 
     public enum State
     {
@@ -26,17 +26,16 @@ public class ProgramManager
 
     public ProgramManager()
     {
-        Raylib.InitWindow(CanvasWidth, CanvasHeight, "GenericDrawingProgram");
-        Raylib.SetTargetFPS(1000);
-        Raylib.ToggleFullscreen();
+        Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
+        Raylib.ToggleBorderlessWindowed();
         _currentstate = State.Drawing;
         canvas = new();
         icons = new();
 
         interactables = InterListInit.GenerateInteractables(toolFolder);
-        drawables = [.. interactables.Where(i => i is IDrawable).Cast<IDrawable>()];
+        drawables = [canvas];
+        drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(icons);
-        drawables.Add(canvas);
 
 
         currentTool = toolFolder.drawTools[0];
@@ -47,7 +46,11 @@ public class ProgramManager
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Gray);
 
-        drawables.ForEach(d => d.Draw());
+        drawables.ForEach(d =>
+        {
+            System.Console.WriteLine(d);
+            d.Draw();
+        });
 
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);

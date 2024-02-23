@@ -8,23 +8,23 @@ public abstract class InterListInit
         for (int i = 0; i < inputTools.drawTools.Count(); i++)
         {
             interactableList.Add(new ToolButton()
-            { buttonRect = new Rectangle(i*90 + 10, ProgramManager.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize), 
+            { buttonRect = new Rectangle(i*90 + 10, Canvas.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize), 
             DrawTool = inputTools.drawTools[i]}
             );
         }
 
         interactableList.Add(new ColorSelectorButton() { buttonRect = 
         new Rectangle(
-        ProgramManager.CanvasWidth + 10,
-        ProgramManager.CanvasHeight + 10,
+        Canvas.CanvasWidth + 60,
+        Canvas.CanvasHeight + 10,
         ColorSelectorButton.buttonSize,
         ColorSelectorButton.buttonSize
         )});
 
         interactableList.Add(new BrushRadiusButton() { buttonRect = 
         new Rectangle(
-        ProgramManager.CanvasWidth + 10,
-        ProgramManager.CanvasHeight - 150,
+        Canvas.CanvasWidth + 60,
+        Canvas.CanvasHeight - 150,
         BrushRadiusButton.buttonSize,
         BrushRadiusButton.buttonSize
         )});

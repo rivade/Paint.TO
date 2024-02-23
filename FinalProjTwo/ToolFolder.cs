@@ -13,5 +13,6 @@ public class Drawing : ToolFolder
         drawTools.Add(new PaintBrush());
         drawTools.Add(new Checker());
         drawTools.Add(new Eraser());
+        drawTools.Add(new Bucket());
     }
 }
