@@ -30,7 +30,7 @@ public class ProgramManager
         buttonRect =
         new Rectangle(
         Canvas.CanvasWidth + 60,
-        10,
+        100,
         SaveCanvasButton.buttonSize,
         SaveCanvasButton.buttonSize)
     };
@@ -40,7 +40,7 @@ public class ProgramManager
     {
         Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
         Raylib.ToggleBorderlessWindowed();
-        Raylib.SetExitKey(KeyboardKey.RightAlt);
+        Raylib.SetExitKey(KeyboardKey.Null);
         _currentstate = State.Drawing;
         canvas = new();
         icons = new();

@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace DrawingProgram;
 
 public abstract class Button : IHoverable
@@ -88,9 +90,6 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
 }
 
-
-
-
 public class SaveCanvasButton : Button, IDrawable, IHoverable
 {
     public SavePopup CreatePopup(Vector2 mousePos, Canvas canvas)
@@ -109,5 +108,18 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
     {
         GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
+    }
+}
+
+public class CloseButton : Button, IDrawable, IHoverable
+{
+    public override void OnClick()
+    {
+        Environment.Exit(0);
+    }
+
+    public void Draw()
+    {
+        Raylib.DrawRectangleRec(buttonRect, Color.Red);
     }
 }
