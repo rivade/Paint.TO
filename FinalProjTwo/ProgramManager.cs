@@ -23,7 +23,7 @@ public class ProgramManager
 
     public static DrawTool currentTool;
     public static Color currentColor;
-    private PopupWindow popupWindow;
+    public static SavePopup popupWindow;
 
     public SaveCanvasButton saveCanvasButton = new()
     {
@@ -40,14 +40,15 @@ public class ProgramManager
     {
         Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
         Raylib.ToggleBorderlessWindowed();
+        Raylib.SetExitKey(KeyboardKey.RightAlt);
         _currentstate = State.Drawing;
         canvas = new();
         icons = new();
 
         interactables = InterListInit.GenerateInteractables(toolFolder);
+        interactables.Add(saveCanvasButton);
         drawables = [canvas];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
-        drawables.Add(saveCanvasButton);
         drawables.Add(icons);
 
 
@@ -59,6 +60,10 @@ public class ProgramManager
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Gray);
         drawables.ForEach(d => d.Draw());
+
+        if (popupWindow != null)
+            popupWindow.Draw();
+        
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);
 
@@ -70,10 +75,20 @@ public class ProgramManager
 
         canvas.Update(mousePos, currentTool);
         interactables.ForEach(c => c.OnHover(mousePos));
+
         if (popupWindow != null)
             popupWindow.Logic(canvas);
 
-        popupWindow = saveCanvasButton.CreatePopup(mousePos, canvas);
+        if (saveCanvasButton.CreatePopup(mousePos, canvas) != null)
+        {
+            popupWindow = saveCanvasButton.CreatePopup(mousePos, canvas);
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
+        {
+            popupWindow = null;
+        }
+
     }
 
     public void Run()
@@ -86,6 +101,7 @@ public class ProgramManager
                     break;
 
                 case State.Drawing:
+                    System.Console.WriteLine(popupWindow);
                     Logic();
                     DrawGraphics();
                     break;

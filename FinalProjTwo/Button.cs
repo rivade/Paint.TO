@@ -91,13 +91,13 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
 
 
-public class SaveCanvasButton : Button, IDrawable
+public class SaveCanvasButton : Button, IDrawable, IHoverable
 {
     public SavePopup CreatePopup(Vector2 mousePos, Canvas canvas)
     {
-        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
+        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
-            SavePopup popup = new(500, 400, ["Select file name", "Press enter to save"], canvas);
+            SavePopup popup = new(500, 300, ["Select file name ", "Press enter to save", "Press ESC to close"], canvas);
 
             return popup;
         }

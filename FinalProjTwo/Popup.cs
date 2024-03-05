@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic.FileIO;
+
 namespace DrawingProgram;
 
 public abstract class PopupWindow : IDrawable // Gör detta till abstract class med arv istället
@@ -8,7 +10,7 @@ public abstract class PopupWindow : IDrawable // Gör detta till abstract class 
     public virtual void Draw()
     {
         Raylib.DrawRectangleRec(windowRect, Color.DarkGray);
-        TextHandling.DrawCenteredText(messages, new Vector2(windowRect.X + 10, windowRect.Y + 10), 30);
+        TextHandling.DrawCenteredText(messages, (int)windowRect.Y + 20, 30, 60, Color.Black);
     }
 
     public virtual void Logic(Canvas canvas)
@@ -26,7 +28,7 @@ public abstract class PopupWindow : IDrawable // Gör detta till abstract class 
 public class SavePopup : PopupWindow
 {
     public Dictionary<KeyboardKey, string> alphabet;
-    public string text = "";
+    public string fileName = "";
 
     public SavePopup(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern, canvas)
     {
@@ -35,36 +37,50 @@ public class SavePopup : PopupWindow
         {
             alphabet.Add((KeyboardKey)i, ((char)(i + 32)).ToString());
         }
+
+        // Add numbers 0-9
+        for (int i = 48; i <= 57; i++)
+        {
+            alphabet.Add((KeyboardKey)i, ((char)i).ToString());
+        }
     }
 
     public void SaveCanvas(Canvas canvas)
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Enter) && text != "")
+        if (Raylib.IsKeyPressed(KeyboardKey.Enter) && fileName != "")
         {
-            canvas.SaveProject(text);
+            canvas.SaveProject(fileName + ".png");
         }
     }
 
-    public string GetTextInput()
+    public string UpdateFileName()
     {
         KeyboardKey keyPressed = (KeyboardKey)Raylib.GetKeyPressed();
-        if (keyPressed != KeyboardKey.Null && alphabet.ContainsKey(keyPressed))
+        if (keyPressed != KeyboardKey.Null && alphabet.ContainsKey(keyPressed) && fileName.Length <= 26)
         {
-            text += alphabet[keyPressed];
+            if (Raylib.IsKeyDown(KeyboardKey.LeftShift) || Raylib.IsKeyDown(KeyboardKey.RightShift))
+                fileName += alphabet[keyPressed].ToUpper();
+
+            else
+                fileName += alphabet[keyPressed];
         }
 
-        return text;
+        if (keyPressed == KeyboardKey.Backspace && fileName.Length != 0)
+            fileName = fileName[..^1];
+
+        return fileName;
     }
 
     public override void Draw()
     {
         base.Draw();
-        Raylib.DrawText(text, (int)windowRect.X + 10, (int)(windowRect.Y + windowRect.Height) - 20, 30, Color.Black);
+        Raylib.DrawRectangle((int)windowRect.X + 10, (int)(windowRect.Y + windowRect.Height) - 80, (int)windowRect.Width - 20, 50, Color.LightGray);
+        Raylib.DrawText(fileName, (int)windowRect.X + 20, (int)(windowRect.Y + windowRect.Height) - 70, 30, Color.Black);
     }
 
     public override void Logic(Canvas canvas)
     {
-        text = GetTextInput();
+        fileName = UpdateFileName();
         SaveCanvas(canvas);
     }
 }

@@ -52,7 +52,7 @@ public abstract class DrawTool
     {
         try
         {
-            return Raylib.IsKeyPressed(KeyboardKey.Z) ? strokes.Pop() : canvas;
+            return (Raylib.IsKeyPressed(KeyboardKey.Z) && ProgramManager.popupWindow == null) ? strokes.Pop() : canvas;
         }
         catch (InvalidOperationException)
         {

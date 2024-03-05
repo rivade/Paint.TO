@@ -3,7 +3,7 @@ namespace DrawingProgram;
 public class Icons : IDrawable
 {
     public List<Texture2D> toolIcons = new();
-    public List<Texture2D> fileIcons = new();
+    public List<Texture2D> miscIcons = new();
 
     public Icons()
     {
@@ -11,6 +11,8 @@ public class Icons : IDrawable
         toolIcons.Add(Raylib.LoadTexture("paintbrush.png"));
         toolIcons.Add(Raylib.LoadTexture("checkers.png"));
         toolIcons.Add(Raylib.LoadTexture("eraser.png"));
+
+        miscIcons.Add(Raylib.LoadTexture("saveicon.png"));
 
     }
 
@@ -20,9 +22,9 @@ public class Icons : IDrawable
         {
             Raylib.DrawTexture(toolIcons[i], i * 90 + 10, Canvas.CanvasHeight + 10, Color.White);
         }
-        for (int i = 0; i < fileIcons.Count; i++)
+        for (int i = 0; i < miscIcons.Count; i++)
         {
-            Raylib.DrawTexture(fileIcons[i], Canvas.CanvasWidth + 10, i * 90 + 10, Color.White);
+            Raylib.DrawTexture(miscIcons[i], Canvas.CanvasWidth + 60, i * 90 + 10, Color.White);
         }
     }
 }
