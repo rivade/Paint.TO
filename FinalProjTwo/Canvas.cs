@@ -29,10 +29,23 @@ public class Canvas : IDrawable
         return cursor.X < CanvasWidth && cursor.Y < CanvasHeight;
     }
 
-    public void SaveProject()
+    public void SaveProject(string fileName)
     {
-        string fileName = "drawing.png";
-        Raylib.ExportImage(canvasImg, fileName);
+        Raylib.ExportImage(CropCanvasForExport(canvasImg), fileName);
+    }
+
+    private Image CropCanvasForExport(Image canvas)
+    {
+        Image newImage = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White);
+        for (int x = 0; x < CanvasWidth; x++)
+        {
+            for (int y = 0; y < CanvasHeight; y++)
+            {
+                Color pixelColor = Raylib.GetImageColor(canvas, x, y);
+                Raylib.ImageDrawPixel(ref newImage, x, y, pixelColor);
+            }
+        }
+        return newImage;
     }
 
     public void Draw()

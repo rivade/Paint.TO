@@ -1,7 +1,8 @@
 namespace DrawingProgram;
 
-public abstract class Button : IHoverable, IClickable
+public abstract class Button : IHoverable
 {
+    public const int buttonSize = 80;
     public Rectangle buttonRect;
     protected Color buttonColor;
     protected bool isHoveredOn;
@@ -35,10 +36,8 @@ public abstract class Button : IHoverable, IClickable
     }
 }
 
-public class ToolButton : Button, IHoverable, IClickable, IDrawable
+public class ToolButton : Button, IHoverable, IDrawable
 {
-    public const int buttonSize = 80;
-
     public DrawTool DrawTool { get; set; }
 
     private bool IsActiveTool() => ProgramManager.currentTool == DrawTool;
@@ -56,12 +55,8 @@ public class ToolButton : Button, IHoverable, IClickable, IDrawable
     }
 }
 
-public class ColorSelectorButton : Button, IHoverable, IClickable, IDrawable
+public class ColorSelectorButton : Button, IHoverable, IDrawable
 {
-    public const int buttonSize = 80;
-
-    
-
     public override void OnClick()
     {
         DrawTool.colorInt++;
@@ -73,14 +68,11 @@ public class ColorSelectorButton : Button, IHoverable, IClickable, IDrawable
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
         Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, DrawTool.DrawingColor);
     }
-
 }
 
-public class BrushRadiusButton : Button, IHoverable, IClickable, IDrawable
+
+public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
-    public const int buttonSize = 80;
-
-
     public override void OnClick()
     {
         DrawTool.brushRadiusSelectorInt++;
@@ -96,18 +88,26 @@ public class BrushRadiusButton : Button, IHoverable, IClickable, IDrawable
 
 }
 
-/* public class SaveCanvasButton : Button, IHoverable, IClickable, IDrawable
+
+
+
+public class SaveCanvasButton : Button, IDrawable
 {
-    public const int buttonSize = 80;
-
-    
-
-    public override void OnClick()
+    public SavePopup CreatePopup(Vector2 mousePos, Canvas canvas)
     {
-        
+        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
+        {
+            SavePopup popup = new(500, 400, ["Select file name", "Press enter to save"], canvas);
+
+            return popup;
+        }
+
+        return null;
     }
+
     public void Draw()
     {
         GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
     }
-} */
+}

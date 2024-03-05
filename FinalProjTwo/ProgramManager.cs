@@ -17,11 +17,23 @@ public class ProgramManager
     private ToolFolder toolFolder = new Drawing();
 
     //interface listor
-    public List<IHoverable> interactables;
-    public List<IDrawable> drawables;
+    private List<IHoverable> interactables;
+    private List<IDrawable> drawables;
+
 
     public static DrawTool currentTool;
     public static Color currentColor;
+    private PopupWindow popupWindow;
+
+    public SaveCanvasButton saveCanvasButton = new()
+    {
+        buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth + 60,
+        10,
+        SaveCanvasButton.buttonSize,
+        SaveCanvasButton.buttonSize)
+    };
 
 
     public ProgramManager()
@@ -35,6 +47,7 @@ public class ProgramManager
         interactables = InterListInit.GenerateInteractables(toolFolder);
         drawables = [canvas];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
+        drawables.Add(saveCanvasButton);
         drawables.Add(icons);
 
 
@@ -45,9 +58,7 @@ public class ProgramManager
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Gray);
-
         drawables.ForEach(d => d.Draw());
-
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);
 
@@ -58,8 +69,11 @@ public class ProgramManager
         Vector2 mousePos = Raylib.GetMousePosition();
 
         canvas.Update(mousePos, currentTool);
-
         interactables.ForEach(c => c.OnHover(mousePos));
+        if (popupWindow != null)
+            popupWindow.Logic(canvas);
+
+        popupWindow = saveCanvasButton.CreatePopup(mousePos, canvas);
     }
 
     public void Run()

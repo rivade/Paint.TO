@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-
 namespace DrawingProgram;
 
 public abstract class DrawTool
@@ -9,7 +7,7 @@ public abstract class DrawTool
 
 
     public static int colorInt = 0;
-    private static Color[] colors = [Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Violet];
+    private static Color[] colors = [Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.DarkGreen, Color.Blue, Color.Violet, Color.Brown, Color.DarkBrown, Color.White];
     public static Color DrawingColor
     {
         get
@@ -24,7 +22,7 @@ public abstract class DrawTool
     }
 
     public static int brushRadiusSelectorInt = 0;
-    private static int[] radiuses = [5, 10, 20];
+    private static int[] radiuses = [5, 10, 15, 20, 30, 40, 50, 100];
     public static int brushRadius
     {
         get
