@@ -61,14 +61,14 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 {
     public override void OnClick()
     {
-        DrawTool.colorInt++;
+        ProgramManager.popupWindow = new ColorSelector(700, 700, [], null);
     }
 
     public void Draw()
     {
         Raylib.DrawText("Color", Canvas.CanvasWidth + 62, (int)buttonRect.Y - 35, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
-        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, DrawTool.DrawingColor);
+        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, DrawTool.drawingColor);
     }
 }
 

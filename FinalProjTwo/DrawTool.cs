@@ -8,20 +8,7 @@ public abstract class DrawTool
     public static Stack<Image> strokes = new();
 
 
-    public static int colorInt = 0;
-    private static Color[] colors = [Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.DarkGreen, Color.Blue, Color.Violet, Color.Brown, Color.DarkBrown, Color.White];
-    public static Color DrawingColor
-    {
-        get
-        {
-            if (colorInt >= colors.Length)
-                colorInt = 0;
-
-            return colors[colorInt];
-        }
-
-        set { }
-    }
+    public static Color drawingColor = Color.Black;
 
     public static int brushRadiusSelectorInt = 0;
     private static int[] radiuses = [5, 10, 15, 20, 30, 40, 50, 100];
@@ -116,7 +103,7 @@ public class Pencil : DrawTool
             Raylib.ImageDrawLine(ref canvas,
                 (int)lastMousePos.X, (int)lastMousePos.Y,
                 (int)mousePos.X, (int)mousePos.Y,
-                DrawingColor);
+                drawingColor);
         }
 
         base.Draw(canvas, mousePos);
@@ -129,7 +116,7 @@ public class PaintBrush : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            DrawThickLine(canvas, lastMousePos, mousePos, DrawingColor);
+            DrawThickLine(canvas, lastMousePos, mousePos, drawingColor);
         }
 
         base.Draw(canvas, mousePos);
@@ -178,7 +165,7 @@ public class Checker : DrawTool
                 if (distanceToMouse <= brushRadius)
                 {
                     if ((row + col) % 2 == 0)
-                        Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, DrawingColor);
+                        Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, drawingColor);
                 }
             }
         }
@@ -198,7 +185,7 @@ public class Bucket : DrawTool
 
     private void FloodFill(Image img, Vector2 pt, Color targetColor)
     {
-        if (targetColor.Equals(DrawingColor))
+        if (targetColor.Equals(drawingColor))
         {
             return;
         }
@@ -219,7 +206,7 @@ public class Bucket : DrawTool
             bool spanRight = false;
             while (y1 < img.Height && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
             {
-                Raylib.ImageDrawPixel(ref img, (int)temp.X, y1, DrawingColor);
+                Raylib.ImageDrawPixel(ref img, (int)temp.X, y1, drawingColor);
 
                 if (!spanLeft && temp.X > 0 && Raylib.GetImageColor(img, (int)temp.X - 1, y1).Equals(targetColor))
                 {

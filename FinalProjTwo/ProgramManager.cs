@@ -23,7 +23,7 @@ public class ProgramManager
 
     public static DrawTool currentTool;
     public static Color currentColor;
-    public static SavePopup popupWindow;
+    public static PopupWindow popupWindow;
 
     public SaveCanvasButton saveCanvasButton = new()
     {
@@ -77,7 +77,7 @@ public class ProgramManager
         interactables.ForEach(c => c.OnHover(mousePos));
 
         if (popupWindow != null)
-            popupWindow.Logic(canvas);
+            popupWindow.Logic(canvas, mousePos);
 
         if (saveCanvasButton.CreatePopup(mousePos, canvas) != null)
         {

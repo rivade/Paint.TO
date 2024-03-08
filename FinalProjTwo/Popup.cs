@@ -13,7 +13,7 @@ public abstract class PopupWindow : IDrawable // Gör detta till abstract class 
         TextHandling.DrawCenteredText(messages, (int)windowRect.Y + 20, 30, 60, Color.Black);
     }
 
-    public virtual void Logic(Canvas canvas)
+    public virtual void Logic(Canvas canvas, Vector2 mousePos)
     {
 
     }
@@ -66,7 +66,7 @@ public class SavePopup : PopupWindow
         }
 
         if (keyPressed == KeyboardKey.Backspace && fileName.Length != 0)
-            fileName = fileName[..^1];
+            fileName = fileName[..^1]; //Tar bort sista bokstaven/siffran i stringen
 
         return fileName;
     }
@@ -78,9 +78,33 @@ public class SavePopup : PopupWindow
         Raylib.DrawText(fileName, (int)windowRect.X + 20, (int)(windowRect.Y + windowRect.Height) - 70, 30, Color.Black);
     }
 
-    public override void Logic(Canvas canvas)
+    public override void Logic(Canvas canvas, Vector2 mousePos)
     {
         fileName = UpdateFileName();
         SaveCanvas(canvas);
+    }
+}
+
+public class ColorSelector : PopupWindow
+{
+    private Texture2D colorWheel = Raylib.LoadTexture("colors.png");
+    private Rectangle colorWheelRect;
+    public ColorSelector(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern, canvas)
+    {
+        colorWheelRect = new(ProgramManager.ScreenWidth/2 - colorWheel.Width, 600, colorWheel.Width, colorWheel.Height);
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        Raylib.DrawTexture(colorWheel, (int)colorWheelRect.X, (int)colorWheelRect.Y, Color.White);
+    }
+
+    public override void Logic(Canvas canvas, Vector2 mousePos)
+    {
+        if (Raylib.CheckCollisionPointRec(mousePos, colorWheelRect) && Raylib.IsMouseButtonDown(MouseButton.Left))
+        {
+            DrawTool.drawingColor = Raylib.GetImageColor(Raylib.LoadImageFromTexture(colorWheel), (int)mousePos.X, (int)mousePos.Y);
+        }
     }
 }
