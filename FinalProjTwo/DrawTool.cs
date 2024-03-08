@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace DrawingProgram;
 
 public abstract class DrawTool
@@ -185,5 +187,60 @@ public class Checker : DrawTool
 
 public class Bucket : DrawTool
 {
+    public override void Draw(Image canvas, Vector2 mousePos)
+    {
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            Color targetColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
+            FloodFill(canvas, mousePos, targetColor);
+        }
+    }
 
+    private void FloodFill(Image img, Vector2 pt, Color targetColor)
+    {
+        if (targetColor.Equals(DrawingColor))
+        {
+            return;
+        }
+
+        Stack<Vector2> pixels = new();
+
+        pixels.Push(pt);
+        while (pixels.Count != 0)
+        {
+            Vector2 temp = pixels.Pop();
+            int y1 = (int)temp.Y;
+            while (y1 >= 0 && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
+            {
+                y1--;
+            }
+            y1++;
+            bool spanLeft = false;
+            bool spanRight = false;
+            while (y1 < img.Height && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
+            {
+                Raylib.ImageDrawPixel(ref img, (int)temp.X, y1, DrawingColor);
+
+                if (!spanLeft && temp.X > 0 && Raylib.GetImageColor(img, (int)temp.X - 1, y1).Equals(targetColor))
+                {
+                    pixels.Push(new Vector2(temp.X - 1, y1));
+                    spanLeft = true;
+                }
+                else if (spanLeft && temp.X - 1 == 0 && !Raylib.GetImageColor(img, (int)temp.X - 1, y1).Equals(targetColor))
+                {
+                    spanLeft = false;
+                }
+                if (!spanRight && temp.X < img.Width - 1 && Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
+                {
+                    pixels.Push(new Vector2(temp.X + 1, y1));
+                    spanRight = true;
+                }
+                else if (spanRight && temp.X < img.Width - 1 && !Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
+                {
+                    spanRight = false;
+                }
+                y1++;
+            }
+        }
+    }
 }

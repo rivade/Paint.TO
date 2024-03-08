@@ -11,6 +11,7 @@ public class Icons : IDrawable
         toolIcons.Add(Raylib.LoadTexture("paintbrush.png"));
         toolIcons.Add(Raylib.LoadTexture("checkers.png"));
         toolIcons.Add(Raylib.LoadTexture("eraser.png"));
+        toolIcons.Add(Raylib.LoadTexture("bucket.png"));
 
         miscIcons.Add(Raylib.LoadTexture("powericon.png"));
         miscIcons.Add(Raylib.LoadTexture("saveicon.png"));
