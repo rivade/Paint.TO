@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace DrawingProgram;
 
 public class ProgramManager
@@ -14,7 +16,7 @@ public class ProgramManager
 
     private Canvas canvas;
     private Icons icons;
-    private ToolFolder toolFolder = new Drawing();
+    public static ToolFolder tools = new Drawing();
 
     //interface listor
     private List<IHoverable> interactables;
@@ -45,14 +47,14 @@ public class ProgramManager
         canvas = new();
         icons = new();
 
-        interactables = InterListInit.GenerateInteractables(toolFolder);
+        interactables = InterListInit.GenerateInteractables(tools);
         interactables.Add(saveCanvasButton);
         drawables = [canvas];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(icons);
 
 
-        currentTool = toolFolder.drawTools[0];
+        currentTool = tools.drawTools[0];
     }
 
     private void DrawGraphics()
@@ -73,11 +75,12 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
-        canvas.Update(mousePos, currentTool);
-        interactables.ForEach(c => c.OnHover(mousePos));
-
-        if (popupWindow != null)
+        if (popupWindow == null)
+            canvas.Update(mousePos, currentTool);
+        else
             popupWindow.Logic(canvas, mousePos);
+
+        interactables.ForEach(c => c.OnHover(mousePos));
 
         if (saveCanvasButton.CreatePopup(mousePos, canvas) != null)
         {

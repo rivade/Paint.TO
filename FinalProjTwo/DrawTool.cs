@@ -138,7 +138,19 @@ public class Eraser : DrawTool
 
 public class Checker : DrawTool
 {
-    private const int pixelSize = 5;
+    public static int checkerSizeInt = 0;
+    private static int[] checkerSizes = [5, 10, 15, 20];
+    public static int checkerSize
+    {
+        get
+        {
+            if (checkerSizeInt >= checkerSizes.Length)
+                checkerSizeInt = 0;
+            
+            return checkerSizes[checkerSizeInt];
+        }
+    }
+
 
     public override void Draw(Image canvas, Vector2 mousePos)
     {
@@ -148,24 +160,24 @@ public class Checker : DrawTool
 
     private void SetCheckers(Image canvas, Vector2 mousePos)
     {
-        int rows = (int)Math.Ceiling((double)canvas.Height / pixelSize);
-        int cols = (int)Math.Ceiling((double)canvas.Width / pixelSize);
+        int rows = (int)Math.Ceiling((double)canvas.Height / checkerSize);
+        int cols = (int)Math.Ceiling((double)canvas.Width / checkerSize);
 
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < cols; col++)
             {
-                int xPos = col * pixelSize;
-                int yPos = row * pixelSize;
+                int xPos = col * checkerSize;
+                int yPos = row * checkerSize;
 
-                Vector2 squareCenter = new Vector2(xPos + pixelSize / 2, yPos + pixelSize / 2);
+                Vector2 squareCenter = new Vector2(xPos + checkerSize / 2, yPos + checkerSize / 2);
 
                 float distanceToMouse = Vector2.Distance(mousePos, squareCenter);
 
                 if (distanceToMouse <= brushRadius)
                 {
                     if ((row + col) % 2 == 0)
-                        Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, pixelSize, pixelSize, drawingColor);
+                        Raylib.ImageDrawRectangle(ref canvas, xPos, yPos, checkerSize, checkerSize, drawingColor);
                 }
             }
         }

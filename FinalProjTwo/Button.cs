@@ -59,9 +59,11 @@ public class ToolButton : Button, IHoverable, IDrawable
 
 public class ColorSelectorButton : Button, IHoverable, IDrawable
 {
+    private ColorSelector colorSelectorWindow = new ColorSelector(660, 750, ["Select a color", "Press ESC/Enter to close"], null);
+
     public override void OnClick()
     {
-        ProgramManager.popupWindow = new ColorSelector(700, 700, [], null);
+        ProgramManager.popupWindow = colorSelectorWindow;
     }
 
     public void Draw()
@@ -82,12 +84,34 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
     public void Draw()
     {
-        Raylib.DrawText("Size", Canvas.CanvasWidth + 67, (int)buttonRect.Y - 35, 30, Color.Black);
+        Raylib.DrawText("Brush", Canvas.CanvasWidth + 56, (int)buttonRect.Y - 65, 30, Color.Black);
+        Raylib.DrawText("size", Canvas.CanvasWidth + 70, (int)buttonRect.Y - 35, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
         Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
         Raylib.DrawText($"{DrawTool.brushRadius}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
     }
 
+}
+
+public class CheckerSizeButton : Button, IDrawable, IHoverable
+{
+    public override void OnClick()
+    {
+        if (ProgramManager.currentTool == ProgramManager.tools.drawTools[2])
+            Checker.checkerSizeInt++;
+    }
+
+    public void Draw()
+    {
+        if (ProgramManager.currentTool == ProgramManager.tools.drawTools[2])
+        {
+            Raylib.DrawText("Checker", Canvas.CanvasWidth + 45, (int)buttonRect.Y - 65, 30, Color.Black);
+            Raylib.DrawText("size", Canvas.CanvasWidth + 70, (int)buttonRect.Y - 35, 30, Color.Black);
+            Raylib.DrawRectangleRec(buttonRect, Color.Black);
+            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
+            Raylib.DrawText($"{Checker.checkerSize}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
+        }
+    }
 }
 
 public class SaveCanvasButton : Button, IDrawable, IHoverable

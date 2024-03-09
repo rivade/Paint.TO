@@ -37,6 +37,17 @@ public abstract class InterListInit
         )
         });
 
+        interactableList.Add(new CheckerSizeButton()
+        {
+            buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth + 60,
+        Canvas.CanvasHeight - 320,
+        BrushRadiusButton.buttonSize,
+        BrushRadiusButton.buttonSize
+        )
+        });
+
         interactableList.Add(new CloseButton()
         {
             buttonRect =

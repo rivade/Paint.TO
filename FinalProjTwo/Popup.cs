@@ -2,7 +2,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace DrawingProgram;
 
-public abstract class PopupWindow : IDrawable // Gör detta till abstract class med arv istället
+public abstract class PopupWindow : IDrawable
 {
     protected Rectangle windowRect;
     public string[] messages;
@@ -87,24 +87,27 @@ public class SavePopup : PopupWindow
 
 public class ColorSelector : PopupWindow
 {
-    private Texture2D colorWheel = Raylib.LoadTexture("colors.png");
-    private Rectangle colorWheelRect;
+    private Texture2D colors;
+    private Image colorsImg;
+    private Rectangle colorsRect;
     public ColorSelector(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern, canvas)
     {
-        colorWheelRect = new(ProgramManager.ScreenWidth/2 - colorWheel.Width, 600, colorWheel.Width, colorWheel.Height);
+        colors = Raylib.LoadTexture("colors.png");
+        colorsImg = Raylib.LoadImageFromTexture(colors);
+        colorsRect = new(ProgramManager.ScreenWidth/2 - colors.Width/2, 300, colors.Width, colors.Height);
     }
 
     public override void Draw()
     {
         base.Draw();
-        Raylib.DrawTexture(colorWheel, (int)colorWheelRect.X, (int)colorWheelRect.Y, Color.White);
+        Raylib.DrawTexture(colors, (int)colorsRect.X, (int)colorsRect.Y, Color.White);
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
-        if (Raylib.CheckCollisionPointRec(mousePos, colorWheelRect) && Raylib.IsMouseButtonDown(MouseButton.Left))
+        if (Raylib.CheckCollisionPointRec(mousePos, colorsRect) && Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            DrawTool.drawingColor = Raylib.GetImageColor(Raylib.LoadImageFromTexture(colorWheel), (int)mousePos.X, (int)mousePos.Y);
+            DrawTool.drawingColor = Raylib.GetImageColor(colorsImg, (int)mousePos.X - (int)colorsRect.X, (int)mousePos.Y - (int)colorsRect.Y);
         }
     }
 }
