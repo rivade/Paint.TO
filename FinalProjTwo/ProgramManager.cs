@@ -62,6 +62,8 @@ public class ProgramManager
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Gray);
         drawables.ForEach(d => d.Draw());
+        Raylib.DrawRectangleRec(RectangleTool.tempRectangle, DrawTool.drawingColor);
+        LineTool.DrawThickLine(canvas.canvasImg, LineTool.tempLine.startPos, LineTool.tempLine.endPos, DrawTool.drawingColor, false);
 
         if (popupWindow != null)
             popupWindow.Draw();

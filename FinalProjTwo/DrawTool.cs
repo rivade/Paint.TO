@@ -11,7 +11,7 @@ public abstract class DrawTool
     public static Color drawingColor = Color.Black;
 
     public static int brushRadiusSelectorInt = 0;
-    private static int[] radiuses = [5, 10, 15, 20, 30, 40, 50, 100];
+    private static int[] radiuses = [1, 5, 10, 15, 20, 30, 40, 50, 100];
     public static int brushRadius
     {
         get
@@ -31,10 +31,26 @@ public abstract class DrawTool
         lastMousePos = mousePos;
     }
 
+    private static Stack<Image> CleanupStrokeStack(Stack<Image> strokes)
+    {
+        Stack<Image> tempReverse = new();
+
+        while (strokes.Count > 0) tempReverse.Push(strokes.Pop());
+
+        tempReverse.Pop();
+
+        while (tempReverse.Count > 0) strokes.Push(tempReverse.Pop());
+
+        return strokes;
+    }
+
     public static void PreStrokeSaveCanvas(Image canvas)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
             strokes.Push(Raylib.ImageCopy(canvas));
+
+        if (strokes.Count > 20)
+            strokes = CleanupStrokeStack(strokes);
     }
 
     public static Image UndoStroke(Image canvas)
@@ -50,7 +66,7 @@ public abstract class DrawTool
     }
 
     // vvvv Tack chatgpt, youtube, stackoverflow och gud för denna algoritm nedan vvvv
-    protected void DrawThickLine(Image canvas, Vector2 startPos, Vector2 endPos, Color color)
+    public static void DrawThickLine(Image canvas, Vector2 startPos, Vector2 endPos, Color color, bool drawOnCanvas)
     {
         // Avgör var på linjen den itererar, börjar på startpos
         int x = (int)startPos.X;
@@ -68,8 +84,11 @@ public abstract class DrawTool
         // Loopa genom alla punkter på linjen med hjälp av Bresenham's algoritm
         while (true)
         {
-            // Rita en cirkel med angiven radie på den aktuella punkten
-            Raylib.ImageDrawCircleV(ref canvas, new Vector2(x, y), brushRadius, color);
+            // Rita en cirkel på den aktuella punkten
+            if (drawOnCanvas)
+                Raylib.ImageDrawCircleV(ref canvas, new Vector2(x, y), brushRadius, color);
+            else
+                Raylib.DrawCircleV(new Vector2(x, y), brushRadius, color);
 
             // Om slutet av linjen har nåtts bryts loopen
             if (x == (int)endPos.X && y == (int)endPos.Y)
@@ -116,7 +135,7 @@ public class PaintBrush : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            DrawThickLine(canvas, lastMousePos, mousePos, drawingColor);
+            DrawThickLine(canvas, lastMousePos, mousePos, drawingColor, true);
         }
 
         base.Draw(canvas, mousePos);
@@ -129,7 +148,7 @@ public class Eraser : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            DrawThickLine(canvas, lastMousePos, mousePos, Color.White);
+            DrawThickLine(canvas, lastMousePos, mousePos, Color.White, true);
         }
 
         base.Draw(canvas, mousePos);
@@ -146,7 +165,7 @@ public class Checker : DrawTool
         {
             if (checkerSizeInt >= checkerSizes.Length)
                 checkerSizeInt = 0;
-            
+
             return checkerSizes[checkerSizeInt];
         }
     }
@@ -241,5 +260,81 @@ public class Bucket : DrawTool
                 y1++;
             }
         }
+    }
+}
+
+public abstract class ShapeTool : DrawTool
+{
+    protected enum Shapes
+    {
+        Rectangle,
+        Line
+    }
+    protected Shapes shape;
+
+    public static Vector2 startPos;
+    public static Rectangle tempRectangle;
+    public static Line tempLine;
+    
+    public override void Draw(Image canvas, Vector2 mousePos)
+    {
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+            startPos = mousePos;
+
+        if (Raylib.IsMouseButtonDown(MouseButton.Left))
+        {
+            switch (shape)
+            {
+                case Shapes.Rectangle:
+                    if (startPos.X < mousePos.X && startPos.Y < mousePos.Y)
+                        tempRectangle = new((int)startPos.X, (int)startPos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
+                    else if (startPos.X > mousePos.X && startPos.Y < mousePos.Y)
+                        tempRectangle = new((int)mousePos.X, (int)startPos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
+                    else if (startPos.X < mousePos.X && startPos.Y > mousePos.Y)
+                        tempRectangle = new((int)startPos.X, (int)mousePos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
+                    else if (startPos.X > mousePos.X && startPos.Y > mousePos.Y)
+                        tempRectangle = new((int)mousePos.X, (int)mousePos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
+                    break;
+                
+                case Shapes.Line:
+                    tempLine = new(startPos, mousePos);
+                    break;
+            }
+        }
+
+        if (Raylib.IsMouseButtonReleased(MouseButton.Left))
+        {
+            switch (shape)
+            {
+                case Shapes.Rectangle:
+                    Raylib.ImageDrawRectangle(ref canvas, (int)tempRectangle.X, (int)tempRectangle.Y,
+                    (int)tempRectangle.Width, (int)tempRectangle.Height, drawingColor);
+
+                    tempRectangle = new(Vector2.Zero, Vector2.Zero);
+                    break;
+                
+                case Shapes.Line:
+                    DrawThickLine(canvas, tempLine.startPos, tempLine.endPos, drawingColor, true);
+
+                    tempLine = new(new Vector2(-10000, -10000), new Vector2(-10000, -10000));
+                    break;
+            }
+        }
+    }
+}
+
+public class RectangleTool : ShapeTool
+{
+    public RectangleTool()
+    {
+        shape = Shapes.Rectangle;
+    }
+}
+
+public class LineTool : ShapeTool
+{
+    public LineTool()
+    {
+        shape = Shapes.Line;
     }
 }

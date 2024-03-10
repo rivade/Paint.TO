@@ -14,5 +14,7 @@ public class Drawing : ToolFolder
         drawTools.Add(new Checker());
         drawTools.Add(new Eraser());
         drawTools.Add(new Bucket());
+        drawTools.Add(new RectangleTool());
+        drawTools.Add(new LineTool());
     }
 }
