@@ -268,13 +268,15 @@ public abstract class ShapeTool : DrawTool
     protected enum Shapes
     {
         Rectangle,
-        Line
+        Line,
+        Circle
     }
     protected Shapes shape;
 
     public static Vector2 startPos;
     public static Rectangle tempRectangle;
     public static Line tempLine;
+    public static Circle tempCircle;
     
     public override void Draw(Image canvas, Vector2 mousePos)
     {
@@ -299,6 +301,11 @@ public abstract class ShapeTool : DrawTool
                 case Shapes.Line:
                     tempLine = new(startPos, mousePos);
                     break;
+                
+                case Shapes.Circle:
+                    tempCircle = Circle.CreateCircle(startPos, mousePos);
+                    break;
+
             }
         }
 
@@ -318,6 +325,12 @@ public abstract class ShapeTool : DrawTool
 
                     tempLine = new(new Vector2(-10000, -10000), new Vector2(-10000, -10000));
                     break;
+                
+                case Shapes.Circle:
+                    Raylib.ImageDrawCircle(ref canvas, (int)tempCircle.Middle.X, (int)tempCircle.Middle.Y, tempCircle.Radius, drawingColor);
+
+                    tempCircle = new();
+                    break;
             }
         }
     }
@@ -336,5 +349,13 @@ public class LineTool : ShapeTool
     public LineTool()
     {
         shape = Shapes.Line;
+    }
+}
+
+public class CircleTool : ShapeTool
+{
+    public CircleTool()
+    {
+        shape = Shapes.Circle;
     }
 }

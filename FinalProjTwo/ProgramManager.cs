@@ -7,13 +7,6 @@ public class ProgramManager
     public const int ScreenWidth = 1920;
     public const int ScreenHeight = 1080;
 
-    public enum State
-    {
-        Menu,
-        Drawing
-    }
-    private State _currentstate;
-
     private Canvas canvas;
     private Icons icons;
     public static ToolFolder tools = new Drawing();
@@ -43,7 +36,6 @@ public class ProgramManager
         Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
         Raylib.ToggleBorderlessWindowed();
         Raylib.SetExitKey(KeyboardKey.Null);
-        _currentstate = State.Drawing;
         canvas = new();
         icons = new();
 
@@ -60,10 +52,11 @@ public class ProgramManager
     private void DrawGraphics()
     {
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.Gray);
+        Raylib.ClearBackground(Color.White);
         drawables.ForEach(d => d.Draw());
         Raylib.DrawRectangleRec(RectangleTool.tempRectangle, DrawTool.drawingColor);
         LineTool.DrawThickLine(canvas.canvasImg, LineTool.tempLine.startPos, LineTool.tempLine.endPos, DrawTool.drawingColor, false);
+        Raylib.DrawCircle((int)CircleTool.tempCircle.Middle.X, (int)CircleTool.tempCircle.Middle.Y, CircleTool.tempCircle.Radius, DrawTool.drawingColor);
 
         if (popupWindow != null)
             popupWindow.Draw();
@@ -100,17 +93,8 @@ public class ProgramManager
     {
         while (!Raylib.WindowShouldClose())
         {
-            switch (_currentstate)
-            {
-                case State.Menu:
-                    break;
-
-                case State.Drawing:
-                    System.Console.WriteLine(popupWindow);
-                    Logic();
-                    DrawGraphics();
-                    break;
-            }
+            Logic();
+            DrawGraphics();
         }
     }
 }

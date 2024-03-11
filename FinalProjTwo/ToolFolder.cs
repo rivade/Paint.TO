@@ -16,5 +16,6 @@ public class Drawing : ToolFolder
         drawTools.Add(new Bucket());
         drawTools.Add(new RectangleTool());
         drawTools.Add(new LineTool());
+        drawTools.Add(new CircleTool());
     }
 }
