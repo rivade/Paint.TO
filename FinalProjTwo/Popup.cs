@@ -92,7 +92,7 @@ public class ColorSelector : PopupWindow
     private Rectangle colorsRect;
     public ColorSelector(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern, canvas)
     {
-        colors = Raylib.LoadTexture("colors.png");
+        colors = Raylib.LoadTexture("Icons/colors.png");
         colorsImg = Raylib.LoadImageFromTexture(colors);
         colorsRect = new(ProgramManager.ScreenWidth/2 - colors.Width/2, 300, colors.Width, colors.Height);
     }
