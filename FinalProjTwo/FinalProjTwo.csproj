@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Sprites\*.*" CopyToOutputDirectory="Always"/>
-    <Content Include="Backgrounds\*.*" CopyToOutputDirectory="Always"/>
-    <Content Include="Sounds\*.*" CopyToOutputDirectory="Always"/>
-    <Content Include="*.png" CopyToOutputDirectory="Always"/>
+    <Content Include="Icons\*.*" CopyToOutputDirectory="Always"/>
   </ItemGroup>
 
 </Project>

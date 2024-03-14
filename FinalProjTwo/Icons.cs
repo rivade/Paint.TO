@@ -7,18 +7,18 @@ public class Icons : IDrawable
 
     public Icons()
     {
-        toolIcons.Add(Raylib.LoadTexture("pencil.png"));
-        toolIcons.Add(Raylib.LoadTexture("paintbrush.png"));
-        toolIcons.Add(Raylib.LoadTexture("eraser.png"));
-        toolIcons.Add(Raylib.LoadTexture("bucket.png"));
-        toolIcons.Add(Raylib.LoadTexture("eyedropper.png"));
-        toolIcons.Add(Raylib.LoadTexture("checkers.png"));
-        toolIcons.Add(Raylib.LoadTexture("rectangle.png"));
-        toolIcons.Add(Raylib.LoadTexture("line.png"));
-        toolIcons.Add(Raylib.LoadTexture("circle.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/pencil.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/paintbrush.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/eraser.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/bucket.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/eyedropper.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/checkers.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/rectangle.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/line.png"));
+        toolIcons.Add(Raylib.LoadTexture("Icons/circle.png"));
 
-        miscIcons.Add(Raylib.LoadTexture("powericon.png"));
-        miscIcons.Add(Raylib.LoadTexture("saveicon.png"));
+        miscIcons.Add(Raylib.LoadTexture("Icons/powericon.png"));
+        miscIcons.Add(Raylib.LoadTexture("Icons/saveicon.png"));
 
     }
 
