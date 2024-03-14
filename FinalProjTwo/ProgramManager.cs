@@ -54,6 +54,7 @@ public class ProgramManager
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.White);
         drawables.ForEach(d => d.Draw());
+
         Raylib.DrawRectangleRec(RectangleTool.tempRectangle, DrawTool.drawingColor);
         LineTool.DrawThickLine(canvas.canvasImg, LineTool.tempLine.startPos, LineTool.tempLine.endPos, DrawTool.drawingColor, false);
         Raylib.DrawCircle((int)CircleTool.tempCircle.Middle.X, (int)CircleTool.tempCircle.Middle.Y, CircleTool.tempCircle.Radius, DrawTool.drawingColor);

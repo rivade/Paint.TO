@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO.Compression;
 
 namespace DrawingProgram;
 
@@ -97,13 +98,13 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
     public override void OnClick()
     {
-        if (ProgramManager.currentTool == ProgramManager.tools.drawTools[2])
+        if (ProgramManager.currentTool.GetType().Name == "Checker")
             Checker.checkerSizeInt++;
     }
 
     public void Draw()
     {
-        if (ProgramManager.currentTool == ProgramManager.tools.drawTools[2])
+        if (ProgramManager.currentTool.GetType().Name == "Checker")
         {
             Raylib.DrawText("Checker", Canvas.CanvasWidth + 45, (int)buttonRect.Y - 65, 30, Color.Black);
             Raylib.DrawText("size", Canvas.CanvasWidth + 70, (int)buttonRect.Y - 35, 30, Color.Black);

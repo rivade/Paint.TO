@@ -275,9 +275,9 @@ public abstract class ShapeTool : DrawTool
 
     public static Vector2 startPos;
     public static Rectangle tempRectangle;
-    public static Line tempLine;
+    public static Line tempLine = new(new Vector2(-10000, -10000), new Vector2(-10000, -10000));
     public static Circle tempCircle;
-    
+
     public override void Draw(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
@@ -288,20 +288,18 @@ public abstract class ShapeTool : DrawTool
             switch (shape)
             {
                 case Shapes.Rectangle:
-                    if (startPos.X < mousePos.X && startPos.Y < mousePos.Y)
-                        tempRectangle = new((int)startPos.X, (int)startPos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
-                    else if (startPos.X > mousePos.X && startPos.Y < mousePos.Y)
-                        tempRectangle = new((int)mousePos.X, (int)startPos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
-                    else if (startPos.X < mousePos.X && startPos.Y > mousePos.Y)
-                        tempRectangle = new((int)startPos.X, (int)mousePos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
-                    else if (startPos.X > mousePos.X && startPos.Y > mousePos.Y)
-                        tempRectangle = new((int)mousePos.X, (int)mousePos.Y, Math.Abs((int)mousePos.X - (int)startPos.X), Math.Abs((int)mousePos.Y - (int)startPos.Y));
+                    int x = Math.Min((int)startPos.X, (int)mousePos.X);
+                    int y = Math.Min((int)startPos.Y, (int)mousePos.Y);
+                    int width = Math.Abs((int)mousePos.X - (int)startPos.X);
+                    int height = Math.Abs((int)mousePos.Y - (int)startPos.Y);
+                    tempRectangle = new Rectangle(x, y, width, height);
+
                     break;
-                
+
                 case Shapes.Line:
                     tempLine = new(startPos, mousePos);
                     break;
-                
+
                 case Shapes.Circle:
                     tempCircle = Circle.CreateCircle(startPos, mousePos);
                     break;
@@ -319,13 +317,13 @@ public abstract class ShapeTool : DrawTool
 
                     tempRectangle = new(Vector2.Zero, Vector2.Zero);
                     break;
-                
+
                 case Shapes.Line:
                     DrawThickLine(canvas, tempLine.startPos, tempLine.endPos, drawingColor, true);
 
                     tempLine = new(new Vector2(-10000, -10000), new Vector2(-10000, -10000));
                     break;
-                
+
                 case Shapes.Circle:
                     Raylib.ImageDrawCircle(ref canvas, (int)tempCircle.Middle.X, (int)tempCircle.Middle.Y, tempCircle.Radius, drawingColor);
 
@@ -357,5 +355,17 @@ public class CircleTool : ShapeTool
     public CircleTool()
     {
         shape = Shapes.Circle;
+    }
+}
+
+public class EyeDropper : DrawTool
+{
+    public override void Draw(Image canvas, Vector2 mousePos)
+    {
+        Rectangle canvasRect = new(0, 0, new Vector2(canvas.Width, canvas.Height));
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left) && Raylib.CheckCollisionPointRec(mousePos, canvasRect))
+        {
+            drawingColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
+        }
     }
 }
