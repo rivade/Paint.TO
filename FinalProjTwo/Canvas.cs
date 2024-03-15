@@ -10,7 +10,7 @@ public class Canvas : IDrawable
 
     public Canvas()
     {
-        canvasImg = Raylib.GenImageColor(ProgramManager.ScreenWidth, ProgramManager.ScreenHeight, Color.White);
+        canvasImg = Raylib.GenImageColor(2500, 2500, Color.White);
     }
 
     public void Update(Vector2 mousePos, DrawTool tool)
@@ -18,7 +18,7 @@ public class Canvas : IDrawable
         if (IsCursorOnCanvas(mousePos))
         {
             DrawTool.PreStrokeSaveCanvas(canvasImg);
-            tool.Draw(canvasImg, mousePos);
+            tool.Stroke(canvasImg, mousePos);
         }
 
         canvasImg = DrawTool.UndoStroke(canvasImg);
@@ -52,7 +52,5 @@ public class Canvas : IDrawable
     {
         canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
-        Raylib.DrawRectangle(CanvasWidth, 0, 200, ProgramManager.ScreenHeight, Color.Gray);
-        Raylib.DrawRectangle(0, CanvasHeight, ProgramManager.ScreenWidth, 100, Color.Gray);
     }
 }

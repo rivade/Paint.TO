@@ -8,7 +8,6 @@ public class ProgramManager
     public const int ScreenHeight = 1080;
 
     private Canvas canvas;
-    private Icons icons;
     public static ToolFolder tools = new Drawing();
 
     //interface listor
@@ -26,13 +25,11 @@ public class ProgramManager
         Raylib.ToggleBorderlessWindowed();
         Raylib.SetExitKey(KeyboardKey.Null);
         canvas = new();
-        icons = new();
 
-        interactables = InterListInit.GenerateInteractables(tools);;
-        drawables = [canvas];
+        interactables = InterListInit.GenerateInteractables(tools);
+        drawables = [canvas, new ShapeIndicators(), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
-        drawables.Add(icons);
-
+        drawables.Add(new Icons());
 
         currentTool = tools.drawTools[0];
     }
@@ -41,17 +38,12 @@ public class ProgramManager
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.White);
+
         drawables.ForEach(d => d.Draw());
-
-        Raylib.DrawRectangleRec(RectangleTool.tempRectangle, DrawTool.drawingColor);
-        LineTool.DrawThickLine(canvas.canvasImg, LineTool.tempLine.startPos, LineTool.tempLine.endPos, DrawTool.drawingColor, false);
-        Raylib.DrawCircle((int)CircleTool.tempCircle.Middle.X, (int)CircleTool.tempCircle.Middle.Y, CircleTool.tempCircle.Radius, DrawTool.drawingColor);
-
         popupWindow?.Draw();
-        
+
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);
-
     }
 
     private void Logic()
