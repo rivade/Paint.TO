@@ -20,17 +20,6 @@ public class ProgramManager
     public static Color currentColor;
     public static PopupWindow popupWindow;
 
-    public SaveCanvasButton saveCanvasButton = new()
-    {
-        buttonRect =
-        new Rectangle(
-        Canvas.CanvasWidth + 60,
-        100,
-        SaveCanvasButton.buttonSize,
-        SaveCanvasButton.buttonSize)
-    };
-
-
     public ProgramManager()
     {
         Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
@@ -39,8 +28,7 @@ public class ProgramManager
         canvas = new();
         icons = new();
 
-        interactables = InterListInit.GenerateInteractables(tools);
-        interactables.Add(saveCanvasButton);
+        interactables = InterListInit.GenerateInteractables(tools);;
         drawables = [canvas];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(icons);
@@ -59,8 +47,7 @@ public class ProgramManager
         LineTool.DrawThickLine(canvas.canvasImg, LineTool.tempLine.startPos, LineTool.tempLine.endPos, DrawTool.drawingColor, false);
         Raylib.DrawCircle((int)CircleTool.tempCircle.Middle.X, (int)CircleTool.tempCircle.Middle.Y, CircleTool.tempCircle.Radius, DrawTool.drawingColor);
 
-        if (popupWindow != null)
-            popupWindow.Draw();
+        popupWindow?.Draw();
         
         Raylib.EndDrawing();
         Raylib.UnloadTexture(canvas.canvasTexture);
@@ -78,16 +65,10 @@ public class ProgramManager
 
         interactables.ForEach(c => c.OnHover(mousePos));
 
-        if (saveCanvasButton.CreatePopup(mousePos, canvas) != null)
-        {
-            popupWindow = saveCanvasButton.CreatePopup(mousePos, canvas);
-        }
-
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
         {
             popupWindow = null;
         }
-
     }
 
     public void Run()

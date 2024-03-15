@@ -58,6 +58,16 @@ public abstract class InterListInit
         SaveCanvasButton.buttonSize)
         });
 
+        interactableList.Add(new SaveCanvasButton()
+        {
+            buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth + 60,
+        100,
+        SaveCanvasButton.buttonSize,
+        SaveCanvasButton.buttonSize)
+        });
+
         return interactableList;
     }
 }

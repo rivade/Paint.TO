@@ -60,7 +60,7 @@ public class ToolButton : Button, IHoverable, IDrawable
 
 public class ColorSelectorButton : Button, IHoverable, IDrawable
 {
-    private ColorSelector colorSelectorWindow = new ColorSelector(660, 750, ["Select a color", "Press ESC/Enter to close"], null);
+    private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color", "Press ESC/Enter to close"], null);
 
     public override void OnClick()
     {
@@ -117,16 +117,11 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
 
 public class SaveCanvasButton : Button, IDrawable, IHoverable
 {
-    public SavePopup CreatePopup(Vector2 mousePos, Canvas canvas)
+    private SavePopup saveWindow = new(500, 300, ["Select file name ", "Press enter to save", "Press ESC to close"]);
+
+    public override void OnClick()
     {
-        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
-        {
-            SavePopup popup = new(500, 300, ["Select file name ", "Press enter to save", "Press ESC to close"], canvas);
-
-            return popup;
-        }
-
-        return null;
+        ProgramManager.popupWindow = saveWindow;
     }
 
     public void Draw()

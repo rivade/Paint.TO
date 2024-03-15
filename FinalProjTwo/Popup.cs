@@ -18,7 +18,7 @@ public abstract class PopupWindow : IDrawable
 
     }
 
-    public PopupWindow(int width, int height, string[] messagesExtern, Canvas canvas)
+    public PopupWindow(int width, int height, string[] messagesExtern)
     {
         windowRect = new Rectangle(ProgramManager.ScreenWidth / 2 - width / 2, ProgramManager.ScreenHeight / 2 - height / 2, width, height);
         messages = messagesExtern;
@@ -30,7 +30,7 @@ public class SavePopup : PopupWindow
     public Dictionary<KeyboardKey, string> alphabet;
     public string fileName = "";
 
-    public SavePopup(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern, canvas)
+    public SavePopup(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
         alphabet = new();
         for (int i = (int)KeyboardKey.A; i <= (int)KeyboardKey.Z; i++)
@@ -90,7 +90,7 @@ public class ColorSelector : PopupWindow
     private Texture2D colors;
     private Image colorsImg;
     private Rectangle colorsRect;
-    public ColorSelector(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern, canvas)
+    public ColorSelector(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern)
     {
         colors = Raylib.LoadTexture("Icons/colors.png");
         colorsImg = Raylib.LoadImageFromTexture(colors);
