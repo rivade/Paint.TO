@@ -85,10 +85,13 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
     public void Draw()
     {
-        TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
-        Raylib.DrawRectangleRec(buttonRect, Color.Black);
-        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
-        TextHandling.DrawCenteredTextPro([$"{DrawTool.brushRadius}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
+        if (ProgramManager.currentTool is DrawTool && ProgramManager.currentTool.GetType().Name != "Bucket" && ProgramManager.currentTool.GetType().Name != "EyeDropper" && ProgramManager.currentTool.GetType().Name != "Pencil" && ProgramManager.currentTool is not ShapeTool)
+        {
+            TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
+            Raylib.DrawRectangleRec(buttonRect, Color.Black);
+            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
+            TextHandling.DrawCenteredTextPro([$"{DrawTool.brushRadius}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
+        }
     }
 
 }
@@ -156,7 +159,7 @@ public class LoadButton : Button, IDrawable, IHoverable
 {
     public override void OnClick()
     {
-        
+
     }
 
     public void Draw()

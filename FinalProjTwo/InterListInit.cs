@@ -53,7 +53,7 @@ public abstract class InterListInit
             buttonRect =
         new Rectangle(
         Canvas.CanvasWidth + 60,
-        Canvas.CanvasHeight - 320,
+        Canvas.CanvasHeight - 150,
         Button.buttonSize,
         Button.buttonSize
         )
