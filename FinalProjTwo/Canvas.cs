@@ -7,6 +7,7 @@ public class Canvas : IDrawable
 
     public Image canvasImg;
     public Texture2D canvasTexture;
+    private Texture2D transparencyBG = Raylib.LoadTexture("Icons/transparent.png");
 
     public Canvas()
     {
@@ -56,6 +57,7 @@ public class Canvas : IDrawable
 
     public void Draw()
     {
+        Raylib.DrawTexture(transparencyBG, 0, 0, Color.White);
         canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
         Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
     }

@@ -148,7 +148,7 @@ public class Eraser : DrawTool
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            DrawThickLine(canvas, lastMousePos, mousePos, Color.White, true);
+            DrawThickLine(canvas, lastMousePos, mousePos, new Color(0, 0, 0, 0), true);
         }
 
         base.Stroke(canvas, mousePos);
