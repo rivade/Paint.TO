@@ -88,7 +88,7 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
         TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
         Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
-        Raylib.DrawText($"{DrawTool.brushRadius}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
+        TextHandling.DrawCenteredTextPro([$"{DrawTool.brushRadius}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
     }
 
 }
@@ -108,7 +108,7 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
             TextHandling.DrawCenteredTextPro(["Checker", "size"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
             Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
-            Raylib.DrawText($"{Checker.checkerSize}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
+            TextHandling.DrawCenteredTextPro([$"{Checker.checkerSize}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
     }
 }
@@ -143,6 +143,20 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
     public override void OnClick()
     {
         ProgramManager.popupWindow = saveWindow;
+    }
+
+    public void Draw()
+    {
+        GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+    }
+}
+
+public class LoadButton : Button, IDrawable, IHoverable
+{
+    public override void OnClick()
+    {
+        
     }
 
     public void Draw()
