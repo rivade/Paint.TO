@@ -10,19 +10,16 @@ public class ProgramManager
     private Canvas canvas;
     public static ToolFolder tools = new Drawing();
 
-    //interface listor
     private List<IHoverable> interactables;
     private List<IDrawable> drawables;
 
-
     public static DrawTool currentTool;
-    public static Color currentColor;
     public static PopupWindow popupWindow;
 
     public ProgramManager()
     {
         Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
-        Raylib.ToggleBorderlessWindowed();
+        Raylib.ToggleFullscreen();
         Raylib.SetExitKey(KeyboardKey.Null);
         canvas = new();
 
@@ -50,17 +47,13 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
-        if (popupWindow == null)
-            canvas.Update(mousePos, currentTool);
-        else
-            popupWindow.Logic(canvas, mousePos);
+        if (popupWindow == null) canvas.Update(mousePos, currentTool);
+        else popupWindow.Logic(canvas, mousePos);
 
-        interactables.ForEach(c => c.OnHover(mousePos));
+        interactables.ForEach(i => i.OnHover(mousePos));
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
-        {
             popupWindow = null;
-        }
     }
 
     public void Run()

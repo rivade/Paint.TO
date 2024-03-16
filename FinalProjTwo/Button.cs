@@ -85,8 +85,7 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
     public void Draw()
     {
-        Raylib.DrawText("Brush", Canvas.CanvasWidth + 56, (int)buttonRect.Y - 65, 30, Color.Black);
-        Raylib.DrawText("size", Canvas.CanvasWidth + 70, (int)buttonRect.Y - 35, 30, Color.Black);
+        TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
         Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
         Raylib.DrawText($"{DrawTool.brushRadius}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
@@ -106,11 +105,33 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
     {
         if (ProgramManager.currentTool.GetType().Name == "Checker")
         {
-            Raylib.DrawText("Checker", Canvas.CanvasWidth + 45, (int)buttonRect.Y - 65, 30, Color.Black);
-            Raylib.DrawText("size", Canvas.CanvasWidth + 70, (int)buttonRect.Y - 35, 30, Color.Black);
+            TextHandling.DrawCenteredTextPro(["Checker", "size"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
             Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
             Raylib.DrawText($"{Checker.checkerSize}", (int)buttonRect.X + 10, (int)buttonRect.Y + 20, 50, Color.Black);
+        }
+    }
+}
+
+public class FilledShapeButton : Button, IDrawable, IHoverable
+{
+    public override void OnClick()
+    {
+        if (ProgramManager.currentTool is ShapeTool && ProgramManager.currentTool is not LineTool)
+            ShapeTool.drawFilled = !ShapeTool.drawFilled;
+    }
+
+    public void Draw()
+    {
+        if (ProgramManager.currentTool is ShapeTool && ProgramManager.currentTool is not LineTool)
+        {
+            TextHandling.DrawCenteredTextPro(["Filled", "shape"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
+            Raylib.DrawRectangleRec(buttonRect, Color.Black);
+
+            if (ShapeTool.drawFilled)
+                Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.Green);
+            else
+                Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.Red);
         }
     }
 }

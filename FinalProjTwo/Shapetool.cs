@@ -14,6 +14,7 @@ public abstract class ShapeTool : DrawTool
     public static Rectangle tempRectangle;
     public static Line tempLine = new(new Vector2(-10000, -10000), new Vector2(-10000, -10000));
     public static Circle tempCircle;
+    public static bool drawFilled = true;
 
     public override void Stroke(Image canvas, Vector2 mousePos)
     {
@@ -44,8 +45,11 @@ public abstract class ShapeTool : DrawTool
             switch (shape)
             {
                 case Shapes.Rectangle:
-                    Raylib.ImageDrawRectangle(ref canvas, (int)tempRectangle.X, (int)tempRectangle.Y,
-                    (int)tempRectangle.Width, (int)tempRectangle.Height, drawingColor);
+                    if (drawFilled)
+                        Raylib.ImageDrawRectangle(ref canvas, (int)tempRectangle.X, (int)tempRectangle.Y,
+                        (int)tempRectangle.Width, (int)tempRectangle.Height, drawingColor);
+                    else
+                        Raylib.ImageDrawRectangleLines(ref canvas, tempRectangle, 1, drawingColor);
 
                     tempRectangle = new(Vector2.Zero, Vector2.Zero);
                     break;
@@ -57,7 +61,16 @@ public abstract class ShapeTool : DrawTool
                     break;
 
                 case Shapes.Circle:
-                    Raylib.ImageDrawCircle(ref canvas, (int)tempCircle.Middle.X, (int)tempCircle.Middle.Y, tempCircle.Radius, drawingColor);
+                    if (drawFilled)
+                        Raylib.ImageDrawCircleV(ref canvas, tempCircle.Middle, tempCircle.Radius, drawingColor);
+                    else
+                    {
+                        unsafe //av någon anledning är imagedrawcirclelines jättedåligt konstruerad så detta behövs
+                        {
+                            Raylib.ImageDrawCircleLinesV(&canvas, tempCircle.Middle, tempCircle.Radius, drawingColor);
+                        }
+                        //i imagedrawcirclelines går det ej att passera imagen med ref, så canvas behövs passeras med en pointer som är 'unsafe'
+                    }
 
                     tempCircle = new();
                     break;

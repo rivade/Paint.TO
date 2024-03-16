@@ -21,8 +21,8 @@ public abstract class InterListInit
         new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight + 10,
-        ColorSelectorButton.buttonSize,
-        ColorSelectorButton.buttonSize
+        Button.buttonSize,
+        Button.buttonSize
         )
         });
 
@@ -32,8 +32,8 @@ public abstract class InterListInit
         new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 150,
-        BrushRadiusButton.buttonSize,
-        BrushRadiusButton.buttonSize
+        Button.buttonSize,
+        Button.buttonSize
         )
         });
 
@@ -43,8 +43,19 @@ public abstract class InterListInit
         new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 320,
-        BrushRadiusButton.buttonSize,
-        BrushRadiusButton.buttonSize
+        Button.buttonSize,
+        Button.buttonSize
+        )
+        });
+
+        interactableList.Add(new FilledShapeButton()
+        {
+            buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth + 60,
+        Canvas.CanvasHeight - 320,
+        Button.buttonSize,
+        Button.buttonSize
         )
         });
 
@@ -54,8 +65,8 @@ public abstract class InterListInit
         new Rectangle(
         Canvas.CanvasWidth + 60,
         10,
-        SaveCanvasButton.buttonSize,
-        SaveCanvasButton.buttonSize)
+        Button.buttonSize,
+        Button.buttonSize)
         });
 
         interactableList.Add(new SaveCanvasButton()
@@ -64,8 +75,8 @@ public abstract class InterListInit
         new Rectangle(
         Canvas.CanvasWidth + 60,
         100,
-        SaveCanvasButton.buttonSize,
-        SaveCanvasButton.buttonSize)
+        Button.buttonSize,
+        Button.buttonSize)
         });
 
         return interactableList;
