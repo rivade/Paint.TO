@@ -10,7 +10,8 @@ public class Canvas : IDrawable
 
     public Canvas()
     {
-        canvasImg = Raylib.GenImageColor(2500, 2500, Color.White);
+        canvasImg = Raylib.GenImageColor(2500, 2500, Color.LightGray);
+        Raylib.ImageDrawRectangle(ref canvasImg, 0, 0, CanvasWidth, CanvasHeight, Color.White);
     }
 
     public void Update(Vector2 mousePos, DrawTool tool)
@@ -37,7 +38,7 @@ public class Canvas : IDrawable
     public void LoadProject(ref Image newImage)
     {
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
-        canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.White));
+        canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.LightGray));
     }
 
     private Image CropCanvas(Image canvas, Image newImage)

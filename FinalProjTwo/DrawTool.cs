@@ -179,8 +179,8 @@ public class Checker : DrawTool
 
     private void SetCheckers(Image canvas, Vector2 mousePos)
     {
-        int rows = (int)Math.Ceiling((double)canvas.Height / checkerSize);
-        int cols = (int)Math.Ceiling((double)canvas.Width / checkerSize);
+        int rows = (int)Math.Ceiling((double)Canvas.CanvasHeight / checkerSize);
+        int cols = (int)Math.Ceiling((double)Canvas.CanvasWidth / checkerSize);
 
         for (int row = 0; row < rows; row++)
         {
