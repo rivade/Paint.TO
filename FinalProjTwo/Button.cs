@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO.Compression;
+using System.Security.Principal;
 
 namespace DrawingProgram;
 
@@ -60,7 +61,7 @@ public class ToolButton : Button, IHoverable, IDrawable
 
 public class ColorSelectorButton : Button, IHoverable, IDrawable
 {
-    private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color", "Press ESC/Enter to close"], null);
+    private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color", "Press ESC/Enter to close"]);
 
     public override void OnClick()
     {
@@ -85,7 +86,11 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
     public void Draw()
     {
-        if (ProgramManager.currentTool is DrawTool && ProgramManager.currentTool.GetType().Name != "Bucket" && ProgramManager.currentTool.GetType().Name != "EyeDropper" && ProgramManager.currentTool.GetType().Name != "Pencil" && ProgramManager.currentTool is not ShapeTool)
+        if (ProgramManager.currentTool.GetType().Name != "Pencil" && 
+        ProgramManager.currentTool.GetType().Name != "Bucket" && 
+        ProgramManager.currentTool.GetType().Name != "EyeDropper" && 
+        ProgramManager.currentTool is not ShapeTool ||
+        ProgramManager.currentTool is LineTool)
         {
             TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
@@ -157,9 +162,13 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
 
 public class LoadButton : Button, IDrawable, IHoverable
 {
+    private DropFileWindow dropFileWindow = new(1820, 880, ["DROP FILE", "HERE"]);
     public override void OnClick()
     {
-
+        ProgramManager.popupWindow = dropFileWindow;
+        if (Raylib.IsWindowFullscreen())
+            Raylib.ToggleFullscreen();
+        Process.Start("explorer.exe");
     }
 
     public void Draw()

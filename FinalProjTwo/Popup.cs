@@ -90,11 +90,11 @@ public class ColorSelector : PopupWindow
     private Texture2D colors;
     private Image colorsImg;
     private Rectangle colorsRect;
-    public ColorSelector(int width, int height, string[] messagesExtern, Canvas canvas) : base(width, height, messagesExtern)
+    public ColorSelector(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
         colors = Raylib.LoadTexture("Icons/colors.png");
         colorsImg = Raylib.LoadImageFromTexture(colors);
-        colorsRect = new(ProgramManager.ScreenWidth/2 - colors.Width/2, 300, colors.Width, colors.Height);
+        colorsRect = new(ProgramManager.ScreenWidth / 2 - colors.Width / 2, 300, colors.Width, colors.Height);
     }
 
     public override void Draw()
@@ -109,5 +109,33 @@ public class ColorSelector : PopupWindow
         {
             DrawTool.drawingColor = Raylib.GetImageColor(colorsImg, (int)mousePos.X - (int)colorsRect.X, (int)mousePos.Y - (int)colorsRect.Y);
         }
+    }
+}
+
+public class DropFileWindow : PopupWindow
+{
+    public DropFileWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) { }
+
+    public override void Logic(Canvas canvas, Vector2 mousePos)
+    {
+        if (Raylib.IsFileDropped())
+        {
+            string[] droppedFiles = Raylib.GetDroppedFiles();
+
+            Image loadedImage = Raylib.LoadImage(droppedFiles[0]);
+            canvas.LoadProject(ref loadedImage);
+            Raylib.UnloadImage(loadedImage);
+
+            if (!Raylib.IsWindowFullscreen())
+                Raylib.ToggleFullscreen();
+            
+            ProgramManager.popupWindow = null;
+        }
+    }
+
+    public override void Draw()
+    {
+        Raylib.DrawRectangleRec(windowRect, Color.DarkGray);
+        TextHandling.DrawScreenCenteredText(messages, 400, 180, 180, Color.Black);
     }
 }

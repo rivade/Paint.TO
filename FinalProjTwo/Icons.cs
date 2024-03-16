@@ -19,6 +19,7 @@ public class Icons : IDrawable
 
         miscIcons.Add(Raylib.LoadTexture("Icons/powericon.png"));
         miscIcons.Add(Raylib.LoadTexture("Icons/saveicon.png"));
+        miscIcons.Add(Raylib.LoadTexture("Icons/foldericon.png"));
 
     }
 

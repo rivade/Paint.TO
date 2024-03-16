@@ -53,7 +53,11 @@ public class ProgramManager
         interactables.ForEach(i => i.OnHover(mousePos));
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
+        {
             popupWindow = null;
+            if (!Raylib.IsWindowFullscreen())
+            Raylib.ToggleFullscreen();
+        }
     }
 
     public void Run()

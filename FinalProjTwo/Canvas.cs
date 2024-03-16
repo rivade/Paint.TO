@@ -31,12 +31,17 @@ public class Canvas : IDrawable
 
     public void SaveProject(string fileName)
     {
-        Raylib.ExportImage(CropCanvasForExport(canvasImg), fileName);
+        Raylib.ExportImage(CropCanvas(canvasImg, Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White)), fileName);
     }
 
-    private Image CropCanvasForExport(Image canvas)
+    public void LoadProject(ref Image newImage)
     {
-        Image newImage = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White);
+        Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
+        canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.White));
+    }
+
+    private Image CropCanvas(Image canvas, Image newImage)
+    {
         for (int x = 0; x < CanvasWidth; x++)
         {
             for (int y = 0; y < CanvasHeight; y++)
