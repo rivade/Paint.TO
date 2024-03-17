@@ -45,9 +45,7 @@ public class ProgramManager
         { 
             Raylib.UnloadTexture(canvas.layerTextures[i]);
             canvas.layerTextures.Remove(canvas.layerTextures[i]);
-        }
-        
-        
+        }   
     }
 
     private void Logic()

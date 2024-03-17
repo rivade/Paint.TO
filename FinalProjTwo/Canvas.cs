@@ -41,8 +41,9 @@ public class Canvas : IDrawable
 
     public void LoadProject(ref Image newImage)
     {
+        currentLayer = 0;
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
-        layers[currentLayer] = CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.Blank));
+        layers = [ CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.Blank)) ];
     }
 
     private Image CropCanvas(Image canvas, Image newImage)

@@ -178,7 +178,7 @@ public class LoadButton : Button, IDrawable, IHoverable
     }
 }
 
-public class LayerButton : Button, IDrawable, IHoverable
+public class OpenLayersButton : Button, IDrawable, IHoverable
 {
     private LayerWindow layerWindow = new(1000, 800, ["Layers:"]);
     public override void OnClick()
@@ -214,39 +214,75 @@ public class CloseButton : Button, IDrawable, IHoverable
 
 
 
-
-public class AddLayerButton : Button, IDrawable, IHoverable
+public class LayerButton : Button, IDrawable, IHoverable
 {
+    public int ThisLayerNumber {get; set;}
+
     public void Draw()
     {
-        if (ProgramManager.popupWindow is LayerWindow)
-        {
-            GetButtonColor(Color.Lime, Color.Green, Color.White, false);
-            Raylib.DrawRectangleRec(buttonRect, buttonColor);
-        }
+        GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+
+        if (Canvas.currentLayer == ThisLayerNumber - 1)
+            Raylib.DrawRectangle((int)buttonRect.X - 5, (int)buttonRect.Y - 5, (int)buttonRect.Width + 10, (int)buttonRect.Height + 10, Color.Red);
+
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+
+        TextHandling.DrawCenteredTextPro([$"Layer {ThisLayerNumber}"],
+        (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width,
+        (int)buttonRect.Y + 20, 30, 0, Color.Black);
     }
 
     public override void OnClick()
     {
-        if (ProgramManager.popupWindow is LayerWindow)
-        {
-            Canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
-            Canvas.currentLayer = Canvas.layers.Count - 1;
-        }
+        Canvas.currentLayer = ThisLayerNumber - 1;
+    }
+}
+
+public class AddLayerButton : Button, IDrawable, IHoverable
+{
+    private Texture2D icon;
+
+    public AddLayerButton()
+    {
+        icon = Raylib.LoadTexture("Icons/plus.png");
+    }
+
+    public void Draw()
+    {
+        GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+    }
+
+    public override void OnClick()
+    {
+        Canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
+        Canvas.currentLayer = Canvas.layers.Count - 1;
     }
 }
 
 public class RemoveLayerButton : Button, IDrawable, IHoverable
 {
+    private Texture2D icon;
+
+    public RemoveLayerButton()
+    {
+        icon = Raylib.LoadTexture("Icons/x.png");
+    }
+
     public void Draw()
     {
         GetButtonColor(Color.Red, Color.Pink, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
     }
 
     public override void OnClick()
     {
-        Canvas.layers.Remove(Canvas.layers[Canvas.currentLayer]);
-        Canvas.currentLayer--;
+        if (Canvas.layers.Count != 1)
+        {
+            Canvas.layers.Remove(Canvas.layers[Canvas.currentLayer]);
+            Canvas.currentLayer--;
+        }
     }
 }

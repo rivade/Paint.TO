@@ -89,7 +89,7 @@ public abstract class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new LayerButton()
+        interactableList.Add(new OpenLayersButton()
         {
             buttonRect =
         new Rectangle(

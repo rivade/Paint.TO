@@ -141,6 +141,7 @@ public class DropFileWindow : PopupWindow
 
 public class LayerWindow : PopupWindow
 {
+    List<LayerButton> layers = new();
     private AddLayerButton addLayer = new() {buttonRect = new(500, 500, Button.buttonSize, Button.buttonSize)};
     private RemoveLayerButton removeLayer = new() {buttonRect = new(600, 500, Button.buttonSize, Button.buttonSize)};
 
@@ -150,6 +151,15 @@ public class LayerWindow : PopupWindow
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
+        layers = new();
+
+        for (int i = 0; i < Canvas.layers.Count; i++)
+        {
+            layers.Add(new() { buttonRect = new(i*300 + 300, 300, 200, 100), ThisLayerNumber = i+1});
+        }
+
+        layers.ForEach(l => l.OnHover(mousePos));
+
         addLayer.OnHover(mousePos);
         removeLayer.OnHover(mousePos);
     }
@@ -157,13 +167,9 @@ public class LayerWindow : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        
-        for (int i = 0; i < Canvas.layers.Count; i++)
-        {
-            Raylib.DrawRectangle(0, 0, 0, 0, Color.Green);
-            Raylib.DrawRectangle(i*300 + 300, 300, 200, 100, Color.LightGray);
-        }
-        
+
+        layers.ForEach(l => l.Draw());
+
         addLayer.Draw();
         removeLayer.Draw();
     }
