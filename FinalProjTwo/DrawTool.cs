@@ -5,8 +5,6 @@ namespace DrawingProgram;
 public abstract class DrawTool
 {
     protected Vector2 lastMousePos;
-    public static Stack<Image> strokes = new();
-
 
     public static Color drawingColor = Color.Black;
 
@@ -29,40 +27,6 @@ public abstract class DrawTool
     public virtual void Stroke(Image canvas, Vector2 mousePos)
     {
         lastMousePos = mousePos;
-    }
-
-    private static Stack<Image> CleanupStrokeStack(Stack<Image> strokes)
-    {
-        Stack<Image> tempReverse = new();
-
-        while (strokes.Count > 0) tempReverse.Push(strokes.Pop());
-
-        tempReverse.Pop();
-
-        while (tempReverse.Count > 0) strokes.Push(tempReverse.Pop());
-
-        return strokes;
-    }
-
-    public static void PreStrokeSaveCanvas(Image canvas)
-    {
-        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
-            strokes.Push(Raylib.ImageCopy(canvas));
-
-        if (strokes.Count > 20)
-            strokes = CleanupStrokeStack(strokes);
-    }
-
-    public static Image UndoStroke(Image canvas)
-    {
-        try
-        {
-            return (Raylib.IsKeyPressed(KeyboardKey.Z) && ProgramManager.popupWindow == null) ? strokes.Pop() : canvas;
-        }
-        catch (InvalidOperationException)
-        {
-            return canvas;
-        }
     }
 
     // vvvv Tack chatgpt, youtube, stackoverflow och gud för denna algoritm nedan vvvv

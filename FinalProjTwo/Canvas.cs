@@ -22,11 +22,11 @@ public class Canvas : IDrawable
     {
         if (IsCursorOnCanvas(mousePos))
         {
-            DrawTool.PreStrokeSaveCanvas(layers[currentLayer]);
+            PreStrokeSaveCanvas(layers[currentLayer]);
             tool.Stroke(layers[currentLayer], mousePos);
         }
 
-        layers[currentLayer] = DrawTool.UndoStroke(layers[currentLayer]);
+        layers[currentLayer] = UndoStroke(layers[currentLayer]);
     }
 
     private bool IsCursorOnCanvas(Vector2 cursor)
@@ -79,6 +79,44 @@ public class Canvas : IDrawable
         foreach (Texture2D layer in layerTextures)
         {
             Raylib.DrawTexture(layer, 0, 0, Color.White);
+        }
+    }
+
+
+
+
+
+
+    Stack<Image> strokes = new();
+    Stack<Image> CleanupStrokeStack(Stack<Image> strokes)
+    {
+        Stack<Image> tempReverse = new();
+
+        while (strokes.Count > 0) tempReverse.Push(strokes.Pop());
+
+        tempReverse.Pop();
+
+        while (tempReverse.Count > 0) strokes.Push(tempReverse.Pop());
+
+        return strokes;
+    }
+    void PreStrokeSaveCanvas(Image canvas)
+    {
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+            strokes.Push(Raylib.ImageCopy(canvas));
+
+        if (strokes.Count > 20)
+            strokes = CleanupStrokeStack(strokes);
+    }
+    Image UndoStroke(Image canvas)
+    {
+        try
+        {
+            return (Raylib.IsKeyPressed(KeyboardKey.Z) && ProgramManager.popupWindow == null) ? strokes.Pop() : canvas;
+        }
+        catch (InvalidOperationException)
+        {
+            return canvas;
         }
     }
 }
