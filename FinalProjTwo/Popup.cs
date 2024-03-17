@@ -153,15 +153,15 @@ public class LayerWindow : PopupWindow
     {
         layers = new();
 
-        for (int i = 0; i < Canvas.layers.Count; i++)
+        for (int i = 0; i < canvas.layers.Count; i++)
         {
             layers.Add(new() { buttonRect = new(i*300 + 300, 300, 200, 100), ThisLayerNumber = i+1});
         }
 
         layers.ForEach(l => l.OnHover(mousePos));
 
-        addLayer.OnHover(mousePos);
-        removeLayer.OnHover(mousePos);
+        addLayer.Hover(mousePos, canvas);
+        removeLayer.Hover(mousePos, canvas);
     }
 
     public override void Draw()

@@ -5,7 +5,7 @@ public class Canvas : IDrawable
     public const int CanvasWidth = ProgramManager.ScreenWidth - 200;
     public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
 
-    public static List<Image> layers = new();
+    public List<Image> layers = new();
     public static int currentLayer = 0;
 
     public List<Texture2D> layerTextures = new();
@@ -121,16 +121,16 @@ public class Canvas : IDrawable
     }
 }
 
-public class CanvasHandler
+public class CanvasHandler //IDE! Istället för detta vvv gör "layer" till en egen klass (datatyp) som innehåller både image och stroke
 {
     List<Stack<Image>> strokeStacks = [ new(), new(), new(), new(), new() ];
 
     public void Update()
     {
-        Stack<Image> strokes = strokeStacks[Canvas.currentLayer];
+        //Stack<Image> strokes = strokeStacks[Canvas.currentLayer];
         
         //blabla övrig logik
         
-        strokeStacks[Canvas.currentLayer] = strokes;
+        //strokeStacks[Canvas.currentLayer] = strokes;
     }
 }

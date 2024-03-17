@@ -212,9 +212,7 @@ public class CloseButton : Button, IDrawable, IHoverable
 
 
 
-
-
-public class LayerButton : Button, IDrawable, IHoverable
+public class LayerButton : Button, IHoverable, IDrawable
 {
     public int ThisLayerNumber {get; set;}
 
@@ -232,13 +230,14 @@ public class LayerButton : Button, IDrawable, IHoverable
         (int)buttonRect.Y + 20, 30, 0, Color.Black);
     }
 
+
     public override void OnClick()
     {
         Canvas.currentLayer = ThisLayerNumber - 1;
     }
 }
 
-public class AddLayerButton : Button, IDrawable, IHoverable
+public class AddLayerButton : Button, IDrawable
 {
     private Texture2D icon;
 
@@ -254,16 +253,27 @@ public class AddLayerButton : Button, IDrawable, IHoverable
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
     }
 
-    public override void OnClick()
+    public void Hover(Vector2 mousePos, Canvas canvas)
     {
-        if (Canvas.layers.Count < 5)
-            Canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
+        isHoveredOn = false;
+        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
+        {
+            isHoveredOn = true;
+
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+                Click(canvas);
+        }
+    }
+    public void Click(Canvas canvas)
+    {
+        if (canvas.layers.Count < 5)
+            canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
             
-        Canvas.currentLayer = Canvas.layers.Count - 1;
+        Canvas.currentLayer = canvas.layers.Count - 1;
     }
 }
 
-public class RemoveLayerButton : Button, IDrawable, IHoverable
+public class RemoveLayerButton : Button, IDrawable
 {
     private Texture2D icon;
 
@@ -279,12 +289,25 @@ public class RemoveLayerButton : Button, IDrawable, IHoverable
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
     }
 
-    public override void OnClick()
+    public void Hover(Vector2 mousePos, Canvas canvas)
     {
-        if (Canvas.layers.Count != 1)
+        isHoveredOn = false;
+        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
         {
-            Canvas.layers.Remove(Canvas.layers[Canvas.currentLayer]);
-            Canvas.currentLayer--;
+            isHoveredOn = true;
+
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+                Click(canvas);
+        }
+    }
+    public void Click(Canvas canvas)
+    {
+        if (canvas.layers.Count != 1)
+        {
+            canvas.layers.Remove(canvas.layers[Canvas.currentLayer]);
+
+            if (Canvas.currentLayer != 0) Canvas.currentLayer--;
+            else Canvas.currentLayer = 0;
         }
     }
 }
