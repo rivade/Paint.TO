@@ -235,3 +235,18 @@ public class AddLayerButton : Button, IDrawable, IHoverable
         }
     }
 }
+
+public class RemoveLayerButton : Button, IDrawable, IHoverable
+{
+    public void Draw()
+    {
+        GetButtonColor(Color.Red, Color.Pink, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+    }
+
+    public override void OnClick()
+    {
+        Canvas.layers.Remove(Canvas.layers[Canvas.currentLayer]);
+        Canvas.currentLayer--;
+    }
+}
