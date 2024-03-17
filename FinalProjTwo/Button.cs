@@ -256,7 +256,9 @@ public class AddLayerButton : Button, IDrawable, IHoverable
 
     public override void OnClick()
     {
-        Canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
+        if (Canvas.layers.Count < 5)
+            Canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
+            
         Canvas.currentLayer = Canvas.layers.Count - 1;
     }
 }

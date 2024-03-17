@@ -6,9 +6,9 @@ public class Canvas : IDrawable
     public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
 
     public static List<Image> layers = new();
-    public List<Texture2D> layerTextures = new();
     public static int currentLayer = 0;
-    public Texture2D canvasTexture;
+
+    public List<Texture2D> layerTextures = new();
     private Texture2D transparencyBG = Raylib.LoadTexture("Icons/transparent.png");
 
     public Canvas()
@@ -118,5 +118,19 @@ public class Canvas : IDrawable
         {
             return canvas;
         }
+    }
+}
+
+public class CanvasHandler
+{
+    List<Stack<Image>> strokeStacks = [ new(), new(), new(), new(), new() ];
+
+    public void Update()
+    {
+        Stack<Image> strokes = strokeStacks[Canvas.currentLayer];
+        
+        //blabla övrig logik
+        
+        strokeStacks[Canvas.currentLayer] = strokes;
     }
 }
