@@ -141,17 +141,26 @@ public class DropFileWindow : PopupWindow
 
 public class LayerWindow : PopupWindow
 {
+    private AddLayerButton addLayer = new() {buttonRect = new(500, 500, Button.buttonSize, Button.buttonSize)};
+
     public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
+    }
 
+    public override void Logic(Canvas canvas, Vector2 mousePos)
+    {
+        for (int i = 0; i < Canvas.layers.Count; i++)
+        {
+            Raylib.DrawRectangle(0, 0, 0, 0, Color.Green);
+            Raylib.DrawRectangle(i*300 + 300, 300, 200, 100, Color.LightGray);
+        }
+        addLayer.OnHover(mousePos);
     }
 
     public override void Draw()
     {
         base.Draw();
-        /*foreach (Image layer in Canvas.layers)
-        {
-            
-        }*/
+        
+        addLayer.Draw();
     }
 }

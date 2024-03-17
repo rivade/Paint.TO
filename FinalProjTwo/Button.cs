@@ -86,9 +86,9 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
     public void Draw()
     {
-        if (ProgramManager.currentTool.GetType().Name != "Pencil" && 
-        ProgramManager.currentTool.GetType().Name != "Bucket" && 
-        ProgramManager.currentTool.GetType().Name != "EyeDropper" && 
+        if (ProgramManager.currentTool.GetType().Name != "Pencil" &&
+        ProgramManager.currentTool.GetType().Name != "Bucket" &&
+        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
         ProgramManager.currentTool is not ShapeTool ||
         ProgramManager.currentTool is LineTool)
         {
@@ -203,5 +203,35 @@ public class CloseButton : Button, IDrawable, IHoverable
     public void Draw()
     {
         Raylib.DrawRectangleRec(buttonRect, Color.Red);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+public class AddLayerButton : Button, IDrawable, IHoverable
+{
+    public void Draw()
+    {
+        if (ProgramManager.popupWindow is LayerWindow)
+        {
+            GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+            Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        }
+    }
+
+    public override void OnClick()
+    {
+        if (ProgramManager.popupWindow is LayerWindow)
+        {
+            Canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
+            Canvas.currentLayer = Canvas.layers.Count - 1;
+        }
     }
 }
