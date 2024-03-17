@@ -40,7 +40,14 @@ public class ProgramManager
         popupWindow?.Draw();
 
         Raylib.EndDrawing();
-        Raylib.UnloadTexture(canvas.canvasTexture);
+
+        for (int i = 0; i < canvas.layerTextures.Count; i++)
+        { 
+            Raylib.UnloadTexture(canvas.layerTextures[i]);
+            canvas.layerTextures.Remove(canvas.layerTextures[i]);
+        }
+        
+        
     }
 
     private void Logic()

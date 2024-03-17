@@ -89,6 +89,16 @@ public abstract class InterListInit
         Button.buttonSize)
         });
 
+        interactableList.Add(new LayerButton()
+        {
+            buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth + 60,
+        280,
+        Button.buttonSize,
+        Button.buttonSize)
+        });
+
         return interactableList;
     }
 }

@@ -5,25 +5,28 @@ public class Canvas : IDrawable
     public const int CanvasWidth = ProgramManager.ScreenWidth - 200;
     public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
 
-    public Image canvasImg;
+    public static List<Image> layers = new();
+    public List<Texture2D> layerTextures = new();
+    public int currentLayer = 0;
     public Texture2D canvasTexture;
     private Texture2D transparencyBG = Raylib.LoadTexture("Icons/transparent.png");
 
     public Canvas()
     {
-        canvasImg = Raylib.GenImageColor(2500, 2500, Color.LightGray);
-        Raylib.ImageDrawRectangle(ref canvasImg, 0, 0, CanvasWidth, CanvasHeight, Color.White);
+        Image temp = Raylib.GenImageColor(2500, 2500, Color.Blank);
+        Raylib.ImageDrawRectangle(ref temp, 0, 0, CanvasWidth, CanvasHeight, Color.White);
+        layers.Add(temp);
     }
 
     public void Update(Vector2 mousePos, DrawTool tool)
     {
         if (IsCursorOnCanvas(mousePos))
         {
-            DrawTool.PreStrokeSaveCanvas(canvasImg);
-            tool.Stroke(canvasImg, mousePos);
+            DrawTool.PreStrokeSaveCanvas(layers[currentLayer]);
+            tool.Stroke(layers[currentLayer], mousePos);
         }
 
-        canvasImg = DrawTool.UndoStroke(canvasImg);
+        layers[currentLayer] = DrawTool.UndoStroke(layers[currentLayer]);
     }
 
     private bool IsCursorOnCanvas(Vector2 cursor)
@@ -33,13 +36,13 @@ public class Canvas : IDrawable
 
     public void SaveProject(string fileName)
     {
-        Raylib.ExportImage(CropCanvas(canvasImg, Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White)), fileName);
+        Raylib.ExportImage(CropCanvas(CompressLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), fileName);
     }
 
     public void LoadProject(ref Image newImage)
     {
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
-        canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.LightGray));
+        layers[currentLayer] = CropCanvas(newImage, Raylib.GenImageColor(2500, 2500, Color.Blank));
     }
 
     private Image CropCanvas(Image canvas, Image newImage)
@@ -55,10 +58,26 @@ public class Canvas : IDrawable
         return newImage;
     }
 
+    private Image CompressLayers(List<Image> layers)
+    {
+        Image result = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank);
+        foreach (Image layer in layers)
+        {
+            Raylib.ImageDraw(ref result, layer, new(0, 0, CanvasWidth, CanvasHeight), new(0, 0, CanvasWidth, CanvasHeight), Color.White);
+        }
+        return result;
+    }
+
     public void Draw()
     {
         Raylib.DrawTexture(transparencyBG, 0, 0, Color.White);
-        canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
-        Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
+        foreach (Image layer in layers)
+        {
+            layerTextures.Add(Raylib.LoadTextureFromImage(layer));
+        }
+        foreach (Texture2D layer in layerTextures)
+        {
+            Raylib.DrawTexture(layer, 0, 0, Color.White);
+        }
     }
 }

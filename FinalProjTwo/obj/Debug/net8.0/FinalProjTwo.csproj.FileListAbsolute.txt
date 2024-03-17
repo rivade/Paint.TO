@@ -35,3 +35,4 @@ C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bi
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Icons\saveicon.png
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Icons\foldericon.png
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Icons\transparent.png
+c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Icons\layers.png

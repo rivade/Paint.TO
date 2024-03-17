@@ -138,3 +138,20 @@ public class DropFileWindow : PopupWindow
         TextHandling.DrawScreenCenteredText(messages, 400, 180, 180, Color.Black);
     }
 }
+
+public class LayerWindow : PopupWindow
+{
+    public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
+    {
+
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        /*foreach (Image layer in Canvas.layers)
+        {
+            
+        }*/
+    }
+}

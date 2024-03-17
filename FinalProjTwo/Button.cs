@@ -178,6 +178,21 @@ public class LoadButton : Button, IDrawable, IHoverable
     }
 }
 
+public class LayerButton : Button, IDrawable, IHoverable
+{
+    private LayerWindow layerWindow = new(1000, 800, ["Layers:"]);
+    public override void OnClick()
+    {
+        ProgramManager.popupWindow = layerWindow;
+    }
+
+    public void Draw()
+    {
+        GetButtonColor(Color.White, Color.LightGray, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+    }
+}
+
 public class CloseButton : Button, IDrawable, IHoverable
 {
     public override void OnClick()
