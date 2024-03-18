@@ -187,7 +187,7 @@ public class LoadButton : Button, IDrawable, IHoverable
 
 public class OpenLayersButton : Button, IDrawable, IHoverable
 {
-    private LayerWindow layerWindow = new(1000, 800, ["Layers:"]);
+    private LayerWindow layerWindow = new(1300, 500, ["Layers:", "Press ESC/Enter to close"]);
     public override void OnClick()
     {
         ProgramManager.popupWindow = layerWindow;

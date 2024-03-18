@@ -114,9 +114,9 @@ public class ColorSelector : PopupWindow
 
 public class LayerWindow : PopupWindow
 {
-    List<LayerButton> layers = new();
-    private AddLayerButton addLayer = new() {buttonRect = new(500, 500, Button.buttonSize, Button.buttonSize)};
-    private RemoveLayerButton removeLayer = new() {buttonRect = new(600, 500, Button.buttonSize, Button.buttonSize)};
+    List<LayerButton> layerButtons = new();
+    private AddLayerButton addLayer = new() {buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize)};
+    private RemoveLayerButton removeLayer = new() {buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize)};
 
     public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
@@ -124,14 +124,14 @@ public class LayerWindow : PopupWindow
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
-        layers = new();
+        layerButtons = new();
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layers.Add(new() { buttonRect = new(i*300 + 300, 300, 200, 100), ThisLayerNumber = i+1 });
+            layerButtons.Add(new() { buttonRect = new(i*250 + 360, 475, 200, 100), ThisLayerNumber = i+1 });
         }
 
-        layers.ForEach(l => l.OnHover(mousePos));
+        layerButtons.ForEach(l => l.OnHover(mousePos));
 
         addLayer.Hover(mousePos, canvas);
         removeLayer.Hover(mousePos, canvas);
@@ -141,7 +141,7 @@ public class LayerWindow : PopupWindow
     {
         base.Draw();
 
-        layers.ForEach(l => l.Draw());
+        layerButtons.ForEach(l => l.Draw());
 
         addLayer.Draw();
         removeLayer.Draw();
