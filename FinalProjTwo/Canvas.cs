@@ -71,6 +71,8 @@ public class Layer
     public Texture2D canvasTexture;
     public Stack<Image> strokes;
 
+    public bool isVisible = true;
+
     public Layer()
     {
         canvasImg = Raylib.GenImageColor(2500, 1600, Color.Blank);
@@ -79,8 +81,11 @@ public class Layer
 
     public void Draw()
     {
-        canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
-        Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
+        if (isVisible)
+        {
+            canvasTexture = Raylib.LoadTextureFromImage(canvasImg);    
+            Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
+        }
     }
 
     public void Logic(Vector2 mousePos, DrawTool tool)

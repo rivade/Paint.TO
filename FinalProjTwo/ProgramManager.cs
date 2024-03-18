@@ -41,10 +41,7 @@ public class ProgramManager
 
         Raylib.EndDrawing();
 
-        foreach (Layer layer in canvas.layers)
-        {
-            Raylib.UnloadTexture(layer.canvasTexture);
-        }
+        canvas.layers.ForEach(layer => Raylib.UnloadTexture(layer.canvasTexture));
     }
 
     private void Logic()

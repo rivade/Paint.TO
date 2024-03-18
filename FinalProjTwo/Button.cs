@@ -266,7 +266,7 @@ public class AddLayerButton : Button, IDrawable
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
     }
 
-    public void Hover(Vector2 mousePos, Canvas canvas)
+    public void Update(Vector2 mousePos, Canvas canvas)
     {
         isHoveredOn = false;
         if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
@@ -277,7 +277,7 @@ public class AddLayerButton : Button, IDrawable
                 Click(canvas);
         }
     }
-    public void Click(Canvas canvas)
+    private void Click(Canvas canvas)
     {
         if (canvas.layers.Count < 5)
             canvas.layers.Add( new() );
@@ -302,7 +302,7 @@ public class RemoveLayerButton : Button, IDrawable
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
     }
 
-    public void Hover(Vector2 mousePos, Canvas canvas)
+    public void Update(Vector2 mousePos, Canvas canvas)
     {
         isHoveredOn = false;
         if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
@@ -313,7 +313,7 @@ public class RemoveLayerButton : Button, IDrawable
                 Click(canvas);
         }
     }
-    public void Click(Canvas canvas)
+    private void Click(Canvas canvas)
     {
         if (canvas.layers.Count != 1)
         {
@@ -323,4 +323,41 @@ public class RemoveLayerButton : Button, IDrawable
             else Canvas.currentLayer = 0;
         }
     }
+}
+
+public class LayerVisibilityButton : Button, IDrawable
+{
+    private List<Texture2D> icons = new();
+    public int currentIcon = 0;
+
+    public LayerVisibilityButton()
+    {
+        icons.Add(Raylib.LoadTexture("Icons/visible.png"));
+        icons.Add(Raylib.LoadTexture("Icons/invisible.png"));
+    }
+
+    public void Draw()
+    {
+        GetButtonColor(Color.LightGray, Color.White, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawTexture(icons[currentIcon], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+    }
+
+    public void Update(Vector2 mousePos, Canvas canvas)
+    {
+        currentIcon = canvas.layers[Canvas.currentLayer].isVisible ? 0 : 1;
+
+        isHoveredOn = false;
+        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
+        {
+            isHoveredOn = true;
+
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+                Click(canvas);
+        }
+    }
+    private void Click(Canvas canvas)
+    {
+        canvas.layers[Canvas.currentLayer].isVisible = !canvas.layers[Canvas.currentLayer].isVisible;
+    }   
 }
