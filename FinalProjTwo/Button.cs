@@ -80,25 +80,17 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
     private ValueSetterWindow valueSetterWindow = 
-    new(900, 700, ["Set brush radius", "Press ESC/Enter to close"], ValueToChange => DrawTool.brushRadius = ValueToChange) {minValue = 1, maxValue = 100};
+    new(800, 600, ["Set brush radius", "Press ESC/Enter to close"], ValueToChange => DrawTool.brushRadius = ValueToChange) {minValue = 1, maxValue = 100};
 
     public override void OnClick()
     {
-        if (ProgramManager.currentTool.GetType().Name != "Pencil" &&
-        ProgramManager.currentTool.GetType().Name != "Bucket" &&
-        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
-        ProgramManager.currentTool is not ShapeTool ||
-        ProgramManager.currentTool is LineTool)
+        if (Conditions())
             ProgramManager.popupWindow = valueSetterWindow;
     }
 
     public void Draw()
     {
-        if (ProgramManager.currentTool.GetType().Name != "Pencil" &&
-        ProgramManager.currentTool.GetType().Name != "Bucket" &&
-        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
-        ProgramManager.currentTool is not ShapeTool ||
-        ProgramManager.currentTool is LineTool)
+        if (Conditions())
         {
             TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
@@ -107,12 +99,20 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
         }
     }
 
+    private bool Conditions()
+    {
+        return ProgramManager.currentTool.GetType().Name != "Pencil" &&
+        ProgramManager.currentTool.GetType().Name != "Bucket" &&
+        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
+        ProgramManager.currentTool is not ShapeTool ||
+        ProgramManager.currentTool is LineTool;
+    }
 }
 
 public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow = 
-    new(900, 700, ["Set checker size", "Press ESC/Enter to close"], ValueToChange => Checker.checkerSize = ValueToChange) {minValue = 5, maxValue = 20};
+    new(800, 600, ["Set checker size", "Press ESC/Enter to close"], ValueToChange => Checker.checkerSize = ValueToChange) {minValue = 5, maxValue = 20};
 
     public override void OnClick()
     {
