@@ -267,7 +267,7 @@ public class AddLayerButton : Button, IDrawable
     public void Click(Canvas canvas)
     {
         if (canvas.layers.Count < 5)
-            canvas.layers.Add(Raylib.GenImageColor(2500, 2500, Color.Blank));
+            canvas.layers.Add( new() );
             
         Canvas.currentLayer = canvas.layers.Count - 1;
     }

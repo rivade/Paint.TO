@@ -41,11 +41,10 @@ public class ProgramManager
 
         Raylib.EndDrawing();
 
-        for (int i = 0; i < canvas.layerTextures.Count; i++)
-        { 
-            Raylib.UnloadTexture(canvas.layerTextures[i]);
-            canvas.layerTextures.Remove(canvas.layerTextures[i]);
-        }   
+        foreach (Layer layer in canvas.layers)
+        {
+            Raylib.UnloadTexture(layer.canvasTexture);
+        }
     }
 
     private void Logic()
