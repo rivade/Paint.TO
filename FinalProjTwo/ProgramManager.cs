@@ -23,7 +23,7 @@ public class ProgramManager
         Raylib.SetExitKey(KeyboardKey.Null);
         canvas = new();
 
-        interactables = InterListInit.GenerateInteractables(tools);
+        interactables = InterListInit.GenerateInteractables(tools, canvas);
         drawables = [canvas, new ShapeIndicators(), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());

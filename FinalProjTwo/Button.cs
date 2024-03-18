@@ -162,13 +162,20 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
 
 public class LoadButton : Button, IDrawable, IHoverable
 {
-    private DropFileWindow dropFileWindow = new(1820, 880, ["DROP FILE", "HERE"]);
+    Canvas canv;
+
+    public LoadButton(Canvas canvasInstance)
+    {
+        canv = canvasInstance;
+    }
     public override void OnClick()
     {
-        ProgramManager.popupWindow = dropFileWindow;
         if (Raylib.IsWindowFullscreen())
             Raylib.ToggleFullscreen();
-        Process.Start("explorer.exe");
+        Image loadedImage = Raylib.LoadImage(OpenDialog.GetFileDirectory());
+        Raylib.ToggleFullscreen();
+
+        canv.LoadProject(loadedImage);
     }
 
     public void Draw()

@@ -2,7 +2,7 @@ namespace DrawingProgram;
 
 public abstract class InterListInit
 {
-    public static List<IHoverable> GenerateInteractables(ToolFolder inputTools)
+    public static List<IHoverable> GenerateInteractables(ToolFolder inputTools, Canvas canvas)
     {
         List<IHoverable> interactableList = new();
         for (int i = 0; i < inputTools.drawTools.Count(); i++)
@@ -79,7 +79,7 @@ public abstract class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new LoadButton()
+        interactableList.Add(new LoadButton(canvas)
         {
             buttonRect =
         new Rectangle(

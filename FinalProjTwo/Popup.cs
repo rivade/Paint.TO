@@ -112,32 +112,6 @@ public class ColorSelector : PopupWindow
     }
 }
 
-public class DropFileWindow : PopupWindow
-{
-    public DropFileWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) { }
-
-    public override void Logic(Canvas canvas, Vector2 mousePos)
-    {
-        if (Raylib.IsFileDropped())
-        {
-            string[] droppedFiles = Raylib.GetDroppedFiles();
-
-            Image loadedImage = Raylib.LoadImage(droppedFiles[0]);
-            canvas.LoadProject(loadedImage);
-            if (!Raylib.IsWindowFullscreen())
-                Raylib.ToggleFullscreen();
-            
-            ProgramManager.popupWindow = null;
-        }
-    }
-
-    public override void Draw()
-    {
-        Raylib.DrawRectangleRec(windowRect, Color.DarkGray);
-        TextHandling.DrawScreenCenteredText(messages, 400, 180, 180, Color.Black);
-    }
-}
-
 public class LayerWindow : PopupWindow
 {
     List<LayerButton> layers = new();
