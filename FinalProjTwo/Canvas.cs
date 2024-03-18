@@ -27,11 +27,12 @@ public class Canvas : IDrawable
         Raylib.ExportImage(CropCanvas(CompressLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), fileName);
     }
 
-    public void LoadProject(ref Image newImage)
+    public void LoadProject(Image newImage)
     {
         currentLayer = 0;
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
         layers = [ new() ];
+        layers[currentLayer].canvasImg = newImage;
     }
 
     private Image CropCanvas(Image canvas, Image newImage)

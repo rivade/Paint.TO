@@ -123,8 +123,7 @@ public class DropFileWindow : PopupWindow
             string[] droppedFiles = Raylib.GetDroppedFiles();
 
             Image loadedImage = Raylib.LoadImage(droppedFiles[0]);
-            canvas.LoadProject(ref loadedImage);
-            Raylib.UnloadImage(loadedImage);
+            canvas.LoadProject(loadedImage);
             if (!Raylib.IsWindowFullscreen())
                 Raylib.ToggleFullscreen();
             
