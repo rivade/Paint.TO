@@ -172,10 +172,16 @@ public class LoadButton : Button, IDrawable, IHoverable
     {
         if (Raylib.IsWindowFullscreen())
             Raylib.ToggleFullscreen();
-        Image loadedImage = Raylib.LoadImage(OpenDialog.GetFileDirectory());
-        Raylib.ToggleFullscreen();
+        
+        string fileDirectory = OpenDialog.GetFileDirectory();
 
-        canv.LoadProject(loadedImage);
+        if (!string.IsNullOrEmpty(fileDirectory))
+        {
+            Image loadedImage = Raylib.LoadImage(fileDirectory);
+            canv.LoadProject(loadedImage);
+        }
+        
+        Raylib.ToggleFullscreen();
     }
 
     public void Draw()

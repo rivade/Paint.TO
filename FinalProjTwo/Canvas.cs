@@ -32,10 +32,10 @@ public class Canvas : IDrawable
         currentLayer = 0;
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
         layers = [ new() ];
-        layers[currentLayer].canvasImg = newImage;
+        layers[currentLayer].canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 1600, Color.Blank));
     }
 
-    private Image CropCanvas(Image canvas, Image newImage)
+    private static Image CropCanvas(Image canvas, Image newImage)
     {
         for (int x = 0; x < CanvasWidth; x++)
         {
@@ -48,7 +48,7 @@ public class Canvas : IDrawable
         return newImage;
     }
 
-    private Image CompressLayers(List<Layer> layers)
+    private static Image CompressLayers(List<Layer> layers)
     {
         Image result = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank);
         foreach (Layer layer in layers)

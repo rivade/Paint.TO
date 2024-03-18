@@ -59,8 +59,6 @@ public class ProgramManager
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
         {
             popupWindow = null;
-            if (!Raylib.IsWindowFullscreen())
-            Raylib.ToggleFullscreen();
         }
     }
 
