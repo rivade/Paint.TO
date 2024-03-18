@@ -115,11 +115,11 @@ public class ColorSelector : PopupWindow
 public class LayerWindow : PopupWindow
 {
     public List<LayerButton> layerButtons = new();
-    private AddLayerButton addLayer = new() {buttonRect = new(820, 650, Button.buttonSize, Button.buttonSize)};
-    private RemoveLayerButton removeLayer = new() {buttonRect = new(920, 650, Button.buttonSize, Button.buttonSize)};
-    private LayerVisibilityButton layerVisibility = new() {buttonRect = new(1020, 650, Button.buttonSize, Button.buttonSize)};
+    private AddLayerButton addLayer = new() { buttonRect = new(820, 650, Button.buttonSize, Button.buttonSize) };
+    private RemoveLayerButton removeLayer = new() { buttonRect = new(920, 650, Button.buttonSize, Button.buttonSize) };
+    private LayerVisibilityButton layerVisibility = new() { buttonRect = new(1020, 650, Button.buttonSize, Button.buttonSize) };
 
-    public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) {}
+    public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) { }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
@@ -127,7 +127,7 @@ public class LayerWindow : PopupWindow
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layerButtons.Add(new() { buttonRect = new(i*250 + 360, 475, 200, 100), ThisLayerNumber = i+1 });
+            layerButtons.Add(new() { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1 });
         }
 
         layerButtons.ForEach(l => l.OnHover(mousePos));
@@ -146,5 +146,32 @@ public class LayerWindow : PopupWindow
         addLayer.Draw();
         removeLayer.Draw();
         layerVisibility.Draw();
+    }
+}
+
+public class ValueSetterWindow : PopupWindow
+{
+    private Slider slider = new(20, new(700, 475, 300, 10));
+
+    public int minValue { get; set; }
+    public int maxValue { get; set; }
+
+    private Action<int> UpdateValue;
+
+    public ValueSetterWindow(int width, int height, string[] messagesExtern, Action<int> valueSetter) : base(width, height, messagesExtern)
+    {
+        UpdateValue = valueSetter;
+    }
+
+    public override void Logic(Canvas canvas, Vector2 mousePos)
+    {
+        int value = slider.GetValue(mousePos, minValue, maxValue);
+        UpdateValue(value);
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        slider.Draw();
     }
 }

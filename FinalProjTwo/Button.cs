@@ -79,9 +79,12 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 
 public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
+    private ValueSetterWindow valueSetterWindow = 
+    new(900, 700, ["Set brush radius", "Press ESC/Enter to close"], ValueToChange => DrawTool.brushRadius = ValueToChange) {minValue = 1, maxValue = 100};
+
     public override void OnClick()
     {
-        DrawTool.brushRadiusSelectorInt++;
+        ProgramManager.popupWindow = valueSetterWindow;
     }
 
     public void Draw()
@@ -103,10 +106,12 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
 public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
+    private ValueSetterWindow valueSetterWindow = 
+    new(900, 700, ["Set checker size", "Press ESC/Enter to close"], ValueToChange => Checker.checkerSize = ValueToChange) {minValue = 5, maxValue = 20};
+
     public override void OnClick()
     {
-        if (ProgramManager.currentTool.GetType().Name == "Checker")
-            Checker.checkerSizeInt++;
+        ProgramManager.popupWindow = valueSetterWindow;
     }
 
     public void Draw()

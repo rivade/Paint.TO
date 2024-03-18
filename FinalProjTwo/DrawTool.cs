@@ -8,20 +8,7 @@ public abstract class DrawTool
 
     public static Color drawingColor = Color.Black;
 
-    public static int brushRadiusSelectorInt = 0;
-    private static int[] radiuses = [1, 5, 10, 15, 20, 30, 40, 50, 100];
-    public static int brushRadius
-    {
-        get
-        {
-            if (brushRadiusSelectorInt >= radiuses.Length)
-                brushRadiusSelectorInt = 0;
-
-            return radiuses[brushRadiusSelectorInt];
-        }
-
-        set { }
-    }
+    public static int brushRadius = 1;
 
 
     public virtual void Stroke(Image canvas, Vector2 mousePos)
@@ -121,19 +108,7 @@ public class Eraser : DrawTool
 
 public class Checker : DrawTool
 {
-    public static int checkerSizeInt = 0;
-    private static int[] checkerSizes = [5, 10, 15, 20];
-    public static int checkerSize
-    {
-        get
-        {
-            if (checkerSizeInt >= checkerSizes.Length)
-                checkerSizeInt = 0;
-
-            return checkerSizes[checkerSizeInt];
-        }
-    }
-
+    public static int checkerSize = 5;
 
     public override void Stroke(Image canvas, Vector2 mousePos)
     {
