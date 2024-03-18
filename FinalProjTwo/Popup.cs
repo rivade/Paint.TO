@@ -127,7 +127,7 @@ public class LayerWindow : PopupWindow
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layerButtons.Add(new() { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1 });
+            layerButtons.Add(new() { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, isVisible = canvas.layers[i].isVisible });
         }
 
         layerButtons.ForEach(l => l.OnHover(mousePos));

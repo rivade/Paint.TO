@@ -233,10 +233,15 @@ public class CloseButton : Button, IDrawable, IHoverable
 public class LayerButton : Button, IHoverable, IDrawable
 {
     public int ThisLayerNumber {get; set;}
+    public bool isVisible {get; set;}
 
     public void Draw()
     {
-        GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+        if (isVisible)
+            GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+
+        else
+            GetButtonColor(Color.Gray, Color.LightGray, Color.White, false);
 
         if (Canvas.currentLayer == ThisLayerNumber - 1)
             Raylib.DrawRectangle((int)buttonRect.X - 5, (int)buttonRect.Y - 5, (int)buttonRect.Width + 10, (int)buttonRect.Height + 10, Color.Red);
