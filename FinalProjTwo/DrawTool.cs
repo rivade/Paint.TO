@@ -207,7 +207,7 @@ public class EyeDropper : DrawTool
     public override void Stroke(Image canvas, Vector2 mousePos)
     {
         Rectangle canvasRect = new(0, 0, new Vector2(canvas.Width, canvas.Height));
-        if (Raylib.IsMouseButtonPressed(MouseButton.Left) && Raylib.CheckCollisionPointRec(mousePos, canvasRect))
+        if (Raylib.IsMouseButtonDown(MouseButton.Left) && Raylib.CheckCollisionPointRec(mousePos, canvasRect))
         {
             drawingColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
         }

@@ -84,7 +84,12 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 
     public override void OnClick()
     {
-        ProgramManager.popupWindow = valueSetterWindow;
+        if (ProgramManager.currentTool.GetType().Name != "Pencil" &&
+        ProgramManager.currentTool.GetType().Name != "Bucket" &&
+        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
+        ProgramManager.currentTool is not ShapeTool ||
+        ProgramManager.currentTool is LineTool)
+            ProgramManager.popupWindow = valueSetterWindow;
     }
 
     public void Draw()
@@ -111,7 +116,8 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
 
     public override void OnClick()
     {
-        ProgramManager.popupWindow = valueSetterWindow;
+        if (ProgramManager.currentTool.GetType().Name == "Checker")
+            ProgramManager.popupWindow = valueSetterWindow;
     }
 
     public void Draw()
