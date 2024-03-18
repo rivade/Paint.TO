@@ -199,7 +199,7 @@ public class Bucket : DrawTool
             y1++;
             bool spanLeft = false;
             bool spanRight = false;
-            while (y1 < img.Height && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
+            while (y1 < Canvas.CanvasHeight && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
             {
                 Raylib.ImageDrawPixel(ref img, (int)temp.X, y1, drawingColor);
 
@@ -212,12 +212,12 @@ public class Bucket : DrawTool
                 {
                     spanLeft = false;
                 }
-                if (!spanRight && temp.X < img.Width - 1 && Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
+                if (!spanRight && temp.X < Canvas.CanvasWidth - 1 && Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
                 {
                     pixels.Push(new Vector2(temp.X + 1, y1));
                     spanRight = true;
                 }
-                else if (spanRight && temp.X < img.Width - 1 && !Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
+                else if (spanRight && temp.X < Canvas.CanvasWidth - 1 && !Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
                 {
                     spanRight = false;
                 }

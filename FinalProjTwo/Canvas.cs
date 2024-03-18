@@ -13,9 +13,7 @@ public class Canvas : IDrawable
 
     public Canvas()
     {
-        Image temp = Raylib.GenImageColor(2500, 2500, Color.Blank);
-        Raylib.ImageDrawRectangle(ref temp, 0, 0, CanvasWidth, CanvasHeight, Color.White);
-        layers.Add(temp);
+        layers.Add(Raylib.GenImageColor(2500, 2500, Color.White));
     }
 
     public void Update(Vector2 mousePos, DrawTool tool)
