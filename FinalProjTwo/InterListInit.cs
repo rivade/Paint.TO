@@ -37,12 +37,24 @@ public abstract class InterListInit
         )
         });
 
-        interactableList.Add(new CheckerSizeButton()
+
+        interactableList.Add(new OpacityButton()
         {
             buttonRect =
         new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 320,
+        Button.buttonSize,
+        Button.buttonSize
+        )
+        });
+
+        interactableList.Add(new CheckerSizeButton()
+        {
+            buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth + 60,
+        Canvas.CanvasHeight - 490,
         Button.buttonSize,
         Button.buttonSize
         )

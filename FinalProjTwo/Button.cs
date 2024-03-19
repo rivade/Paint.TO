@@ -38,6 +38,15 @@ public abstract class Button : IHoverable
         else if (condition)
             buttonColor = activeColor;
     }
+
+    public static bool PaintBrushTypeConditions()
+    {
+        return ProgramManager.currentTool.GetType().Name != "Pencil" &&
+        ProgramManager.currentTool.GetType().Name != "Bucket" &&
+        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
+        ProgramManager.currentTool is not ShapeTool ||
+        ProgramManager.currentTool is LineTool;
+    }
 }
 
 public class ToolButton : Button, IHoverable, IDrawable
@@ -80,39 +89,30 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
     private ValueSetterWindow valueSetterWindow = 
-    new(800, 600, ["Set brush radius", "Press ESC/Enter to close"], ValueToChange => DrawTool.brushRadius = ValueToChange) {minValue = 1, maxValue = 100};
+    new(800, 600, ["Set brush radius", "Press ESC/Enter to close"]) {minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius};
 
     public override void OnClick()
     {
-        if (Conditions())
+        if (PaintBrushTypeConditions())
             ProgramManager.popupWindow = valueSetterWindow;
     }
 
     public void Draw()
     {
-        if (Conditions())
+        if (PaintBrushTypeConditions())
         {
             TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
             Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
             TextHandling.DrawCenteredTextPro([$"{DrawTool.brushRadius}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
-    }
-
-    private bool Conditions()
-    {
-        return ProgramManager.currentTool.GetType().Name != "Pencil" &&
-        ProgramManager.currentTool.GetType().Name != "Bucket" &&
-        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
-        ProgramManager.currentTool is not ShapeTool ||
-        ProgramManager.currentTool is LineTool;
-    }
+    }    
 }
 
 public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow = 
-    new(800, 600, ["Set checker size", "Press ESC/Enter to close"], ValueToChange => Checker.checkerSize = ValueToChange) {minValue = 5, maxValue = 20};
+    new(800, 600, ["Set checker size", "Press ESC/Enter to close"]) {minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize};
 
     public override void OnClick()
     {
@@ -129,6 +129,34 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
             Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
             TextHandling.DrawCenteredTextPro([$"{Checker.checkerSize}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
+    }
+}
+
+public class OpacityButton : Button, IDrawable, IHoverable
+{
+    private ValueSetterWindow valueSetterWindow = 
+    new(800, 600, ["Set opacity", "Press ESC/Enter to close"]) {minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity};
+
+    public override void OnClick()
+    {
+        if (Conditions())
+            ProgramManager.popupWindow = valueSetterWindow;
+    }
+
+    public void Draw()
+    {
+        if (Conditions())
+        {
+            TextHandling.DrawCenteredTextPro(["Opacity"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 35, 30, 30, Color.Black);
+            Raylib.DrawRectangleRec(buttonRect, Color.Black);
+            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
+            TextHandling.DrawCenteredTextPro([$"{DrawTool.drawingColor.A}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
+        }
+    }
+
+    private bool Conditions()
+    {
+        return (PaintBrushTypeConditions() || ProgramManager.currentTool is ShapeTool) && ProgramManager.currentTool.GetType().Name != "Eraser";
     }
 }
 

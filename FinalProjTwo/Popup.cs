@@ -151,30 +151,48 @@ public class LayerWindow : PopupWindow
 
 public class ValueSetterWindow : PopupWindow
 {
+    public enum Changes
+    {
+        BrushRadius,
+        Opacity,
+        CheckerSize
+    }
+
+    public Changes thisChanges {get ; set;}
+
     private Slider slider;
 
     public int minValue { get; set; }
     public int maxValue { get; set; }
-
+    public bool sliderStartAtBeginning { get ; set; } = true;
     int value;
 
-    private Action<int> UpdateValue;
-
-    public ValueSetterWindow(int width, int height, string[] messagesExtern, Action<int> valueSetter) : base(width, height, messagesExtern)
+    public ValueSetterWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
         int sliderWidth = 500;
         int sliderHeight = 15;
 
         int sliderX = (int)(windowRect.X + windowRect.Width/2 - sliderWidth/2);
-
-        UpdateValue = valueSetter;
+        
         slider = new(20, new(sliderX, 475, sliderWidth, sliderHeight));
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
         value = slider.GetValue(mousePos, minValue, maxValue);
-        UpdateValue(value);
+        
+        switch (thisChanges)
+        {
+            case Changes.BrushRadius:
+                DrawTool.brushRadius = value;
+                break;
+            case Changes.Opacity:
+                DrawTool.drawingColor.A = (byte)value;
+                break;
+            case Changes.CheckerSize:
+                Checker.checkerSize = value;
+                break;
+        }
     }
 
     public override void Draw()
@@ -182,22 +200,18 @@ public class ValueSetterWindow : PopupWindow
         base.Draw();
         slider.Draw();
 
-        bool isRadiusWindow = false;
-        foreach (string str in messages)
+        switch (thisChanges)
         {
-            if (str.Contains("radius"))
-            {
-                isRadiusWindow = true;
+            case Changes.BrushRadius:
+                Raylib.DrawCircle(ProgramManager.ScreenWidth/2, 675, value, DrawTool.drawingColor);
                 break;
-            }
+            case Changes.Opacity:
+                Raylib.DrawCircle(ProgramManager.ScreenWidth/2, 675, 100, DrawTool.drawingColor);
+                break;
+            case Changes.CheckerSize:
+                CheckerPreview.DrawCheckerPreview();
+                break;
         }
-
-        if (isRadiusWindow)
-            Raylib.DrawCircle(ProgramManager.ScreenWidth/2, 675, value, DrawTool.drawingColor);
-
-        else
-            CheckerPreview.DrawCheckerPreview();
-            
     }
 }
 
@@ -225,8 +239,6 @@ public static class CheckerPreview
                 // Adjusting position based on offset and center of previous shape
                 xPos += xOffset + centerX - 100; // 100 is half of the side length of the square
                 yPos += yOffset + centerY - 100;
-
-                Vector2 squareCenter = new Vector2(xPos + Checker.checkerSize / 2, yPos + Checker.checkerSize / 2);
 
                 if ((row + col) % 2 == 0)
                     Raylib.DrawRectangle(xPos, yPos, Checker.checkerSize, Checker.checkerSize, DrawTool.drawingColor);
