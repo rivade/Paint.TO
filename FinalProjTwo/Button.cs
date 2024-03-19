@@ -79,9 +79,11 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 
     public void Draw()
     {
+        Color colorPreview = DrawTool.drawingColor;
+        colorPreview.A = 255;
         Raylib.DrawText("Color", Canvas.CanvasWidth + 62, (int)buttonRect.Y - 35, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
-        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, DrawTool.drawingColor);
+        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, colorPreview);
     }
 }
 
@@ -137,9 +139,16 @@ public class OpacityButton : Button, IDrawable, IHoverable
     private ValueSetterWindow valueSetterWindow = 
     new(800, 600, ["Set opacity", "Press ESC/Enter to close"]) {minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity};
 
+    public override void OnHover(Vector2 mousePos)
+    {
+        base.OnHover(mousePos);
+        buttonRect.Y = IsBottomButton() ? Canvas.CanvasHeight - 150 : Canvas.CanvasHeight - 320;
+            
+    }
     public override void OnClick()
     {
         if (Conditions())
+            valueSetterWindow.SetSlider(DrawTool.drawingColor.A);
             ProgramManager.popupWindow = valueSetterWindow;
     }
 
@@ -156,7 +165,15 @@ public class OpacityButton : Button, IDrawable, IHoverable
 
     private bool Conditions()
     {
-        return (PaintBrushTypeConditions() || ProgramManager.currentTool is ShapeTool) && ProgramManager.currentTool.GetType().Name != "Eraser";
+        return (PaintBrushTypeConditions() ||  
+                ProgramManager.currentTool.GetType().Name == "Bucket" ||
+                ProgramManager.currentTool.GetType().Name == "Pencil" 
+                || ProgramManager.currentTool is ShapeTool) && ProgramManager.currentTool.GetType().Name != "Eraser";
+    }
+
+    private bool IsBottomButton()
+    {
+        return ProgramManager.currentTool.GetType().Name == "Bucket" || ProgramManager.currentTool.GetType().Name == "Pencil";
     }
 }
 

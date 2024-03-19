@@ -107,7 +107,9 @@ public class ColorSelector : PopupWindow
     {
         if (Raylib.CheckCollisionPointRec(mousePos, colorsRect) && Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            DrawTool.drawingColor = Raylib.GetImageColor(colorsImg, (int)mousePos.X - (int)colorsRect.X, (int)mousePos.Y - (int)colorsRect.Y);
+            Color newColor = Raylib.GetImageColor(colorsImg, (int)mousePos.X - (int)colorsRect.X, (int)mousePos.Y - (int)colorsRect.Y);
+            newColor.A = DrawTool.drawingColor.A;
+            DrawTool.drawingColor = newColor;
         }
     }
 }
@@ -158,29 +160,29 @@ public class ValueSetterWindow : PopupWindow
         CheckerSize
     }
 
-    public Changes thisChanges {get ; set;}
+    public Changes thisChanges { get; set; }
 
     private Slider slider;
 
     public int minValue { get; set; }
     public int maxValue { get; set; }
-    public bool sliderStartAtBeginning { get ; set; } = true;
-    int value;
+    public bool sliderStartAtBeginning { get; set; } = true;
+    public int value;
 
     public ValueSetterWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
         int sliderWidth = 500;
         int sliderHeight = 15;
 
-        int sliderX = (int)(windowRect.X + windowRect.Width/2 - sliderWidth/2);
-        
+        int sliderX = (int)(windowRect.X + windowRect.Width / 2 - sliderWidth / 2);
+
         slider = new(20, new(sliderX, 475, sliderWidth, sliderHeight));
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
         value = slider.GetValue(mousePos, minValue, maxValue);
-        
+
         switch (thisChanges)
         {
             case Changes.BrushRadius:
@@ -203,15 +205,25 @@ public class ValueSetterWindow : PopupWindow
         switch (thisChanges)
         {
             case Changes.BrushRadius:
-                Raylib.DrawCircle(ProgramManager.ScreenWidth/2, 675, value, DrawTool.drawingColor);
+                Color colorPreview = DrawTool.drawingColor;
+                colorPreview.A = 255;
+                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 675, value, colorPreview);
                 break;
             case Changes.Opacity:
-                Raylib.DrawCircle(ProgramManager.ScreenWidth/2, 675, 100, DrawTool.drawingColor);
+                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 675, 100, DrawTool.drawingColor);
                 break;
             case Changes.CheckerSize:
                 CheckerPreview.DrawCheckerPreview();
                 break;
         }
+    }
+
+    public void SetSlider(int value)
+    {
+        float relativePosition = (value - minValue) / (float)(maxValue - minValue);
+        float sliderX = slider.SliderBar.X + relativePosition * slider.SliderBar.Width;
+
+        slider.SliderCircle.Middle = new Vector2(sliderX, slider.SliderCircle.Middle.Y);
     }
 }
 
@@ -224,6 +236,9 @@ public static class CheckerPreview
 
         int rows = (int)Math.Ceiling(200d / Checker.checkerSize);
         int cols = (int)Math.Ceiling(200d / Checker.checkerSize);
+
+        Color colorPreview = DrawTool.drawingColor;
+        colorPreview.A = 255;
 
         for (int row = 0; row < rows; row++)
         {
