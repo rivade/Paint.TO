@@ -30,9 +30,11 @@ public class Icons : IDrawable
         {
             Raylib.DrawTexture(toolIcons[i], i * 90 + 10, Canvas.CanvasHeight + 10, Color.White);
         }
-        for (int i = 0; i < miscIcons.Count; i++)
+        for (int i = 0; i < miscIcons.Count - 1; i++)
         {
             Raylib.DrawTexture(miscIcons[i], Canvas.CanvasWidth + 60, i * 90 + 10, Color.White);
         }
+
+        Raylib.DrawTexture(miscIcons[3], Canvas.CanvasWidth - 80, Canvas.CanvasHeight + 10, Color.White);
     }
 }

@@ -422,3 +422,37 @@ public class LayerVisibilityButton : Button, IDrawable
         canvas.layers[Canvas.currentLayer].isVisible = !canvas.layers[Canvas.currentLayer].isVisible;
     }   
 }
+
+public class SettingsButton : Button, IHoverable, IDrawable
+{
+    private SettingsWindow settingsWindow = new(1300, 500, ["Settings", "Press ESC/Enter to close"]);
+    public override void OnClick()
+    {
+        ProgramManager.popupWindow = settingsWindow;
+    }
+
+    public void Draw()
+    {
+        GetButtonColor(Color.Gray, Color.LightGray, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+    }
+}
+
+public class GUIColorButton : Button, IHoverable, IDrawable
+{
+    public override void OnClick()
+    {
+        if (ProgramManager.popupWindow is SettingsWindow)
+            GUIarea.colorInt++;
+    }
+
+    public void Draw()
+    {
+        if (ProgramManager.popupWindow is SettingsWindow)
+        {
+            GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+            Raylib.DrawRectangleRec(buttonRect, buttonColor);
+            TextHandling.DrawCenteredTextPro(["Change GUI color"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
+        }
+    }
+}

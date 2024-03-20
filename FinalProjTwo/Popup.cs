@@ -227,6 +227,26 @@ public class ValueSetterWindow : PopupWindow
     }
 }
 
+public class SettingsWindow : PopupWindow
+{
+    private GUIColorButton guiColorSetter = new() { buttonRect = new(360, 475, 800, 100) };
+
+    public SettingsWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
+    {
+    }
+
+    public override void Logic(Canvas c, Vector2 mousePos)
+    {
+        guiColorSetter.OnHover(mousePos);
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        guiColorSetter.Draw();
+    }
+}
+
 public static class CheckerPreview
 {
     public static void DrawCheckerPreview()

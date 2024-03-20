@@ -101,12 +101,22 @@ public abstract class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new OpenLayersButton()
+        interactableList.Add(new SettingsButton()
         {
             buttonRect =
         new Rectangle(
         Canvas.CanvasWidth + 60,
         280,
+        Button.buttonSize,
+        Button.buttonSize)
+        });
+
+        interactableList.Add(new OpenLayersButton()
+        {
+            buttonRect =
+        new Rectangle(
+        Canvas.CanvasWidth - 80,
+        Canvas.CanvasHeight + 10,
         Button.buttonSize,
         Button.buttonSize)
         });

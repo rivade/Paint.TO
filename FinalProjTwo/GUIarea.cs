@@ -2,7 +2,19 @@ namespace DrawingProgram;
 
 public class GUIarea : IDrawable
 {
-    public static Color guiColor = Color.SkyBlue;
+    private static Color[] colors = [ Color.SkyBlue, Color.LightGray, Color.Gray, Color.Gold, Color.Red, Color.Pink ];
+    public static int colorInt = 0;
+
+    public static Color guiColor
+    {
+        get 
+        {
+            if (colorInt >= colors.Length)
+                colorInt = 0;
+            return colors[colorInt];
+        }
+    }
+
     public void Draw()
     {
         Raylib.DrawRectangle(Canvas.CanvasWidth, 0, 200, ProgramManager.ScreenHeight, guiColor);

@@ -1,4 +1,9 @@
 namespace DrawingProgram;
+using System.Diagnostics;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 //vv tack stackoverflow, tänker inte ens försöka förstå detta vv
 
