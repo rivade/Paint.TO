@@ -81,7 +81,6 @@ public class OpenDialog
             hwndOwner = IntPtr.Zero,
             pidlRoot = IntPtr.Zero,
             pszDisplayName = new string('\0', 260),
-            lpszTitle = "Select Folder",
             ulFlags = 0x00000001 // BIF_RETURNONLYFSDIRS flag
         };
 

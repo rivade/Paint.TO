@@ -51,7 +51,8 @@ public class SavePopup : PopupWindow
         {
             Raylib.ToggleFullscreen();
             string directory = OpenDialog.GetDirectory();
-            canvas.SaveProject(fileName, directory);
+            canvas.SaveProject(fileName + ".png", directory);
+            Raylib.ToggleFullscreen();
         }
     }
 

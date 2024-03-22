@@ -25,9 +25,9 @@ public class Canvas : IDrawable
 
     public void SaveProject(string fileName, string directory)
     {
-        System.Console.WriteLine(directory);
-        throw new Exception();
-        Raylib.ExportImage(CropCanvas(CompressLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), fileName);
+        string path = directory + @"\" + fileName;
+        Raylib.ExportImage(CropCanvas(CompressLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), path);
+        ProgramManager.popupWindow = null;
     }
 
     public void LoadProject(Image newImage)
@@ -38,7 +38,7 @@ public class Canvas : IDrawable
         layers[currentLayer].canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 1600, Color.Blank));
     }
 
-    private static Image CropCanvas(Image canvas, Image newImage)
+    private Image CropCanvas(Image canvas, Image newImage)
     {
         for (int x = 0; x < CanvasWidth; x++)
         {
@@ -51,7 +51,7 @@ public class Canvas : IDrawable
         return newImage;
     }
 
-    private static Image CompressLayers(List<Layer> layers)
+    private Image CompressLayers(List<Layer> layers)
     {
         Image result = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank);
         foreach (Layer layer in layers)
