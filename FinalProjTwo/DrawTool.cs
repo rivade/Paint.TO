@@ -5,7 +5,6 @@ public abstract class DrawTool
     protected Vector2 lastMousePos;
 
     public static Color drawingColor = Color.Black;
-
     public static int brushRadius = 1;
 
 

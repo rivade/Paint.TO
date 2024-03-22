@@ -35,6 +35,19 @@ public struct OpenFileName
     public int flagsEx;
 }
 
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+public struct BROWSEINFO
+{
+    public IntPtr hwndOwner;
+    public IntPtr pidlRoot;
+    public string pszDisplayName;
+    public string lpszTitle;
+    public uint ulFlags;
+    public IntPtr lpfn;
+    public IntPtr lParam;
+    public int iImage;
+}
+
 public class OpenDialog
 {
     [DllImport("comdlg32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -52,6 +65,40 @@ public class OpenDialog
         ofn.lpstrTitle = "Open File";
         if (GetOpenFileName(ref ofn))
             return ofn.lpstrFile;
+        return string.Empty;
+    }
+
+    [DllImport("shell32.dll")]
+    public static extern IntPtr SHBrowseForFolder(ref BROWSEINFO lpbi);
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    public static extern bool SHGetPathFromIDList(IntPtr pidl, IntPtr pszPath);
+
+    public static string GetDirectory()
+    {
+        var folderInfo = new BROWSEINFO
+        {
+            hwndOwner = IntPtr.Zero,
+            pidlRoot = IntPtr.Zero,
+            pszDisplayName = new string('\0', 260),
+            lpszTitle = "Select Folder",
+            ulFlags = 0x00000001 // BIF_RETURNONLYFSDIRS flag
+        };
+
+        IntPtr pidl = SHBrowseForFolder(ref folderInfo);
+
+        if (pidl != IntPtr.Zero)
+        {
+            IntPtr pszPath = Marshal.AllocHGlobal(260);
+            if (SHGetPathFromIDList(pidl, pszPath))
+            {
+                string selectedPath = Marshal.PtrToStringAuto(pszPath);
+                Marshal.FreeCoTaskMem(pidl);
+                Marshal.FreeHGlobal(pszPath);
+                return selectedPath;
+            }
+        }
+
         return string.Empty;
     }
 }

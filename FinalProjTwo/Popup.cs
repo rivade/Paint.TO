@@ -49,7 +49,9 @@ public class SavePopup : PopupWindow
     {
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) && fileName != "")
         {
-            canvas.SaveProject(fileName + ".png");
+            Raylib.ToggleFullscreen();
+            string directory = OpenDialog.GetDirectory();
+            canvas.SaveProject(fileName, directory);
         }
     }
 

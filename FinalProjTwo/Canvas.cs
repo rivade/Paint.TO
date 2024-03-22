@@ -1,4 +1,5 @@
 namespace DrawingProgram;
+using System.IO;
 
 public class Canvas : IDrawable
 {
@@ -22,8 +23,10 @@ public class Canvas : IDrawable
         layers[currentLayer].Logic(mousePos, tool);
     }
 
-    public void SaveProject(string fileName)
+    public void SaveProject(string fileName, string directory)
     {
+        System.Console.WriteLine(directory);
+        throw new Exception();
         Raylib.ExportImage(CropCanvas(CompressLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), fileName);
     }
 
@@ -31,7 +34,7 @@ public class Canvas : IDrawable
     {
         currentLayer = 0;
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
-        layers = [ new() ];
+        layers = [new()];
         layers[currentLayer].canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 1600, Color.Blank));
     }
 
@@ -83,7 +86,7 @@ public class Layer
     {
         if (isVisible)
         {
-            canvasTexture = Raylib.LoadTextureFromImage(canvasImg);    
+            canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
             Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
         }
     }
