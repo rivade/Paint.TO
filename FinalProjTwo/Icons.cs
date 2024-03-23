@@ -20,6 +20,7 @@ public class Icons : IDrawable
         miscIcons.Add(Raylib.LoadTexture("Icons/powericon.png"));
         miscIcons.Add(Raylib.LoadTexture("Icons/saveicon.png"));
         miscIcons.Add(Raylib.LoadTexture("Icons/foldericon.png"));
+        miscIcons.Add(Raylib.LoadTexture("Icons/settings.png"));
         miscIcons.Add(Raylib.LoadTexture("Icons/layers.png"));
 
     }
@@ -35,6 +36,6 @@ public class Icons : IDrawable
             Raylib.DrawTexture(miscIcons[i], Canvas.CanvasWidth + 60, i * 90 + 10, Color.White);
         }
 
-        Raylib.DrawTexture(miscIcons[3], Canvas.CanvasWidth - 80, Canvas.CanvasHeight + 10, Color.White);
+        Raylib.DrawTexture(miscIcons[4], Canvas.CanvasWidth - 80, Canvas.CanvasHeight + 10, Color.White);
     }
 }
