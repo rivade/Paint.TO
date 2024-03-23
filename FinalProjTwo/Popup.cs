@@ -169,7 +169,6 @@ public class ValueSetterWindow : PopupWindow
 
     public int minValue { get; set; }
     public int maxValue { get; set; }
-    public bool sliderStartAtBeginning { get; set; } = true;
     public int value;
 
     public ValueSetterWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
@@ -232,7 +231,11 @@ public class ValueSetterWindow : PopupWindow
 
 public class SettingsWindow : PopupWindow
 {
-    private GUIColorButton guiColorSetter = new() { buttonRect = new(360, 475, 800, 100) };
+    private List<Button> buttons = 
+    [ 
+        new GUIColorButton(() => GUIarea.colorInt++, "Change GUI color") { buttonRect = new(340, 475, 1230, 100) },
+        new GUIColorButton(() => ToolButton.colorSetInt++, "Change toolbutton color") { buttonRect = new(340, 600, 1230, 100) }
+    ];
 
     public SettingsWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
@@ -240,13 +243,13 @@ public class SettingsWindow : PopupWindow
 
     public override void Logic(Canvas c, Vector2 mousePos)
     {
-        guiColorSetter.OnHover(mousePos);
+        buttons.ForEach(b => b.OnHover(mousePos));
     }
 
     public override void Draw()
     {
         base.Draw();
-        guiColorSetter.Draw();
+        buttons.ForEach(b => b.Draw());
     }
 }
 

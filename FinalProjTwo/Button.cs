@@ -1,10 +1,11 @@
 using System.Collections.ObjectModel;
 using System.IO.Compression;
 using System.Security.Principal;
+using System.Text.Json.Serialization.Metadata;
 
 namespace DrawingProgram;
 
-public abstract class Button : IHoverable
+public abstract class Button : IHoverable, IDrawable
 {
     public const int buttonSize = 80;
     public Rectangle buttonRect;
@@ -28,14 +29,19 @@ public abstract class Button : IHoverable
 
     }
 
-    protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool condition) //Condition lämnas false om knappen ej kan vara aktiv
+    public virtual void Draw()
+    {
+
+    }
+
+    protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive) //Condition lämnas false om knappen ej kan vara aktiv
     {
         buttonColor = defaultColor;
 
-        if (isHoveredOn && !condition)
+        if (isHoveredOn && !isActive)
             buttonColor = hoverColor;
 
-        else if (condition)
+        else if (isActive)
             buttonColor = activeColor;
     }
 
@@ -53,6 +59,24 @@ public class ToolButton : Button, IHoverable, IDrawable
 {
     public DrawTool DrawTool { get; set; }
 
+    private static List<Color>[] colorSets =
+    [
+        new List<Color> {Color.Lime, Color.Green, Color.DarkGreen},
+        new List<Color> {Color.Purple, Color.Pink, Color.DarkPurple},
+        new List<Color> {Color.Blue, Color.SkyBlue, Color.DarkBlue}
+    ];
+
+    private static List<Color> activeColorSet
+    {
+        get
+        {
+            if (colorSetInt >= 3)
+                colorSetInt = 0;
+            return colorSets[colorSetInt];
+        }
+    }
+    public static int colorSetInt = 0;
+
     private bool IsActiveTool() => ProgramManager.currentTool == DrawTool;
 
     public override void OnClick()
@@ -61,9 +85,9 @@ public class ToolButton : Button, IHoverable, IDrawable
             ProgramManager.currentTool = DrawTool;
     }
 
-    public void Draw()
+    public override void Draw()
     {
-        GetButtonColor(Color.Lime, Color.Green, Color.DarkGreen, IsActiveTool());
+        GetButtonColor(activeColorSet[0], activeColorSet[1], activeColorSet[2], IsActiveTool());
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
     }
 }
@@ -77,7 +101,7 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
         ProgramManager.popupWindow = colorSelectorWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         Color colorPreview = DrawTool.drawingColor;
         colorPreview.A = 255;
@@ -90,8 +114,8 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 
 public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
-    private ValueSetterWindow valueSetterWindow = 
-    new(800, 600, ["Set brush radius", "Press ESC/Enter to close"]) {minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius};
+    private ValueSetterWindow valueSetterWindow =
+    new(800, 600, ["Set brush radius", "Press ESC/Enter to close"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
 
     public override void OnClick()
     {
@@ -99,7 +123,7 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
             ProgramManager.popupWindow = valueSetterWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         if (PaintBrushTypeConditions())
         {
@@ -108,13 +132,13 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
             Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
             TextHandling.DrawCenteredTextPro([$"{DrawTool.brushRadius}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
-    }    
+    }
 }
 
 public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
-    private ValueSetterWindow valueSetterWindow = 
-    new(800, 600, ["Set checker size", "Press ESC/Enter to close"]) {minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize};
+    private ValueSetterWindow valueSetterWindow =
+    new(800, 600, ["Set checker size", "Press ESC/Enter to close"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
 
     public override void OnClick()
     {
@@ -122,7 +146,7 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
             ProgramManager.popupWindow = valueSetterWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         if (ProgramManager.currentTool.GetType().Name == "Checker")
         {
@@ -136,23 +160,23 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
 
 public class OpacityButton : Button, IDrawable, IHoverable
 {
-    private ValueSetterWindow valueSetterWindow = 
-    new(800, 600, ["Set opacity", "Press ESC/Enter to close"]) {minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity};
+    private ValueSetterWindow valueSetterWindow =
+    new(800, 600, ["Set opacity", "Press ESC/Enter to close"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
 
     public override void OnHover(Vector2 mousePos)
     {
         base.OnHover(mousePos);
         buttonRect.Y = IsBottomButton() ? Canvas.CanvasHeight - 150 : Canvas.CanvasHeight - 320;
-            
+
     }
     public override void OnClick()
     {
         if (Conditions())
             valueSetterWindow.SetSlider(DrawTool.drawingColor.A);
-            ProgramManager.popupWindow = valueSetterWindow;
+        ProgramManager.popupWindow = valueSetterWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         if (Conditions())
         {
@@ -165,9 +189,9 @@ public class OpacityButton : Button, IDrawable, IHoverable
 
     private bool Conditions()
     {
-        return (PaintBrushTypeConditions() ||  
+        return (PaintBrushTypeConditions() ||
                 ProgramManager.currentTool.GetType().Name == "Bucket" ||
-                ProgramManager.currentTool.GetType().Name == "Pencil" 
+                ProgramManager.currentTool.GetType().Name == "Pencil"
                 || ProgramManager.currentTool is ShapeTool) && ProgramManager.currentTool.GetType().Name != "Eraser";
     }
 
@@ -185,7 +209,7 @@ public class FilledShapeButton : Button, IDrawable, IHoverable
             ShapeTool.drawFilled = !ShapeTool.drawFilled;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         if (ProgramManager.currentTool is ShapeTool && ProgramManager.currentTool is not LineTool)
         {
@@ -209,7 +233,7 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
         ProgramManager.popupWindow = saveWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -228,19 +252,19 @@ public class LoadButton : Button, IDrawable, IHoverable
     {
         if (Raylib.IsWindowFullscreen())
             Raylib.ToggleFullscreen();
-        
-        string fileDirectory = OpenDialog.GetFileDirectory();
+
+        string fileDirectory = OpenDialog.GetFile();
 
         if (!string.IsNullOrEmpty(fileDirectory))
         {
             Image loadedImage = Raylib.LoadImage(fileDirectory);
             canv.LoadProject(loadedImage);
         }
-        
+
         Raylib.ToggleFullscreen();
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -255,7 +279,7 @@ public class OpenLayersButton : Button, IDrawable, IHoverable
         ProgramManager.popupWindow = layerWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.White, Color.LightGray, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -269,7 +293,7 @@ public class CloseButton : Button, IDrawable, IHoverable
         Environment.Exit(0);
     }
 
-    public void Draw()
+    public override void Draw()
     {
         Raylib.DrawRectangleRec(buttonRect, Color.Red);
     }
@@ -283,10 +307,10 @@ public class CloseButton : Button, IDrawable, IHoverable
 
 public class LayerButton : Button, IHoverable, IDrawable
 {
-    public int ThisLayerNumber {get; set;}
-    public bool isVisible {get; set;}
+    public int ThisLayerNumber { get; set; }
+    public bool isVisible { get; set; }
 
-    public void Draw()
+    public override void Draw()
     {
         if (isVisible)
             GetButtonColor(Color.Lime, Color.Green, Color.White, false);
@@ -320,7 +344,7 @@ public class AddLayerButton : Button, IDrawable
         icon = Raylib.LoadTexture("Icons/plus.png");
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.Lime, Color.Green, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -341,8 +365,8 @@ public class AddLayerButton : Button, IDrawable
     private void Click(Canvas canvas)
     {
         if (canvas.layers.Count < 5)
-            canvas.layers.Add( new() );
-            
+            canvas.layers.Add(new());
+
         Canvas.currentLayer = canvas.layers.Count - 1;
     }
 }
@@ -356,7 +380,7 @@ public class RemoveLayerButton : Button, IDrawable
         icon = Raylib.LoadTexture("Icons/x.png");
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.Red, Color.Pink, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -397,7 +421,7 @@ public class LayerVisibilityButton : Button, IDrawable
         icons.Add(Raylib.LoadTexture("Icons/invisible.png"));
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.LightGray, Color.White, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -420,7 +444,7 @@ public class LayerVisibilityButton : Button, IDrawable
     private void Click(Canvas canvas)
     {
         canvas.layers[Canvas.currentLayer].isVisible = !canvas.layers[Canvas.currentLayer].isVisible;
-    }   
+    }
 }
 
 public class SettingsButton : Button, IHoverable, IDrawable
@@ -431,7 +455,7 @@ public class SettingsButton : Button, IHoverable, IDrawable
         ProgramManager.popupWindow = settingsWindow;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         GetButtonColor(Color.Gray, Color.LightGray, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -440,19 +464,24 @@ public class SettingsButton : Button, IHoverable, IDrawable
 
 public class GUIColorButton : Button, IHoverable, IDrawable
 {
-    public override void OnClick()
+    private Action ChangeColor;
+    private string text;
+
+    public GUIColorButton(Action ColorToChange, string buttonText)
     {
-        if (ProgramManager.popupWindow is SettingsWindow)
-            GUIarea.colorInt++;
+        ChangeColor = ColorToChange;
+        text = buttonText;
     }
 
-    public void Draw()
+    public override void OnClick()
     {
-        if (ProgramManager.popupWindow is SettingsWindow)
-        {
-            GetButtonColor(Color.Lime, Color.Green, Color.White, false);
-            Raylib.DrawRectangleRec(buttonRect, buttonColor);
-            TextHandling.DrawCenteredTextPro(["Change GUI color"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
-        }
+        ChangeColor.Invoke();
+    }
+
+    public override void Draw()
+    {
+        GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        TextHandling.DrawCenteredTextPro([text], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
     }
 }

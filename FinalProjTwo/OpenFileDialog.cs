@@ -53,7 +53,7 @@ public class OpenDialog
     [DllImport("comdlg32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     public static extern bool GetOpenFileName(ref OpenFileName ofn);
 
-    public static string GetFileDirectory()
+    public static string GetFile()
     {
         var ofn = new OpenFileName();
         ofn.lStructSize = Marshal.SizeOf(ofn);

@@ -8,7 +8,7 @@ public class ProgramManager
     public const int ScreenHeight = 1080;
 
     private Canvas canvas;
-    private ToolFolder tools = new Drawing();
+    private ToolFolder tools = new DrawingTools();
 
     private List<IHoverable> interactables;
     private List<IDrawable> drawables;

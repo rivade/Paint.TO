@@ -5,9 +5,9 @@ public abstract class ToolFolder
     public List<DrawTool> drawTools = new();  
 }
 
-public class Drawing : ToolFolder
+public class DrawingTools : ToolFolder
 {
-    public Drawing()
+    public DrawingTools()
     {
         drawTools.Add(new Pencil());
         drawTools.Add(new PaintBrush());
