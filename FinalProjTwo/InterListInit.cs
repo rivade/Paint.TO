@@ -2,12 +2,17 @@ namespace DrawingProgram;
 
 public abstract class InterListInit
 {
+    private static string[] toolNames = 
+    { "Pencil", "Brush", "Eraser", "Fill color",
+     "Color picker", "Checker/Dither", "Draw rectangle",
+     "Draw line", "Draw circle"};
+
     public static List<IHoverable> GenerateInteractables(ToolFolder inputTools, Canvas canvas)
     {
         List<IHoverable> interactableList = new();
         for (int i = 0; i < inputTools.drawTools.Count(); i++)
         {
-            interactableList.Add(new ToolButton()
+            interactableList.Add(new ToolButton(toolNames[i])
             {
                 buttonRect = new Rectangle(i * 90 + 10, Canvas.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize),
                 DrawTool = inputTools.drawTools[i]

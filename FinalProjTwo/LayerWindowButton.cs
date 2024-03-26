@@ -180,6 +180,17 @@ public class MoveLayerButton : LayerWindowButton
 
     public override void Click(Canvas canvas)
     {
-        
+        if (Canvas.currentLayer != 4 && canvas.layers.Count != 1 && Canvas.currentLayer != canvas.layers.Count - 1)
+        {
+            Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer + 1);
+            Canvas.currentLayer++;
+        }
+    }
+
+    private static void Swap<T>(ref List<T> list, int indexA, int indexB)
+    {
+        T tmp = list[indexA];
+        list[indexA] = list[indexB];
+        list[indexB] = tmp;
     }
 }

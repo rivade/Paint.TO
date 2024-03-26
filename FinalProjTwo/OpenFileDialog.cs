@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-//vv tack stackoverflow, tänker inte ens försöka förstå detta vv
+//vv tack stackoverflow och gpt, tänker inte ens försöka förstå detta vv
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
 public struct OpenFileName

@@ -4,7 +4,7 @@ public class InfoWindow : IDrawable
 {
     private Rectangle textbox;
     private string text;
-    private const int FontSize = 20;
+    public const int FontSize = 20;
 
     public InfoWindow(string infoText, int startX, int startY)
     {
