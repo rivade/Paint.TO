@@ -11,6 +11,7 @@ public abstract class Button : IHoverable, IDrawable
     public Rectangle buttonRect;
     protected Color buttonColor;
     protected bool isHoveredOn;
+    protected InfoWindow infoWindow;
 
     public virtual void OnHover(Vector2 mousePos)
     {
@@ -22,6 +23,8 @@ public abstract class Button : IHoverable, IDrawable
             if (Raylib.IsMouseButtonPressed(MouseButton.Left))
                 OnClick();
         }
+
+        infoWindow = null;
     }
 
     public virtual void OnClick()
@@ -31,7 +34,7 @@ public abstract class Button : IHoverable, IDrawable
 
     public virtual void Draw()
     {
-
+        infoWindow?.Draw();
     }
 
     protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive) //Condition lämnas false om knappen ej kan vara aktiv
@@ -89,6 +92,7 @@ public class ToolButton : Button, IHoverable, IDrawable
     {
         GetButtonColor(activeColorSet[0], activeColorSet[1], activeColorSet[2], IsActiveTool());
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        base.Draw();
     }
 }
 
@@ -279,10 +283,19 @@ public class OpenLayersButton : Button, IDrawable, IHoverable
         ProgramManager.popupWindow = layerWindow;
     }
 
+    public override void OnHover(Vector2 mousePos)
+    {
+        base.OnHover(mousePos);
+
+        if (isHoveredOn)
+            infoWindow = new("Layers", (int)buttonRect.X, (int)buttonRect.Y - 40);
+    }
+
     public override void Draw()
     {
         GetButtonColor(Color.White, Color.LightGray, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        base.Draw();
     }
 }
 

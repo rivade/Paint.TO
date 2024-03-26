@@ -12,6 +12,8 @@ public abstract class LayerWindowButton : Button
             if (Raylib.IsMouseButtonPressed(MouseButton.Left))
                 Click(canvas);
         }
+
+        infoWindow = null;
     }
 
     public virtual void Click(Canvas canvas) {}
@@ -56,11 +58,19 @@ public class AddLayerButton : LayerWindowButton
         icon = Raylib.LoadTexture("Icons/plus.png");
     }
 
+    public override void Update(Vector2 mousePos, Canvas canvas)
+    {
+        base.Update(mousePos, canvas);
+
+        if (isHoveredOn)
+            infoWindow = new("Add new layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+    }
     public override void Draw()
     {
         GetButtonColor(Color.Lime, Color.Green, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        base.Draw();
     }
 
     public override void Click(Canvas canvas)
@@ -81,11 +91,20 @@ public class RemoveLayerButton : LayerWindowButton
         icon = Raylib.LoadTexture("Icons/x.png");
     }
 
+    public override void Update(Vector2 mousePos, Canvas canvas)
+    {
+        base.Update(mousePos, canvas);
+
+        if (isHoveredOn)
+            infoWindow = new("Remove layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+    }
+
     public override void Draw()
     {
         GetButtonColor(Color.Red, Color.Pink, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        base.Draw();
     }
 
     public override void Click(Canvas canvas)
@@ -116,12 +135,16 @@ public class LayerVisibilityButton : LayerWindowButton
         GetButtonColor(Color.LightGray, Color.White, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
         Raylib.DrawTexture(icons[currentIcon], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        base.Draw();
     }
 
     public override void Update(Vector2 mousePos, Canvas canvas)
     {
         currentIcon = canvas.layers[Canvas.currentLayer].isVisible ? 0 : 1;
         base.Update(mousePos, canvas);
+
+        if (isHoveredOn)
+            infoWindow = new("Toggle layer visibility", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
     public override void Click(Canvas canvas)
@@ -139,11 +162,20 @@ public class MoveLayerButton : LayerWindowButton
         icon = Raylib.LoadTexture("Icons/rightarrow.png");
     }
 
+    public override void Update(Vector2 mousePos, Canvas canvas)
+    {
+        base.Update(mousePos, canvas);
+
+        if (isHoveredOn)
+            infoWindow = new("Move layer up hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+    }
+
     public override void Draw()
     {
         GetButtonColor(Color.LightGray, Color.White, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        base.Draw();
     }
 
     public override void Click(Canvas canvas)

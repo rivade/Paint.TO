@@ -15,7 +15,8 @@ public abstract class PopupWindow : IDrawable
 
     public virtual void Logic(Canvas canvas, Vector2 mousePos)
     {
-
+        if (!Raylib.CheckCollisionPointRec(mousePos, windowRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
+            ProgramManager.popupWindow = null;
     }
 
     public PopupWindow(int width, int height, string[] messagesExtern)
@@ -83,6 +84,7 @@ public class SavePopup : PopupWindow
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
+        base.Logic(canvas, mousePos);
         fileName = UpdateFileName();
         SaveCanvas(canvas);
     }
@@ -108,6 +110,7 @@ public class ColorSelector : PopupWindow
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
+        base.Logic(canvas, mousePos);
         if (Raylib.CheckCollisionPointRec(mousePos, colorsRect) && Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             Color newColor = Raylib.GetImageColor(colorsImg, (int)mousePos.X - (int)colorsRect.X, (int)mousePos.Y - (int)colorsRect.Y);
@@ -133,6 +136,7 @@ public class LayerWindow : PopupWindow
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
+        base.Logic(canvas, mousePos);
         layerButtons = new();
 
         for (int i = 0; i < canvas.layers.Count; i++)
@@ -182,6 +186,7 @@ public class ValueSetterWindow : PopupWindow
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
+        base.Logic(canvas, mousePos);
         value = slider.GetValue(mousePos, minValue, maxValue);
 
         switch (thisChanges)
@@ -242,6 +247,7 @@ public class SettingsWindow : PopupWindow
 
     public override void Logic(Canvas c, Vector2 mousePos)
     {
+        base.Logic(c, mousePos);
         buttons.ForEach(b => b.OnHover(mousePos));
     }
 
