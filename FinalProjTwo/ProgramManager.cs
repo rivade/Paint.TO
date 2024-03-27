@@ -42,9 +42,6 @@ public class ProgramManager
         Raylib.EndDrawing();
 
         canvas.layers.ForEach(layer => Raylib.UnloadTexture(layer.canvasTexture));
-
-        if (popupWindow is LayerWindow layerWindow)
-            layerWindow.layerButtons.ForEach(l => Raylib.UnloadTexture(l.preview));
     }
 
     private void Logic()

@@ -24,22 +24,8 @@ public class LayerButton : LayerWindowButton
     public int ThisLayerNumber { get; set; }
     public bool isVisible { get; set; }
 
-    private Texture2D preResizePreview;
-    public Texture2D preview;
-
-    public LayerButton(Texture2D layerPreview)
-    {
-        preResizePreview = layerPreview;
-    }
-
     public override void Draw()
     {
-        Image tempImg = Raylib.LoadImageFromTexture(preResizePreview);
-        
-        Raylib.ImageResize(ref tempImg, (int)buttonRect.Width, (int)buttonRect.Height);
-
-        preview = Raylib.LoadTextureFromImage(tempImg);
-
         if (isVisible)
             GetButtonColor(Color.Lime, Color.Green, Color.White, false);
 
@@ -50,13 +36,10 @@ public class LayerButton : LayerWindowButton
             Raylib.DrawRectangle((int)buttonRect.X - 5, (int)buttonRect.Y - 5, (int)buttonRect.Width + 10, (int)buttonRect.Height + 10, Color.Red);
 
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
-        Raylib.DrawTexture(preview, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
 
         TextHandling.DrawCenteredTextPro([$"Layer {ThisLayerNumber}"],
         (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width,
         (int)buttonRect.Y + 20, 30, 0, Color.Black);
-
-        Raylib.UnloadImage(tempImg);
     }
 
 
