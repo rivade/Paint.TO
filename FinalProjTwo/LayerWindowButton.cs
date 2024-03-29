@@ -16,7 +16,7 @@ public abstract class LayerWindowButton : Button
         infoWindow = null;
     }
 
-    public virtual void Click(Canvas canvas) {}
+    public virtual void Click(Canvas canvas) { }
 }
 
 public class LayerButton : LayerWindowButton
@@ -96,7 +96,7 @@ public class RemoveLayerButton : LayerWindowButton
         base.Update(mousePos, canvas);
 
         if (isHoveredOn)
-            infoWindow = new("Remove layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+            infoWindow = new("Remove current layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
     public override void Draw()
@@ -155,11 +155,17 @@ public class LayerVisibilityButton : LayerWindowButton
 
 public class MoveLayerButton : LayerWindowButton
 {
-    private Texture2D icon;
+    public enum Direction
+    {
+        Up,
+        Down
+    }
+    public Direction direction { get; set; }
+    private Texture2D[] icons;
 
     public MoveLayerButton()
     {
-        icon = Raylib.LoadTexture("Icons/rightarrow.png");
+        icons = [Raylib.LoadTexture("Icons/rightarrow.png"), Raylib.LoadTexture("Icons/leftarrow.png")];
     }
 
     public override void Update(Vector2 mousePos, Canvas canvas)
@@ -167,23 +173,56 @@ public class MoveLayerButton : LayerWindowButton
         base.Update(mousePos, canvas);
 
         if (isHoveredOn)
-            infoWindow = new("Move layer up hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        {
+            switch (direction)
+            {
+                case Direction.Up:
+                    infoWindow = new("Move layer up hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+                break;
+                case Direction.Down:
+                    infoWindow = new("Move layer down hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+                break;
+            }
+        }
     }
 
     public override void Draw()
     {
         GetButtonColor(Color.LightGray, Color.White, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
-        Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        switch (direction)
+        {
+            case Direction.Up:
+                Raylib.DrawTexture(icons[0], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+                break;
+            case Direction.Down:
+                Raylib.DrawTexture(icons[1], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+                break;
+        }
         base.Draw();
     }
 
     public override void Click(Canvas canvas)
     {
-        if (Canvas.currentLayer != 4 && canvas.layers.Count != 1 && Canvas.currentLayer != canvas.layers.Count - 1)
+
+        switch (direction)
         {
-            Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer + 1);
-            Canvas.currentLayer++;
+            case Direction.Up:
+                if (Canvas.currentLayer != 4 && canvas.layers.Count != 1 && Canvas.currentLayer != canvas.layers.Count - 1)
+                {
+                    Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer + 1);
+                    Canvas.currentLayer++;
+                }
+                break;
+
+            case Direction.Down:
+                if (Canvas.currentLayer != 0 && canvas.layers.Count != 1)
+                {
+                    Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer - 1);
+                    Canvas.currentLayer--;
+                }
+                break;
+
         }
     }
 

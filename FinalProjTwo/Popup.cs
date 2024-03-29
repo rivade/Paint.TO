@@ -126,10 +126,11 @@ public class LayerWindow : PopupWindow
 
     private List<LayerWindowButton> buttons = 
     [
-        new AddLayerButton() { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize) },
-        new RemoveLayerButton() { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
-        new LayerVisibilityButton() { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton() { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize) }
+        new AddLayerButton() { buttonRect = new(720, 650, Button.buttonSize, Button.buttonSize) },
+        new MoveLayerButton() { buttonRect = new(820, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
+        new LayerVisibilityButton() { buttonRect = new(920, 650, Button.buttonSize, Button.buttonSize) },
+        new MoveLayerButton() { buttonRect = new(1020, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
+        new RemoveLayerButton() { buttonRect = new(1120, 650, Button.buttonSize, Button.buttonSize) }
     ];
 
     public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) { }

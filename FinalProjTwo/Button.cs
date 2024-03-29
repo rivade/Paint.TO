@@ -64,11 +64,10 @@ public class ToolButton : Button, IHoverable, IDrawable
 
     private static List<Color>[] colorSets =
     [
+        new List<Color> {Color.Blue, Color.SkyBlue, Color.DarkBlue},
         new List<Color> {Color.Lime, Color.Green, Color.DarkGreen},
-        new List<Color> {Color.Purple, Color.Pink, Color.DarkPurple},
-        new List<Color> {Color.Blue, Color.SkyBlue, Color.DarkBlue}
+        new List<Color> {Color.Purple, Color.Pink, Color.DarkPurple}
     ];
-
     private static List<Color> activeColorSet
     {
         get
