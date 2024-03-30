@@ -6,15 +6,18 @@ public abstract class PopupWindow : IDrawable
 {
     protected Rectangle windowRect;
     public string[] messages;
+    protected ClosePopupButton closeButton;
 
     public virtual void Draw()
     {
         Raylib.DrawRectangleRec(windowRect, GUIarea.guiColor);
         TextHandling.DrawScreenCenteredText(messages, (int)windowRect.Y + 20, 30, 60, Color.Black);
+        closeButton.Draw();
     }
 
     public virtual void Logic(Canvas canvas, Vector2 mousePos)
     {
+        closeButton.OnHover(mousePos);
         if (!Raylib.CheckCollisionPointRec(mousePos, windowRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
             ProgramManager.popupWindow = null;
     }
@@ -23,6 +26,7 @@ public abstract class PopupWindow : IDrawable
     {
         windowRect = new Rectangle(ProgramManager.ScreenWidth / 2 - width / 2, ProgramManager.ScreenHeight / 2 - height / 2, width, height);
         messages = messagesExtern;
+        closeButton = new(windowRect);
     }
 }
 

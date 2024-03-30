@@ -48,8 +48,8 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
+        popupWindow?.Logic(canvas, mousePos);
         if (popupWindow == null) canvas.Update(mousePos, currentTool);
-        else popupWindow.Logic(canvas, mousePos);
 
         interactables.ForEach(i => i.OnHover(mousePos));
 

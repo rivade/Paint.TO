@@ -400,3 +400,34 @@ public class GUIColorButton : Button, IHoverable, IDrawable
         TextHandling.DrawCenteredTextPro([text], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
     }
 }
+
+public class ClosePopupButton : Button, IHoverable, IDrawable
+{
+    private const int buttonWidth = 50;
+    private const int buttonHeight = 30;
+
+    public ClosePopupButton(Rectangle popupRect)
+    {
+        buttonRect = new((popupRect.X + popupRect.Width) - buttonWidth, popupRect.Y, buttonWidth, buttonHeight);
+    }
+
+    public override void OnHover(Vector2 mousePos)
+    {
+        base.OnHover(mousePos);
+
+        if (isHoveredOn)
+            infoWindow = new("Close window", (int)buttonRect.X - Raylib.MeasureText("Close window", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
+    }
+
+    public override void OnClick()
+    {
+        ProgramManager.popupWindow = null;
+    }
+
+    public override void Draw()
+    {
+        GetButtonColor(Color.Red, Color.Pink, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        base.Draw();
+    }
+}
