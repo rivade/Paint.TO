@@ -16,7 +16,7 @@ public abstract class ShapeTool : DrawTool
     public static Circle tempCircle;
     public static bool drawFilled = true;
 
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
             startPos = mousePos;

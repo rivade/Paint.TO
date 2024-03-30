@@ -2,15 +2,13 @@ namespace DrawingProgram;
 
 public abstract class DrawTool
 {
-    protected Vector2 lastMousePos;
-
     public static Color drawingColor = Color.Black;
     public static int brushRadius = 1;
 
 
-    public virtual void Stroke(Image canvas, Vector2 mousePos)
+    public virtual void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
-        lastMousePos = mousePos;
+
     }
 
     // vvvv Tack chatgpt, youtube, stackoverflow och gud för denna algoritm nedan vvvv
@@ -63,7 +61,7 @@ public abstract class DrawTool
 
 public class Pencil : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
@@ -72,34 +70,28 @@ public class Pencil : DrawTool
                 (int)mousePos.X, (int)mousePos.Y,
                 drawingColor);
         }
-
-        base.Stroke(canvas, mousePos);
     }
 }
 
 public class PaintBrush : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             DrawThickLine(canvas, lastMousePos, mousePos, drawingColor, true);
         }
-
-        base.Stroke(canvas, mousePos);
     }
 }
 
 public class Eraser : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             DrawThickLine(canvas, lastMousePos, mousePos, new Color(0, 0, 0, 0), true);
         }
-
-        base.Stroke(canvas, mousePos);
     }
 }
 
@@ -107,7 +99,7 @@ public class Checker : DrawTool
 {
     public static int checkerSize = 5;
 
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
             SetCheckers(canvas, mousePos);
@@ -141,7 +133,7 @@ public class Checker : DrawTool
 
 public class Bucket : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
@@ -201,7 +193,7 @@ public class Bucket : DrawTool
 
 public class EyeDropper : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         Rectangle canvasRect = new(0, 0, new Vector2(canvas.Width, canvas.Height));
         if (Raylib.IsMouseButtonDown(MouseButton.Left) && Raylib.CheckCollisionPointRec(mousePos, canvasRect))

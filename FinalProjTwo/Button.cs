@@ -405,6 +405,7 @@ public class ClosePopupButton : Button, IHoverable, IDrawable
 {
     private const int buttonWidth = 50;
     private const int buttonHeight = 30;
+    private Texture2D icon = Raylib.LoadTexture("Icons/x2.png");
 
     public ClosePopupButton(Rectangle popupRect)
     {
@@ -428,6 +429,7 @@ public class ClosePopupButton : Button, IHoverable, IDrawable
     {
         GetButtonColor(Color.Red, Color.Pink, Color.White, false);
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }
 }

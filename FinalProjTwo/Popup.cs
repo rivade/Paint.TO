@@ -30,6 +30,19 @@ public abstract class PopupWindow : IDrawable
     }
 }
 
+public class StartPopup : PopupWindow
+{
+    public StartPopup(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) {}
+
+    public override void Draw()
+    {
+        base.Draw();
+        TextHandling.DrawScreenCenteredText(["TheoShop v1.69"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "blablablablablablablablablabla", "jag orkar inte uppdatera detta varje gång"],
+                                            (int)windowRect.Y + 175, 20, 30, Color.Black);
+    }
+}
+
 public class SavePopup : PopupWindow
 {
     public Dictionary<KeyboardKey, string> alphabet;

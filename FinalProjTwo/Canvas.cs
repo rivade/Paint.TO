@@ -18,9 +18,9 @@ public class Canvas : IDrawable
         Raylib.ImageDrawRectangle(ref layers[0].canvasImg, 0, 0, CanvasWidth, CanvasHeight, Color.White);
     }
 
-    public void Update(Vector2 mousePos, DrawTool tool)
+    public void Update(Vector2 mousePos, Vector2 lastMousePos, DrawTool tool)
     {
-        layers[currentLayer].Logic(mousePos, tool);
+        layers[currentLayer].Logic(mousePos, lastMousePos, tool);
     }
 
     public void SaveProject(string fileName, string directory)
@@ -38,7 +38,7 @@ public class Canvas : IDrawable
         layers[currentLayer].canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 1600, Color.Blank));
     }
 
-    private Image CropCanvas(Image canvas, Image newImage)
+    public static Image CropCanvas(Image canvas, Image newImage)
     {
         for (int x = 0; x < CanvasWidth; x++)
         {
@@ -91,12 +91,12 @@ public class Layer
         }
     }
 
-    public void Logic(Vector2 mousePos, DrawTool tool)
+    public void Logic(Vector2 mousePos, Vector2 lastMousePos, DrawTool tool)
     {
         if (IsCursorOnCanvas(mousePos))
         {
             PreStrokeSaveCanvas(canvasImg);
-            tool.Stroke(canvasImg, mousePos);
+            tool.Stroke(canvasImg, mousePos, lastMousePos);
         }
 
         canvasImg = UndoStroke(canvasImg);

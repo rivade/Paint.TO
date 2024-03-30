@@ -16,6 +16,8 @@ public class ProgramManager
     public static DrawTool currentTool;
     public static PopupWindow popupWindow;
 
+    private Vector2 lastMousePos;
+
     public ProgramManager()
     {
         Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
@@ -28,6 +30,7 @@ public class ProgramManager
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
 
+        popupWindow = new StartPopup(800, 300, []);
         currentTool = tools.drawTools[0];
     }
 
@@ -49,7 +52,8 @@ public class ProgramManager
         Vector2 mousePos = Raylib.GetMousePosition();
 
         popupWindow?.Logic(canvas, mousePos);
-        if (popupWindow == null) canvas.Update(mousePos, currentTool);
+        if (popupWindow == null) 
+            canvas.Update(mousePos, lastMousePos, currentTool);
 
         interactables.ForEach(i => i.OnHover(mousePos));
 
@@ -57,6 +61,8 @@ public class ProgramManager
         {
             popupWindow = null;
         }
+
+        lastMousePos = mousePos;
     }
 
     public void Run()
