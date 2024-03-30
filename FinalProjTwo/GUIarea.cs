@@ -2,7 +2,7 @@ namespace DrawingProgram;
 
 public class GUIarea : IDrawable
 {
-    private static Color[] colors = [ Color.SkyBlue, Color.LightGray, Color.Gray, Color.Gold, Color.Red, Color.Pink ];
+    private static Color[] colors = [ Color.SkyBlue, Color.LightGray, Color.Gray, Color.Gold, Color.Red, Color.Pink, Color.Green ];
     public static int colorInt = 0;
 
     public static Color guiColor

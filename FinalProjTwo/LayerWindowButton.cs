@@ -208,7 +208,7 @@ public class MoveLayerButton : LayerWindowButton
         switch (direction)
         {
             case Direction.Up:
-                if (Canvas.currentLayer != 4 && canvas.layers.Count != 1 && Canvas.currentLayer != canvas.layers.Count - 1)
+                if (canvas.layers.Count != 1 && Canvas.currentLayer != canvas.layers.Count - 1)
                 {
                     Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer + 1);
                     Canvas.currentLayer++;

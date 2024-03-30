@@ -348,7 +348,8 @@ public class CloseButton : Button, IDrawable, IHoverable
 
     public override void Draw()
     {
-        Raylib.DrawRectangleRec(buttonRect, Color.Red);
+        GetButtonColor(Color.Red, Color.Pink, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
         base.Draw();
     }
 }
