@@ -37,8 +37,8 @@ public class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["TheoShop v1.69"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "blablablablablablablablablabla", "jag orkar inte uppdatera detta varje gång"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.70"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Fixed issue with input after closing popup", "-Changed application name"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

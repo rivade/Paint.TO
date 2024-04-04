@@ -15,12 +15,13 @@ public class ProgramManager
 
     public static DrawTool currentTool;
     public static PopupWindow popupWindow;
+    public static bool isMouseInputEnabled;
 
     private Vector2 lastMousePos;
 
     public ProgramManager()
     {
-        Raylib.InitWindow(1920, 1080, "GenericDrawingProgram");
+        Raylib.InitWindow(1920, 1080, "Paint.TO");
         Raylib.ToggleFullscreen();
         Raylib.SetExitKey(KeyboardKey.Null);
         canvas = new();
@@ -51,8 +52,10 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left)) isMouseInputEnabled = true;
+
         popupWindow?.Logic(canvas, mousePos);
-        if (popupWindow == null) 
+        if (popupWindow == null && isMouseInputEnabled) 
             canvas.Update(mousePos, lastMousePos, currentTool);
 
         interactables.ForEach(i => i.OnHover(mousePos));

@@ -422,6 +422,7 @@ public class ClosePopupButton : Button, IHoverable, IDrawable
 
     public override void OnClick()
     {
+        ProgramManager.isMouseInputEnabled = false;
         ProgramManager.popupWindow = null;
     }
 
