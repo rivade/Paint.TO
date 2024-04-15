@@ -112,7 +112,7 @@ public class ToolButton : Button, IHoverable, IDrawable
 
 public class ColorSelectorButton : Button, IHoverable, IDrawable
 {
-    private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color", "Press ESC/Enter to close"]);
+    private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color"]);
 
     public override void OnClick()
     {
@@ -133,7 +133,7 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
     private ValueSetterWindow valueSetterWindow =
-    new(800, 600, ["Set brush radius", "Press ESC/Enter to close"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
+    new(800, 600, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
 
     public override void OnClick()
     {
@@ -156,7 +156,7 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow =
-    new(800, 600, ["Set checker size", "Press ESC/Enter to close"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
+    new(800, 600, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
 
     public override void OnClick()
     {
@@ -244,8 +244,6 @@ public class FilledShapeButton : Button, IDrawable, IHoverable
 
 public class SaveCanvasButton : Button, IDrawable, IHoverable
 {
-    private SavePopup saveWindow = new(500, 300, ["Select file name ", "Press enter to save", "Press ESC to close"]);
-
     public override void OnHover(Vector2 mousePos)
     {
         base.OnHover(mousePos);
@@ -256,7 +254,7 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
 
     public override void OnClick()
     {
-        ProgramManager.popupWindow = saveWindow;
+        ProgramManager.popupWindow = new SavePopup(800, 300, ["Select file name", "Press enter to save"]);
     }
 
     public override void Draw()
@@ -309,7 +307,7 @@ public class LoadButton : Button, IDrawable, IHoverable
 
 public class OpenLayersButton : Button, IDrawable, IHoverable
 {
-    private LayerWindow layerWindow = new(1300, 500, ["Layers:", "Press ESC/Enter to close"]);
+    private LayerWindow layerWindow = new(1300, 500, ["Layers:"]);
     public override void OnClick()
     {
         ProgramManager.popupWindow = layerWindow;
@@ -356,7 +354,7 @@ public class CloseButton : Button, IDrawable, IHoverable
 
 public class SettingsButton : Button, IHoverable, IDrawable
 {
-    private SettingsWindow settingsWindow = new(1300, 500, ["Settings", "Press ESC/Enter to close"]);
+    private SettingsWindow settingsWindow = new(1300, 400, ["Settings"]);
     public override void OnHover(Vector2 mousePos)
     {
         base.OnHover(mousePos);

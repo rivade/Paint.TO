@@ -11,7 +11,7 @@ public abstract class PopupWindow : IDrawable
     public virtual void Draw()
     {
         Raylib.DrawRectangleRec(windowRect, GUIarea.guiColor);
-        TextHandling.DrawScreenCenteredText(messages, (int)windowRect.Y + 20, 30, 60, Color.Black);
+        TextHandling.DrawScreenCenteredText(messages, (int)windowRect.Y + 20, 60, 70, Color.Black);
         closeButton.Draw();
     }
 
@@ -37,8 +37,8 @@ public class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.70"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Fixed issue with input after closing popup", "-Changed application name"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.71"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Removed redundant text on popup windows", "-Miscellaneous tweaks"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }
@@ -77,7 +77,7 @@ public class SavePopup : PopupWindow
     public string UpdateFileName()
     {
         KeyboardKey keyPressed = (KeyboardKey)Raylib.GetKeyPressed();
-        if (keyPressed != KeyboardKey.Null && alphabet.ContainsKey(keyPressed) && fileName.Length <= 26)
+        if (keyPressed != KeyboardKey.Null && alphabet.ContainsKey(keyPressed) && Raylib.MeasureText(fileName, 30) < windowRect.Width - 50)
         {
             if (Raylib.IsKeyDown(KeyboardKey.LeftShift) || Raylib.IsKeyDown(KeyboardKey.RightShift))
                 fileName += alphabet[keyPressed].ToUpper();
