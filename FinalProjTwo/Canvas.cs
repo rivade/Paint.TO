@@ -26,7 +26,7 @@ public class Canvas : IDrawable
     public void SaveProject(string fileName, string directory)
     {
         string path = directory + @"\" + fileName;
-        Raylib.ExportImage(CropCanvas(CompressLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), path);
+        Raylib.ExportImage(CropCanvas(FuseLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), path);
         ProgramManager.popupWindow = null;
     }
 
@@ -51,7 +51,7 @@ public class Canvas : IDrawable
         return newImage;
     }
 
-    private Image CompressLayers(List<Layer> layers)
+    private Image FuseLayers(List<Layer> layers)
     {
         Image result = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank);
         foreach (Layer layer in layers)
@@ -61,11 +61,18 @@ public class Canvas : IDrawable
         return result;
     }
 
+    public void CompressLayers()
+    {
+        currentLayer = 0;
+        layers = [new() {canvasImg = FuseLayers(layers)}];
+    }
+
     public void Draw()
     {
         Raylib.DrawTexture(transparencyBG, 0, 0, Color.White);
         layers.ForEach(l => l.Draw());
     }
+
 }
 
 public class Layer

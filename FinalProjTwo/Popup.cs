@@ -37,8 +37,8 @@ public class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.71"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Removed redundant text on popup windows", "-Miscellaneous tweaks"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.72"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to compress layers into one", "-Small tweaks to popup windows"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }
@@ -143,11 +143,12 @@ public class LayerWindow : PopupWindow
 
     private List<LayerWindowButton> buttons = 
     [
-        new AddLayerButton() { buttonRect = new(720, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton() { buttonRect = new(820, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
-        new LayerVisibilityButton() { buttonRect = new(920, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton() { buttonRect = new(1020, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
-        new RemoveLayerButton() { buttonRect = new(1120, 650, Button.buttonSize, Button.buttonSize) }
+        new AddLayerButton() { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
+        new MoveLayerButton() { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
+        new LayerVisibilityButton() { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
+        new CompressLayersButton() { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
+        new MoveLayerButton() { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
+        new RemoveLayerButton() { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
     ];
 
     public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) { }
@@ -164,6 +165,7 @@ public class LayerWindow : PopupWindow
 
         layerButtons.ForEach(l => l.OnHover(mousePos));
         buttons.ForEach(b => b.Update(mousePos, canvas));
+
     }
 
     public override void Draw()
@@ -190,7 +192,7 @@ public class ValueSetterWindow : PopupWindow
 
     public int minValue { get; set; }
     public int maxValue { get; set; }
-    public int value;
+    private int value;
 
     public ValueSetterWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
@@ -231,10 +233,11 @@ public class ValueSetterWindow : PopupWindow
             case Changes.BrushRadius:
                 Color colorPreview = DrawTool.drawingColor;
                 colorPreview.A = 255;
-                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 675, value, colorPreview);
+                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 650, value, colorPreview);
                 break;
             case Changes.Opacity:
-                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 675, 100, DrawTool.drawingColor);
+                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 650, 105, Color.White);
+                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 650, 100, DrawTool.drawingColor);
                 break;
             case Changes.CheckerSize:
                 CheckerPreview.DrawCheckerPreview();
@@ -281,7 +284,7 @@ public static class CheckerPreview
     public static void DrawCheckerPreview()
     {
         int centerX = ProgramManager.ScreenWidth / 2;
-        int centerY = 675;
+        int centerY = 650;
 
         int rows = (int)Math.Ceiling(200d / Checker.checkerSize);
         int cols = (int)Math.Ceiling(200d / Checker.checkerSize);

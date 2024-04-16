@@ -2,6 +2,8 @@ namespace DrawingProgram;
 
 public abstract class LayerWindowButton : Button
 {
+    protected Texture2D icon;
+
     public virtual void Update(Vector2 mousePos, Canvas canvas)
     {
         isHoveredOn = false;
@@ -51,8 +53,6 @@ public class LayerButton : LayerWindowButton
 
 public class AddLayerButton : LayerWindowButton
 {
-    private Texture2D icon;
-
     public AddLayerButton()
     {
         icon = Raylib.LoadTexture("Icons/plus.png");
@@ -84,8 +84,6 @@ public class AddLayerButton : LayerWindowButton
 
 public class RemoveLayerButton : LayerWindowButton
 {
-    private Texture2D icon;
-
     public RemoveLayerButton()
     {
         icon = Raylib.LoadTexture("Icons/x.png");
@@ -150,6 +148,35 @@ public class LayerVisibilityButton : LayerWindowButton
     public override void Click(Canvas canvas)
     {
         canvas.layers[Canvas.currentLayer].isVisible = !canvas.layers[Canvas.currentLayer].isVisible;
+    }
+}
+
+public class CompressLayersButton : LayerWindowButton
+{
+    public CompressLayersButton()
+    {
+        icon = Raylib.LoadTexture("Icons/compressicon.png");
+    }
+
+    public override void Draw()
+    {
+        GetButtonColor(Color.LightGray, Color.White, Color.White, false);
+        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        base.Draw();
+    }
+
+    public override void Update(Vector2 mousePos, Canvas canvas)
+    {
+        base.Update(mousePos, canvas);
+
+        if (isHoveredOn)
+            infoWindow = new("Compress layers", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+    }
+
+    public override void Click(Canvas canvas)
+    {
+        canvas.CompressLayers();
     }
 }
 

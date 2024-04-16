@@ -133,7 +133,7 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 public class BrushRadiusButton : Button, IHoverable, IDrawable
 {
     private ValueSetterWindow valueSetterWindow =
-    new(800, 600, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
+    new(800, 500, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
 
     public override void OnClick()
     {
@@ -156,7 +156,7 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
 public class CheckerSizeButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow =
-    new(800, 600, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
+    new(800, 500, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
 
     public override void OnClick()
     {
@@ -179,7 +179,7 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
 public class OpacityButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow =
-    new(800, 600, ["Set opacity", "Press ESC/Enter to close"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
+    new(800, 500, ["Set opacity"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
 
     public override void OnHover(Vector2 mousePos)
     {
