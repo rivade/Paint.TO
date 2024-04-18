@@ -30,7 +30,7 @@ public abstract class PopupWindow : IDrawable
     }
 }
 
-public class StartPopup : PopupWindow
+public sealed class StartPopup : PopupWindow
 {
     public StartPopup(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) {}
 
@@ -43,7 +43,7 @@ public class StartPopup : PopupWindow
     }
 }
 
-public class SavePopup : PopupWindow
+public sealed class SavePopup : PopupWindow
 {
     public Dictionary<KeyboardKey, string> alphabet;
     public string fileName = "";
@@ -107,7 +107,7 @@ public class SavePopup : PopupWindow
     }
 }
 
-public class ColorSelector : PopupWindow
+public sealed class ColorSelector : PopupWindow
 {
     private Texture2D colors;
     private Image colorsImg;
@@ -137,7 +137,7 @@ public class ColorSelector : PopupWindow
     }
 }
 
-public class LayerWindow : PopupWindow
+public sealed class LayerWindow : PopupWindow
 {
     public List<LayerButton> layerButtons = new();
 
@@ -146,7 +146,7 @@ public class LayerWindow : PopupWindow
         new AddLayerButton() { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
         new MoveLayerButton() { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
         new LayerVisibilityButton() { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
-        new CompressLayersButton() { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
+        new MergeLayersButton() { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
         new MoveLayerButton() { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
         new RemoveLayerButton() { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
     ];
@@ -177,7 +177,7 @@ public class LayerWindow : PopupWindow
     }
 }
 
-public class ValueSetterWindow : PopupWindow
+public sealed class ValueSetterWindow : PopupWindow
 {
     public enum Changes
     {
@@ -254,7 +254,7 @@ public class ValueSetterWindow : PopupWindow
     }
 }
 
-public class SettingsWindow : PopupWindow
+public sealed class SettingsWindow : PopupWindow
 {
     private List<Button> buttons = 
     [ 

@@ -59,7 +59,7 @@ public abstract class DrawTool
 
 }
 
-public class Pencil : DrawTool
+public sealed class Pencil : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
@@ -73,7 +73,7 @@ public class Pencil : DrawTool
     }
 }
 
-public class PaintBrush : DrawTool
+public sealed class PaintBrush : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
@@ -84,7 +84,7 @@ public class PaintBrush : DrawTool
     }
 }
 
-public class Eraser : DrawTool
+public sealed class Eraser : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
@@ -95,7 +95,7 @@ public class Eraser : DrawTool
     }
 }
 
-public class Checker : DrawTool
+public sealed class Checker : DrawTool
 {
     public static int checkerSize = 5;
 
@@ -131,7 +131,7 @@ public class Checker : DrawTool
     }
 }
 
-public class Bucket : DrawTool
+public sealed class Bucket : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
@@ -191,7 +191,7 @@ public class Bucket : DrawTool
     }
 }
 
-public class EyeDropper : DrawTool
+public sealed class EyeDropper : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {

@@ -16,6 +16,7 @@ public abstract class Button : IHoverable, IDrawable
     public virtual void OnHover(Vector2 mousePos)
     {
         isHoveredOn = false;
+        infoWindow = null;
         if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
         {
             isHoveredOn = true;
@@ -23,8 +24,6 @@ public abstract class Button : IHoverable, IDrawable
             if (Raylib.IsMouseButtonPressed(MouseButton.Left))
                 OnClick();
         }
-
-        infoWindow = null;
     }
 
     public virtual void OnClick()
@@ -37,7 +36,7 @@ public abstract class Button : IHoverable, IDrawable
         infoWindow?.Draw();
     }
 
-    protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive) //Condition lämnas false om knappen ej kan vara aktiv
+    protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive)
     {
         buttonColor = defaultColor;
 
@@ -58,7 +57,7 @@ public abstract class Button : IHoverable, IDrawable
     }
 }
 
-public class ToolButton : Button, IHoverable, IDrawable
+public sealed class ToolButton : Button, IHoverable, IDrawable
 {
     public DrawTool DrawTool { get; set; }
 
@@ -110,7 +109,7 @@ public class ToolButton : Button, IHoverable, IDrawable
     }
 }
 
-public class ColorSelectorButton : Button, IHoverable, IDrawable
+public sealed class ColorSelectorButton : Button, IHoverable, IDrawable
 {
     private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color"]);
 
@@ -130,7 +129,7 @@ public class ColorSelectorButton : Button, IHoverable, IDrawable
 }
 
 
-public class BrushRadiusButton : Button, IHoverable, IDrawable
+public sealed class BrushRadiusButton : Button, IHoverable, IDrawable
 {
     private ValueSetterWindow valueSetterWindow =
     new(800, 500, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
@@ -153,7 +152,7 @@ public class BrushRadiusButton : Button, IHoverable, IDrawable
     }
 }
 
-public class CheckerSizeButton : Button, IDrawable, IHoverable
+public sealed class CheckerSizeButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow =
     new(800, 500, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
@@ -176,7 +175,7 @@ public class CheckerSizeButton : Button, IDrawable, IHoverable
     }
 }
 
-public class OpacityButton : Button, IDrawable, IHoverable
+public sealed class OpacityButton : Button, IDrawable, IHoverable
 {
     private ValueSetterWindow valueSetterWindow =
     new(800, 500, ["Set opacity"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
@@ -219,7 +218,7 @@ public class OpacityButton : Button, IDrawable, IHoverable
     }
 }
 
-public class FilledShapeButton : Button, IDrawable, IHoverable
+public sealed class FilledShapeButton : Button, IDrawable, IHoverable
 {
     public override void OnClick()
     {
@@ -242,7 +241,7 @@ public class FilledShapeButton : Button, IDrawable, IHoverable
     }
 }
 
-public class SaveCanvasButton : Button, IDrawable, IHoverable
+public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
 {
     public override void OnHover(Vector2 mousePos)
     {
@@ -265,7 +264,7 @@ public class SaveCanvasButton : Button, IDrawable, IHoverable
     }
 }
 
-public class LoadButton : Button, IDrawable, IHoverable
+public sealed class LoadButton : Button, IDrawable, IHoverable
 {
     Canvas canv;
 
@@ -305,7 +304,7 @@ public class LoadButton : Button, IDrawable, IHoverable
     }
 }
 
-public class OpenLayersButton : Button, IDrawable, IHoverable
+public sealed class OpenLayersButton : Button, IDrawable, IHoverable
 {
     private LayerWindow layerWindow = new(1300, 500, ["Layers:"]);
     public override void OnClick()
@@ -329,7 +328,7 @@ public class OpenLayersButton : Button, IDrawable, IHoverable
     }
 }
 
-public class CloseButton : Button, IDrawable, IHoverable
+public sealed class CloseButton : Button, IDrawable, IHoverable
 {
     public override void OnHover(Vector2 mousePos)
     {
@@ -352,7 +351,7 @@ public class CloseButton : Button, IDrawable, IHoverable
     }
 }
 
-public class SettingsButton : Button, IHoverable, IDrawable
+public sealed class SettingsButton : Button, IHoverable, IDrawable
 {
     private SettingsWindow settingsWindow = new(1300, 400, ["Settings"]);
     public override void OnHover(Vector2 mousePos)
@@ -375,7 +374,7 @@ public class SettingsButton : Button, IHoverable, IDrawable
     }
 }
 
-public class GUIColorButton : Button, IHoverable, IDrawable
+public sealed class GUIColorButton : Button, IHoverable, IDrawable
 {
     private Action ChangeColor;
     private string text;
@@ -399,7 +398,7 @@ public class GUIColorButton : Button, IHoverable, IDrawable
     }
 }
 
-public class ClosePopupButton : Button, IHoverable, IDrawable
+public sealed class ClosePopupButton : Button, IHoverable, IDrawable
 {
     private const int buttonWidth = 50;
     private const int buttonHeight = 30;

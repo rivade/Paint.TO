@@ -88,7 +88,7 @@ public abstract class ShapeTool : DrawTool
     }
 }
 
-public class RectangleTool : ShapeTool
+public sealed class RectangleTool : ShapeTool
 {
     public RectangleTool()
     {
@@ -96,7 +96,7 @@ public class RectangleTool : ShapeTool
     }
 }
 
-public class LineTool : ShapeTool
+public sealed class LineTool : ShapeTool
 {
     public LineTool()
     {
@@ -104,7 +104,7 @@ public class LineTool : ShapeTool
     }
 }
 
-public class CircleTool : ShapeTool
+public sealed class CircleTool : ShapeTool
 {
     public CircleTool()
     {

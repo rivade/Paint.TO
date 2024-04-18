@@ -21,7 +21,7 @@ public abstract class LayerWindowButton : Button
     public virtual void Click(Canvas canvas) { }
 }
 
-public class LayerButton : LayerWindowButton
+public sealed class LayerButton : LayerWindowButton
 {
     public int ThisLayerNumber { get; set; }
     public bool isVisible { get; set; }
@@ -51,7 +51,7 @@ public class LayerButton : LayerWindowButton
     }
 }
 
-public class AddLayerButton : LayerWindowButton
+public sealed class AddLayerButton : LayerWindowButton
 {
     public AddLayerButton()
     {
@@ -82,7 +82,7 @@ public class AddLayerButton : LayerWindowButton
     }
 }
 
-public class RemoveLayerButton : LayerWindowButton
+public sealed class RemoveLayerButton : LayerWindowButton
 {
     public RemoveLayerButton()
     {
@@ -117,7 +117,7 @@ public class RemoveLayerButton : LayerWindowButton
     }
 }
 
-public class LayerVisibilityButton : LayerWindowButton
+public sealed class LayerVisibilityButton : LayerWindowButton
 {
     private List<Texture2D> icons = new();
     public int currentIcon = 0;
@@ -151,9 +151,9 @@ public class LayerVisibilityButton : LayerWindowButton
     }
 }
 
-public class CompressLayersButton : LayerWindowButton
+public sealed class MergeLayersButton : LayerWindowButton
 {
-    public CompressLayersButton()
+    public MergeLayersButton()
     {
         icon = Raylib.LoadTexture("Icons/compressicon.png");
     }
@@ -171,7 +171,7 @@ public class CompressLayersButton : LayerWindowButton
         base.Update(mousePos, canvas);
 
         if (isHoveredOn)
-            infoWindow = new("Compress layers", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+            infoWindow = new("Merge all layers", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
     public override void Click(Canvas canvas)
@@ -180,7 +180,7 @@ public class CompressLayersButton : LayerWindowButton
     }
 }
 
-public class MoveLayerButton : LayerWindowButton
+public sealed class MoveLayerButton : LayerWindowButton
 {
     public enum Direction
     {

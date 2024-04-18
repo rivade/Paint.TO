@@ -5,7 +5,7 @@ public abstract class ToolFolder
     public List<DrawTool> drawTools = new();  
 }
 
-public class DrawingTools : ToolFolder
+public sealed class DrawingTools : ToolFolder
 {
     public DrawingTools()
     {

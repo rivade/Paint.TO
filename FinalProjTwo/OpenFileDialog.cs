@@ -51,7 +51,7 @@ public struct BROWSEINFO
 public class OpenDialog
 {
     [DllImport("comdlg32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    public static extern bool GetOpenFileName(ref OpenFileName ofn);
+    private static extern bool GetOpenFileName(ref OpenFileName ofn);
 
     public static string GetFile()
     {
@@ -69,10 +69,10 @@ public class OpenDialog
     }
 
     [DllImport("shell32.dll")]
-    public static extern IntPtr SHBrowseForFolder(ref BROWSEINFO lpbi);
+    private static extern IntPtr SHBrowseForFolder(ref BROWSEINFO lpbi);
 
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-    public static extern bool SHGetPathFromIDList(IntPtr pidl, IntPtr pszPath);
+    private static extern bool SHGetPathFromIDList(IntPtr pidl, IntPtr pszPath);
 
     public static string GetDirectory()
     {
