@@ -1,6 +1,6 @@
 namespace DrawingProgram;
 
-public abstract class InterListInit
+public static class InterListInit
 {
     private static string[] toolNames = 
     { "Pencil", "Brush", "Eraser", "Fill color",
