@@ -1,5 +1,3 @@
-using Microsoft.VisualBasic.FileIO;
-
 namespace DrawingProgram;
 
 public abstract class PopupWindow : IDrawable
@@ -37,8 +35,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.72"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to compress layers into one", "-Small tweaks to popup windows"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.76"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to merge layers into one", "-Small tweaks to popup windows"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }
