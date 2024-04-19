@@ -7,12 +7,12 @@ public static class InterListInit
      "Color picker", "Checker/Dither", "Draw rectangle",
      "Draw line", "Draw circle"};
 
-    public static List<IHoverable> GenerateInteractables(ToolFolder inputTools, Canvas canvas)
+    public static List<IHoverable> GenerateInteractables(ProgramManager program, ToolFolder inputTools, Canvas canvas)
     {
         List<IHoverable> interactableList = new();
         for (int i = 0; i < inputTools.drawTools.Count(); i++)
         {
-            interactableList.Add(new ToolButton(toolNames[i])
+            interactableList.Add(new ToolButton(program, toolNames[i])
             {
                 buttonRect = new Rectangle(i * 90 + 10, Canvas.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize),
                 DrawTool = inputTools.drawTools[i]
@@ -20,7 +20,7 @@ public static class InterListInit
             );
         }
 
-        interactableList.Add(new ColorSelectorButton()
+        interactableList.Add(new ColorSelectorButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -31,7 +31,7 @@ public static class InterListInit
         )
         });
 
-        interactableList.Add(new BrushRadiusButton()
+        interactableList.Add(new BrushRadiusButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -43,7 +43,7 @@ public static class InterListInit
         });
 
 
-        interactableList.Add(new OpacityButton()
+        interactableList.Add(new OpacityButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -54,7 +54,7 @@ public static class InterListInit
         )
         });
 
-        interactableList.Add(new CheckerSizeButton()
+        interactableList.Add(new CheckerSizeButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -65,7 +65,7 @@ public static class InterListInit
         )
         });
 
-        interactableList.Add(new FilledShapeButton()
+        interactableList.Add(new FilledShapeButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -76,7 +76,7 @@ public static class InterListInit
         )
         });
 
-        interactableList.Add(new CloseButton()
+        interactableList.Add(new CloseButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -86,7 +86,7 @@ public static class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new SaveCanvasButton()
+        interactableList.Add(new SaveCanvasButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -96,7 +96,7 @@ public static class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new LoadButton(canvas)
+        interactableList.Add(new LoadButton(program, canvas)
         {
             buttonRect =
         new Rectangle(
@@ -106,7 +106,7 @@ public static class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new SettingsButton()
+        interactableList.Add(new SettingsButton(program)
         {
             buttonRect =
         new Rectangle(
@@ -116,7 +116,7 @@ public static class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new OpenLayersButton()
+        interactableList.Add(new OpenLayersButton(program)
         {
             buttonRect =
         new Rectangle(

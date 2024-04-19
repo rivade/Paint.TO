@@ -13,9 +13,9 @@ public class ProgramManager
     private List<IHoverable> interactables;
     private List<IDrawable> drawables;
 
-    public static DrawTool currentTool;
-    public static PopupWindow popupWindow;
-    public static bool isMouseInputEnabled;
+    public DrawTool currentTool;
+    public PopupWindow popupWindow;
+    public bool isMouseInputEnabled;
 
     private Vector2 lastMousePos;
 
@@ -24,14 +24,14 @@ public class ProgramManager
         Raylib.InitWindow(1920, 1080, "Paint.TO");
         Raylib.ToggleFullscreen();
         Raylib.SetExitKey(KeyboardKey.Null);
-        canvas = new();
+        canvas = new(this);
 
-        interactables = InterListInit.GenerateInteractables(tools, canvas);
+        interactables = InterListInit.GenerateInteractables(this, tools, canvas);
         drawables = [canvas, new ShapeIndicators(), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
 
-        popupWindow = new StartPopup(800, 300, []);
+        popupWindow = new StartPopup(this, 800, 300, []);
         currentTool = tools.drawTools[0];
     }
 

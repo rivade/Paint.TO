@@ -7,6 +7,12 @@ namespace DrawingProgram;
 
 public abstract class Button : IHoverable, IDrawable
 {
+    protected ProgramManager program;
+    public Button(ProgramManager programInstance)
+    {
+        program = programInstance;
+    }
+
     public const int buttonSize = 80;
     public Rectangle buttonRect;
     protected Color buttonColor;
@@ -47,13 +53,13 @@ public abstract class Button : IHoverable, IDrawable
             buttonColor = activeColor;
     }
 
-    public static bool PaintBrushTypeConditions()
+    public bool PaintBrushTypeConditions()
     {
-        return ProgramManager.currentTool.GetType().Name != "Pencil" &&
-        ProgramManager.currentTool.GetType().Name != "Bucket" &&
-        ProgramManager.currentTool.GetType().Name != "EyeDropper" &&
-        ProgramManager.currentTool is not ShapeTool ||
-        ProgramManager.currentTool is LineTool;
+        return program.currentTool.GetType().Name != "Pencil" &&
+        program.currentTool.GetType().Name != "Bucket" &&
+        program.currentTool.GetType().Name != "EyeDropper" &&
+        program.currentTool is not ShapeTool ||
+        program.currentTool is LineTool;
     }
 }
 
@@ -80,12 +86,12 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
 
     private string hoverText;
 
-    public ToolButton(string hovText)
+    public ToolButton(ProgramManager programInstance, string hovText) : base(programInstance)
     {
         hoverText = hovText;
     }
 
-    private bool IsActiveTool() => ProgramManager.currentTool == DrawTool;
+    private bool IsActiveTool() => program.currentTool == DrawTool;
 
     public override void OnHover(Vector2 mousePos)
     {
@@ -98,7 +104,7 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
     public override void OnClick()
     {
         if (!IsActiveTool())
-            ProgramManager.currentTool = DrawTool;
+            program.currentTool = DrawTool;
     }
 
     public override void Draw()
@@ -111,11 +117,16 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
 
 public sealed class ColorSelectorButton : Button, IHoverable, IDrawable
 {
-    private ColorSelector colorSelectorWindow = new(660, 750, ["Select a color"]);
+    private ColorSelector colorSelectorWindow;
+
+    public ColorSelectorButton(ProgramManager programInstance) : base(programInstance)
+    {
+        colorSelectorWindow = new(programInstance, 660, 750, ["Select a color"]);
+    }
 
     public override void OnClick()
     {
-        ProgramManager.popupWindow = colorSelectorWindow;
+        program.popupWindow = colorSelectorWindow;
     }
 
     public override void Draw()
@@ -131,13 +142,18 @@ public sealed class ColorSelectorButton : Button, IHoverable, IDrawable
 
 public sealed class BrushRadiusButton : Button, IHoverable, IDrawable
 {
-    private ValueSetterWindow valueSetterWindow =
-    new(800, 500, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
+    private ValueSetterWindow valueSetterWindow;
+
+    public BrushRadiusButton(ProgramManager programInstance) : base(programInstance)
+    {
+        valueSetterWindow =
+        new(programInstance, 800, 500, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
+    }
 
     public override void OnClick()
     {
         if (PaintBrushTypeConditions())
-            ProgramManager.popupWindow = valueSetterWindow;
+            program.popupWindow = valueSetterWindow;
     }
 
     public override void Draw()
@@ -154,18 +170,23 @@ public sealed class BrushRadiusButton : Button, IHoverable, IDrawable
 
 public sealed class CheckerSizeButton : Button, IDrawable, IHoverable
 {
-    private ValueSetterWindow valueSetterWindow =
-    new(800, 500, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
+    private ValueSetterWindow valueSetterWindow;
+
+    public CheckerSizeButton(ProgramManager programInstance) : base(programInstance)
+    {
+        valueSetterWindow =
+        new(programInstance, 800, 500, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
+    }
 
     public override void OnClick()
     {
-        if (ProgramManager.currentTool.GetType().Name == "Checker")
-            ProgramManager.popupWindow = valueSetterWindow;
+        if (program.currentTool.GetType().Name == "Checker")
+            program.popupWindow = valueSetterWindow;
     }
 
     public override void Draw()
     {
-        if (ProgramManager.currentTool.GetType().Name == "Checker")
+        if (program.currentTool.GetType().Name == "Checker")
         {
             TextHandling.DrawCenteredTextPro(["Checker", "size"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
@@ -177,8 +198,13 @@ public sealed class CheckerSizeButton : Button, IDrawable, IHoverable
 
 public sealed class OpacityButton : Button, IDrawable, IHoverable
 {
-    private ValueSetterWindow valueSetterWindow =
-    new(800, 500, ["Set opacity"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
+    private ValueSetterWindow valueSetterWindow;
+
+    public OpacityButton(ProgramManager programInstance) : base(programInstance)
+    {
+        valueSetterWindow =
+        new(programInstance, 800, 500, ["Set opacity"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
+    }
 
     public override void OnHover(Vector2 mousePos)
     {
@@ -190,7 +216,7 @@ public sealed class OpacityButton : Button, IDrawable, IHoverable
     {
         if (Conditions())
             valueSetterWindow.SetSlider(DrawTool.drawingColor.A);
-        ProgramManager.popupWindow = valueSetterWindow;
+        program.popupWindow = valueSetterWindow;
     }
 
     public override void Draw()
@@ -207,28 +233,30 @@ public sealed class OpacityButton : Button, IDrawable, IHoverable
     private bool Conditions()
     {
         return (PaintBrushTypeConditions() ||
-                ProgramManager.currentTool.GetType().Name == "Bucket" ||
-                ProgramManager.currentTool.GetType().Name == "Pencil"
-                || ProgramManager.currentTool is ShapeTool) && ProgramManager.currentTool.GetType().Name != "Eraser";
+                program.currentTool.GetType().Name == "Bucket" ||
+                program.currentTool.GetType().Name == "Pencil"
+                || program.currentTool is ShapeTool) && program.currentTool.GetType().Name != "Eraser";
     }
 
     private bool IsBottomButton()
     {
-        return ProgramManager.currentTool.GetType().Name == "Bucket" || ProgramManager.currentTool.GetType().Name == "Pencil";
+        return program.currentTool.GetType().Name == "Bucket" || program.currentTool.GetType().Name == "Pencil";
     }
 }
 
 public sealed class FilledShapeButton : Button, IDrawable, IHoverable
 {
+    public FilledShapeButton(ProgramManager programInstance) : base(programInstance) {}
+
     public override void OnClick()
     {
-        if (ProgramManager.currentTool is ShapeTool && ProgramManager.currentTool is not LineTool)
+        if (program.currentTool is ShapeTool && program.currentTool is not LineTool)
             ShapeTool.drawFilled = !ShapeTool.drawFilled;
     }
 
     public override void Draw()
     {
-        if (ProgramManager.currentTool is ShapeTool && ProgramManager.currentTool is not LineTool)
+        if (program.currentTool is ShapeTool && program.currentTool is not LineTool)
         {
             TextHandling.DrawCenteredTextPro(["Filled", "shape"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
@@ -243,6 +271,8 @@ public sealed class FilledShapeButton : Button, IDrawable, IHoverable
 
 public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
 {
+    public SaveCanvasButton(ProgramManager programInstance) : base(programInstance) {}
+
     public override void OnHover(Vector2 mousePos)
     {
         base.OnHover(mousePos);
@@ -253,7 +283,7 @@ public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
 
     public override void OnClick()
     {
-        ProgramManager.popupWindow = new SavePopup(800, 300, ["Select file name", "Press enter to save"]);
+        program.popupWindow = new SavePopup(program, 800, 300, ["Select file name", "Press enter to save"]);
     }
 
     public override void Draw()
@@ -266,11 +296,11 @@ public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
 
 public sealed class LoadButton : Button, IDrawable, IHoverable
 {
-    Canvas canv;
+    Canvas canvas;
 
-    public LoadButton(Canvas canvasInstance)
+    public LoadButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance)
     {
-        canv = canvasInstance;
+        canvas = canvasInstance;
     }
     public override void OnHover(Vector2 mousePos)
     {
@@ -290,7 +320,7 @@ public sealed class LoadButton : Button, IDrawable, IHoverable
         if (!string.IsNullOrEmpty(fileDirectory))
         {
             Image loadedImage = Raylib.LoadImage(fileDirectory);
-            canv.LoadProject(loadedImage);
+            canvas.LoadProject(loadedImage);
         }
 
         Raylib.ToggleFullscreen();
@@ -306,10 +336,16 @@ public sealed class LoadButton : Button, IDrawable, IHoverable
 
 public sealed class OpenLayersButton : Button, IDrawable, IHoverable
 {
-    private LayerWindow layerWindow = new(1300, 500, ["Layers:"]);
+    private LayerWindow layerWindow;
+
+    public OpenLayersButton(ProgramManager programInstance) : base(programInstance)
+    {
+        layerWindow = new(programInstance, 1300, 500, ["Layers:"]);
+    }
+
     public override void OnClick()
     {
-        ProgramManager.popupWindow = layerWindow;
+        program.popupWindow = layerWindow;
     }
 
     public override void OnHover(Vector2 mousePos)
@@ -330,6 +366,8 @@ public sealed class OpenLayersButton : Button, IDrawable, IHoverable
 
 public sealed class CloseButton : Button, IDrawable, IHoverable
 {
+    public CloseButton(ProgramManager programInstance) : base(programInstance) {}
+
     public override void OnHover(Vector2 mousePos)
     {
         base.OnHover(mousePos);
@@ -353,7 +391,13 @@ public sealed class CloseButton : Button, IDrawable, IHoverable
 
 public sealed class SettingsButton : Button, IHoverable, IDrawable
 {
-    private SettingsWindow settingsWindow = new(1300, 400, ["Settings"]);
+    private SettingsWindow settingsWindow;
+
+    public SettingsButton(ProgramManager programInstance) : base(programInstance)
+    {
+        settingsWindow = new(programInstance, 1300, 400, ["Settings"]);
+    }
+
     public override void OnHover(Vector2 mousePos)
     {
         base.OnHover(mousePos);
@@ -363,7 +407,7 @@ public sealed class SettingsButton : Button, IHoverable, IDrawable
     }
     public override void OnClick()
     {
-        ProgramManager.popupWindow = settingsWindow;
+        program.popupWindow = settingsWindow;
     }
 
     public override void Draw()
@@ -379,7 +423,7 @@ public sealed class GUIColorButton : Button, IHoverable, IDrawable
     private Action ChangeColor;
     private string text;
 
-    public GUIColorButton(Action ColorToChange, string buttonText)
+    public GUIColorButton(ProgramManager programInstance, Action ColorToChange, string buttonText) : base(programInstance)
     {
         ChangeColor = ColorToChange;
         text = buttonText;
@@ -404,7 +448,7 @@ public sealed class ClosePopupButton : Button, IHoverable, IDrawable
     private const int buttonHeight = 30;
     private Texture2D icon = Raylib.LoadTexture("Textures/Icons/x2.png");
 
-    public ClosePopupButton(Rectangle popupRect)
+    public ClosePopupButton(ProgramManager programInstance, Rectangle popupRect) : base(programInstance)
     {
         buttonRect = new((popupRect.X + popupRect.Width) - buttonWidth, popupRect.Y, buttonWidth, buttonHeight);
     }
@@ -419,8 +463,8 @@ public sealed class ClosePopupButton : Button, IHoverable, IDrawable
 
     public override void OnClick()
     {
-        ProgramManager.isMouseInputEnabled = false;
-        ProgramManager.popupWindow = null;
+        program.isMouseInputEnabled = false;
+        program.popupWindow = null;
     }
 
     public override void Draw()

@@ -12,9 +12,12 @@ public class Canvas : IDrawable
     public List<Texture2D> layerTextures = new();
     private Texture2D transparencyBG = Raylib.LoadTexture("Textures/transparent.png");
 
-    public Canvas()
+    private ProgramManager program;
+
+    public Canvas(ProgramManager programInstance)
     {
-        layers.Add(new());
+        program = programInstance;
+        layers.Add(new(program));
         Raylib.ImageDrawRectangle(ref layers[0].canvasImg, 0, 0, CanvasWidth, CanvasHeight, Color.White);
     }
 
@@ -27,14 +30,14 @@ public class Canvas : IDrawable
     {
         string path = directory + @"\" + fileName;
         Raylib.ExportImage(CropCanvas(FuseLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), path);
-        ProgramManager.popupWindow = null;
+        program.popupWindow = null;
     }
 
     public void LoadProject(Image newImage)
     {
         currentLayer = 0;
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
-        layers = [new()];
+        layers = [new(program)];
         layers[currentLayer].canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 1600, Color.Blank));
     }
 
@@ -64,7 +67,7 @@ public class Canvas : IDrawable
     public void CompressLayers()
     {
         currentLayer = 0;
-        layers = [new() {canvasImg = FuseLayers(layers)}];
+        layers = [new(program) {canvasImg = FuseLayers(layers)}];
     }
 
     public void Draw()
@@ -83,8 +86,11 @@ public class Layer
 
     public bool isVisible = true;
 
-    public Layer()
+    private ProgramManager program;
+
+    public Layer(ProgramManager programInstance)
     {
+        program = programInstance;
         canvasImg = Raylib.GenImageColor(2500, 1600, Color.Blank);
         strokes = new();
     }
@@ -138,7 +144,7 @@ public class Layer
     {
         try
         {
-            return (Raylib.IsKeyPressed(KeyboardKey.Z) && ProgramManager.popupWindow == null) ? strokes.Pop() : canvas;
+            return (Raylib.IsKeyPressed(KeyboardKey.Z) && program.popupWindow == null) ? strokes.Pop() : canvas;
         }
         catch (InvalidOperationException)
         {

@@ -5,6 +5,7 @@ public abstract class PopupWindow : IDrawable
     protected Rectangle windowRect;
     public string[] messages;
     protected ClosePopupButton closeButton;
+    protected ProgramManager program;
 
     public virtual void Draw()
     {
@@ -17,25 +18,26 @@ public abstract class PopupWindow : IDrawable
     {
         closeButton.OnHover(mousePos);
         if (!Raylib.CheckCollisionPointRec(mousePos, windowRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
-            ProgramManager.popupWindow = null;
+            program.popupWindow = null;
     }
 
-    public PopupWindow(int width, int height, string[] messagesExtern)
+    public PopupWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern)
     {
+        program = programInstance;
         windowRect = new Rectangle(ProgramManager.ScreenWidth / 2 - width / 2, ProgramManager.ScreenHeight / 2 - height / 2, width, height);
         messages = messagesExtern;
-        closeButton = new(windowRect);
+        closeButton = new(program, windowRect);
     }
 }
 
 public sealed class StartPopup : PopupWindow
 {
-    public StartPopup(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) {}
+    public StartPopup(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern) { }
 
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.76"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.80"], (int)windowRect.Y + 30, 80, 0, Color.Black);
         TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to merge layers into one", "-Small tweaks to popup windows"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
@@ -46,7 +48,7 @@ public sealed class SavePopup : PopupWindow
     public Dictionary<KeyboardKey, string> alphabet;
     public string fileName = "";
 
-    public SavePopup(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
+    public SavePopup(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
         alphabet = new();
         for (int i = (int)KeyboardKey.A; i <= (int)KeyboardKey.Z; i++)
@@ -110,7 +112,7 @@ public sealed class ColorSelector : PopupWindow
     private Texture2D colors;
     private Image colorsImg;
     private Rectangle colorsRect;
-    public ColorSelector(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
+    public ColorSelector(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
         colors = Raylib.LoadTexture("Textures/colors.png");
         colorsImg = Raylib.LoadImageFromTexture(colors);
@@ -139,17 +141,20 @@ public sealed class LayerWindow : PopupWindow
 {
     private List<LayerButton> layerButtons = new();
 
-    private List<LayerWindowButton> buttons = 
-    [
-        new AddLayerButton() { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton() { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
-        new LayerVisibilityButton() { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
-        new MergeLayersButton() { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton() { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
-        new RemoveLayerButton() { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
-    ];
+    private List<LayerWindowButton> buttons;
 
-    public LayerWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern) { }
+    public LayerWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
+    {
+        buttons =
+    [
+        new AddLayerButton(programInstance) { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
+        new MoveLayerButton(programInstance) { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
+        new LayerVisibilityButton(programInstance) { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
+        new MergeLayersButton(programInstance) { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
+        new MoveLayerButton(programInstance) { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
+        new RemoveLayerButton(programInstance) { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
+    ];
+    }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
     {
@@ -158,7 +163,7 @@ public sealed class LayerWindow : PopupWindow
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layerButtons.Add(new() { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, isVisible = canvas.layers[i].isVisible });
+            layerButtons.Add(new(program) { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, isVisible = canvas.layers[i].isVisible });
         }
 
         layerButtons.ForEach(l => l.OnHover(mousePos));
@@ -192,7 +197,7 @@ public sealed class ValueSetterWindow : PopupWindow
     public int maxValue { get; set; }
     private int value;
 
-    public ValueSetterWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
+    public ValueSetterWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
         int sliderWidth = 500;
         int sliderHeight = 15;
@@ -254,14 +259,15 @@ public sealed class ValueSetterWindow : PopupWindow
 
 public sealed class SettingsWindow : PopupWindow
 {
-    private List<Button> buttons = 
-    [ 
-        new GUIColorButton(() => GUIarea.colorInt++, "Change GUI color") { buttonRect = new(340, 475, 1230, 100) },
-        new GUIColorButton(() => ToolButton.colorSetInt++, "Change toolbutton color") { buttonRect = new(340, 600, 1230, 100) }
-    ];
+    private List<Button> buttons;
 
-    public SettingsWindow(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
+    public SettingsWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
+        buttons =
+        [
+            new GUIColorButton(programInstance, () => GUIarea.colorInt++, "Change GUI color") { buttonRect = new(340, 475, 1230, 100) },
+            new GUIColorButton(programInstance, () => ToolButton.colorSetInt++, "Change toolbutton color") { buttonRect = new(340, 600, 1230, 100) }
+        ];
     }
 
     public override void Logic(Canvas c, Vector2 mousePos)
@@ -297,12 +303,10 @@ public static class CheckerPreview
                 int xPos = col * Checker.checkerSize;
                 int yPos = row * Checker.checkerSize;
 
-                // Offset to center the square within the 200x200 area
                 int xOffset = (200 - (cols * Checker.checkerSize)) / 2;
                 int yOffset = (200 - (rows * Checker.checkerSize)) / 2;
 
-                // Adjusting position based on offset and center of previous shape
-                xPos += xOffset + centerX - 100; // 100 is half of the side length of the square
+                xPos += xOffset + centerX - 100;
                 yPos += yOffset + centerY - 100;
 
                 if ((row + col) % 2 == 0)

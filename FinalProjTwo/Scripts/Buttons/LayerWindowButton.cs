@@ -4,6 +4,8 @@ public abstract class LayerWindowButton : Button
 {
     protected Texture2D icon;
 
+    protected LayerWindowButton(ProgramManager programInstance) : base(programInstance) {}
+
     public virtual void Update(Vector2 mousePos, Canvas canvas)
     {
         isHoveredOn = false;
@@ -23,6 +25,8 @@ public abstract class LayerWindowButton : Button
 
 public sealed class LayerButton : LayerWindowButton
 {
+    public LayerButton(ProgramManager programInstance) : base(programInstance) {}
+
     public int ThisLayerNumber { get; set; }
     public bool isVisible { get; set; }
 
@@ -53,7 +57,7 @@ public sealed class LayerButton : LayerWindowButton
 
 public sealed class AddLayerButton : LayerWindowButton
 {
-    public AddLayerButton()
+    public AddLayerButton(ProgramManager programInstance) : base(programInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/plus.png");
     }
@@ -76,7 +80,7 @@ public sealed class AddLayerButton : LayerWindowButton
     public override void Click(Canvas canvas)
     {
         if (canvas.layers.Count < 5)
-            canvas.layers.Add(new());
+            canvas.layers.Add(new(program));
 
         Canvas.currentLayer = canvas.layers.Count - 1;
     }
@@ -84,7 +88,7 @@ public sealed class AddLayerButton : LayerWindowButton
 
 public sealed class RemoveLayerButton : LayerWindowButton
 {
-    public RemoveLayerButton()
+    public RemoveLayerButton(ProgramManager programInstance) : base(programInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/x.png");
     }
@@ -122,7 +126,7 @@ public sealed class LayerVisibilityButton : LayerWindowButton
     private List<Texture2D> icons = new();
     public int currentIcon = 0;
 
-    public LayerVisibilityButton()
+    public LayerVisibilityButton(ProgramManager programInstance) : base(programInstance)
     {
         icons.Add(Raylib.LoadTexture("Textures/Icons/visible.png"));
         icons.Add(Raylib.LoadTexture("Textures/Icons/invisible.png"));
@@ -153,7 +157,7 @@ public sealed class LayerVisibilityButton : LayerWindowButton
 
 public sealed class MergeLayersButton : LayerWindowButton
 {
-    public MergeLayersButton()
+    public MergeLayersButton(ProgramManager programInstance) : base(programInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/compressicon.png");
     }
@@ -190,7 +194,7 @@ public sealed class MoveLayerButton : LayerWindowButton
     public Direction direction { get; set; }
     private Texture2D[] icons;
 
-    public MoveLayerButton()
+    public MoveLayerButton(ProgramManager programInstance) : base(programInstance)
     {
         icons = [Raylib.LoadTexture("Textures/Icons/rightarrow.png"), Raylib.LoadTexture("Textures/Icons/leftarrow.png")];
     }
