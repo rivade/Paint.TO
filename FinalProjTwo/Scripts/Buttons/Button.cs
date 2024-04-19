@@ -402,7 +402,7 @@ public sealed class ClosePopupButton : Button, IHoverable, IDrawable
 {
     private const int buttonWidth = 50;
     private const int buttonHeight = 30;
-    private Texture2D icon = Raylib.LoadTexture("Icons/x2.png");
+    private Texture2D icon = Raylib.LoadTexture("Textures/Icons/x2.png");
 
     public ClosePopupButton(Rectangle popupRect)
     {

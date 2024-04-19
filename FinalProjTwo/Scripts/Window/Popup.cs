@@ -112,7 +112,7 @@ public sealed class ColorSelector : PopupWindow
     private Rectangle colorsRect;
     public ColorSelector(int width, int height, string[] messagesExtern) : base(width, height, messagesExtern)
     {
-        colors = Raylib.LoadTexture("Icons/colors.png");
+        colors = Raylib.LoadTexture("Textures/colors.png");
         colorsImg = Raylib.LoadImageFromTexture(colors);
         colorsRect = new(ProgramManager.ScreenWidth / 2 - colors.Width / 2, 300, colors.Width, colors.Height);
     }
@@ -137,7 +137,7 @@ public sealed class ColorSelector : PopupWindow
 
 public sealed class LayerWindow : PopupWindow
 {
-    public List<LayerButton> layerButtons = new();
+    private List<LayerButton> layerButtons = new();
 
     private List<LayerWindowButton> buttons = 
     [

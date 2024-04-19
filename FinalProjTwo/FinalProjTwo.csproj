@@ -9,7 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="Raylib-cs" Version="6.0.0" />
-    <Content Include="Icons\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Textures\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Textures\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Scripts\**\*.*" CopyToOutputDirectory="Always"/>
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ public class Canvas : IDrawable
     public static int currentLayer = 0;
 
     public List<Texture2D> layerTextures = new();
-    private Texture2D transparencyBG = Raylib.LoadTexture("Icons/transparent.png");
+    private Texture2D transparencyBG = Raylib.LoadTexture("Textures/transparent.png");
 
     public Canvas()
     {

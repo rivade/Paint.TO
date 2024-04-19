@@ -55,7 +55,7 @@ public sealed class AddLayerButton : LayerWindowButton
 {
     public AddLayerButton()
     {
-        icon = Raylib.LoadTexture("Icons/plus.png");
+        icon = Raylib.LoadTexture("Textures/Icons/plus.png");
     }
 
     public override void Update(Vector2 mousePos, Canvas canvas)
@@ -86,7 +86,7 @@ public sealed class RemoveLayerButton : LayerWindowButton
 {
     public RemoveLayerButton()
     {
-        icon = Raylib.LoadTexture("Icons/x.png");
+        icon = Raylib.LoadTexture("Textures/Icons/x.png");
     }
 
     public override void Update(Vector2 mousePos, Canvas canvas)
@@ -124,8 +124,8 @@ public sealed class LayerVisibilityButton : LayerWindowButton
 
     public LayerVisibilityButton()
     {
-        icons.Add(Raylib.LoadTexture("Icons/visible.png"));
-        icons.Add(Raylib.LoadTexture("Icons/invisible.png"));
+        icons.Add(Raylib.LoadTexture("Textures/Icons/visible.png"));
+        icons.Add(Raylib.LoadTexture("Textures/Icons/invisible.png"));
     }
 
     public override void Draw()
@@ -155,7 +155,7 @@ public sealed class MergeLayersButton : LayerWindowButton
 {
     public MergeLayersButton()
     {
-        icon = Raylib.LoadTexture("Icons/compressicon.png");
+        icon = Raylib.LoadTexture("Textures/Icons/compressicon.png");
     }
 
     public override void Draw()
@@ -192,7 +192,7 @@ public sealed class MoveLayerButton : LayerWindowButton
 
     public MoveLayerButton()
     {
-        icons = [Raylib.LoadTexture("Icons/rightarrow.png"), Raylib.LoadTexture("Icons/leftarrow.png")];
+        icons = [Raylib.LoadTexture("Textures/Icons/rightarrow.png"), Raylib.LoadTexture("Textures/Icons/leftarrow.png")];
     }
 
     public override void Update(Vector2 mousePos, Canvas canvas)
@@ -231,7 +231,6 @@ public sealed class MoveLayerButton : LayerWindowButton
 
     public override void Click(Canvas canvas)
     {
-
         switch (direction)
         {
             case Direction.Up:
