@@ -8,13 +8,15 @@ namespace DrawingProgram;
 public abstract class Button : IHoverable, IDrawable
 {
     protected ProgramManager program;
-    public Button(ProgramManager programInstance)
+
+    public Rectangle buttonRect;
+    public Button(ProgramManager programInstance, Rectangle button)
     {
         program = programInstance;
+        buttonRect = button;
     }
 
     public const int buttonSize = 80;
-    public Rectangle buttonRect;
     protected bool isHoveredOn;
     protected InfoWindow infoWindow;
 
@@ -30,7 +32,7 @@ public abstract class Button : IHoverable, IDrawable
         }
     }
 
-    public virtual void OnClick() 
+    public virtual void OnClick()
     {
 
     }
@@ -64,7 +66,7 @@ public abstract class Button : IHoverable, IDrawable
     }
 }
 
-public sealed class ToolButton : Button, IHoverable, IDrawable
+public sealed class ToolButton : Button
 {
     public DrawTool DrawTool { get; set; }
 
@@ -85,12 +87,9 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
     }
     public static int colorSetInt = 0;
 
-    private string hoverText;
-
-    public ToolButton(ProgramManager programInstance, string hovText) : base(programInstance)
+    public ToolButton(ProgramManager programInstance, Rectangle buttonRect, string hovText) : base(programInstance, buttonRect)
     {
-        hoverText = hovText;
-        infoWindow = new(hoverText, (int)buttonRect.X, (int)buttonRect.Y - 40);
+        infoWindow = new(hovText, (int)buttonRect.X, (int)buttonRect.Y - 40);
     }
 
     private bool IsActiveTool() => program.currentTool == DrawTool;
@@ -108,11 +107,11 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
     }
 }
 
-public sealed class ColorSelectorButton : Button, IHoverable, IDrawable
+public sealed class ColorSelectorButton : Button
 {
     private ColorSelector colorSelectorWindow;
 
-    public ColorSelectorButton(ProgramManager programInstance) : base(programInstance)
+    public ColorSelectorButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         colorSelectorWindow = new(programInstance, 660, 750, ["Select a color"]);
     }
@@ -133,11 +132,11 @@ public sealed class ColorSelectorButton : Button, IHoverable, IDrawable
 }
 
 
-public sealed class BrushRadiusButton : Button, IHoverable, IDrawable
+public sealed class BrushRadiusButton : Button
 {
     private ValueSetterWindow valueSetterWindow;
 
-    public BrushRadiusButton(ProgramManager programInstance) : base(programInstance)
+    public BrushRadiusButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         valueSetterWindow =
         new(programInstance, 800, 500, ["Set brush radius"]) { minValue = 1, maxValue = 100, thisChanges = ValueSetterWindow.Changes.BrushRadius };
@@ -161,11 +160,11 @@ public sealed class BrushRadiusButton : Button, IHoverable, IDrawable
     }
 }
 
-public sealed class CheckerSizeButton : Button, IDrawable, IHoverable
+public sealed class CheckerSizeButton : Button
 {
     private ValueSetterWindow valueSetterWindow;
 
-    public CheckerSizeButton(ProgramManager programInstance) : base(programInstance)
+    public CheckerSizeButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         valueSetterWindow =
         new(programInstance, 800, 500, ["Set checker size"]) { minValue = 5, maxValue = 20, thisChanges = ValueSetterWindow.Changes.CheckerSize };
@@ -189,11 +188,11 @@ public sealed class CheckerSizeButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class OpacityButton : Button, IDrawable, IHoverable
+public sealed class OpacityButton : Button
 {
     private ValueSetterWindow valueSetterWindow;
 
-    public OpacityButton(ProgramManager programInstance) : base(programInstance)
+    public OpacityButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         valueSetterWindow =
         new(programInstance, 800, 500, ["Set opacity"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
@@ -203,8 +202,8 @@ public sealed class OpacityButton : Button, IDrawable, IHoverable
     {
         base.OnHover(mousePos);
         buttonRect.Y = IsBottomButton() ? Canvas.CanvasHeight - 150 : Canvas.CanvasHeight - 320;
-
     }
+
     public override void OnClick()
     {
         if (Conditions())
@@ -237,9 +236,9 @@ public sealed class OpacityButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class FilledShapeButton : Button, IDrawable, IHoverable
+public sealed class FilledShapeButton : Button
 {
-    public FilledShapeButton(ProgramManager programInstance) : base(programInstance) {}
+    public FilledShapeButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect) { }
 
     public override void OnClick()
     {
@@ -262,9 +261,9 @@ public sealed class FilledShapeButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
+public sealed class SaveCanvasButton : Button
 {
-    public SaveCanvasButton(ProgramManager programInstance) : base(programInstance)
+    public SaveCanvasButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         infoWindow = new("Save image", (int)buttonRect.X - Raylib.MeasureText("Save image", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
@@ -281,11 +280,11 @@ public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class LoadButton : Button, IDrawable, IHoverable
+public sealed class LoadButton : Button
 {
     private Canvas canvas;
 
-    public LoadButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance)
+    public LoadButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect)
     {
         canvas = canvasInstance;
         infoWindow = new("Open image", (int)buttonRect.X - Raylib.MeasureText("Open image", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
@@ -314,11 +313,11 @@ public sealed class LoadButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class OpenLayersButton : Button, IDrawable, IHoverable
+public sealed class OpenLayersButton : Button
 {
     private LayerWindow layerWindow;
 
-    public OpenLayersButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance)
+    public OpenLayersButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect)
     {
         layerWindow = new(programInstance, canvasInstance, 1300, 500, ["Layers:"]);
         infoWindow = new("Layers", (int)buttonRect.X, (int)buttonRect.Y - 40);
@@ -336,9 +335,9 @@ public sealed class OpenLayersButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class CloseButton : Button, IDrawable, IHoverable
+public sealed class CloseButton : Button
 {
-    public CloseButton(ProgramManager programInstance) : base(programInstance)
+    public CloseButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         infoWindow = new("Close program", (int)buttonRect.X - Raylib.MeasureText("Close program", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
@@ -355,11 +354,11 @@ public sealed class CloseButton : Button, IDrawable, IHoverable
     }
 }
 
-public sealed class SettingsButton : Button, IHoverable, IDrawable
+public sealed class SettingsButton : Button
 {
     private SettingsWindow settingsWindow;
 
-    public SettingsButton(ProgramManager programInstance) : base(programInstance)
+    public SettingsButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         settingsWindow = new(programInstance, 1300, 400, ["Settings"]);
         infoWindow = new("Settings", (int)buttonRect.X - Raylib.MeasureText("Settings", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
@@ -377,12 +376,12 @@ public sealed class SettingsButton : Button, IHoverable, IDrawable
     }
 }
 
-public sealed class GUIColorButton : Button, IHoverable, IDrawable
+public sealed class GUIColorButton : Button
 {
     private Action ChangeColor;
     private string text;
 
-    public GUIColorButton(ProgramManager programInstance, Action ColorToChange, string buttonText) : base(programInstance)
+    public GUIColorButton(ProgramManager programInstance, Rectangle buttonRect, Action ColorToChange, string buttonText) : base(programInstance, buttonRect)
     {
         ChangeColor = ColorToChange;
         text = buttonText;
@@ -400,13 +399,13 @@ public sealed class GUIColorButton : Button, IHoverable, IDrawable
     }
 }
 
-public sealed class ClosePopupButton : Button, IHoverable, IDrawable
+public sealed class ClosePopupButton : Button
 {
     private const int buttonWidth = 50;
     private const int buttonHeight = 30;
     private Texture2D icon = Raylib.LoadTexture("Textures/Icons/x2.png");
 
-    public ClosePopupButton(ProgramManager programInstance, Rectangle popupRect) : base(programInstance)
+    public ClosePopupButton(ProgramManager programInstance, Rectangle popupRect) : base(programInstance, new())
     {
         buttonRect = new((popupRect.X + popupRect.Width) - buttonWidth, popupRect.Y, buttonWidth, buttonHeight);
         infoWindow = new("Close window", (int)buttonRect.X - Raylib.MeasureText("Close window", InfoWindow.FontSize) - 20, (int)buttonRect.Y);

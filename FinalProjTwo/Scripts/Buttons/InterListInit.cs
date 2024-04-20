@@ -12,119 +12,73 @@ public static class InterListInit
         List<IHoverable> interactableList = new();
         for (int i = 0; i < inputTools.drawTools.Count(); i++)
         {
-            interactableList.Add(new ToolButton(program, toolNames[i])
+            interactableList.Add(new ToolButton(program, new Rectangle(i * 90 + 10, Canvas.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize), toolNames[i])
             {
-                buttonRect = new Rectangle(i * 90 + 10, Canvas.CanvasHeight + 10, ToolButton.buttonSize, ToolButton.buttonSize),
                 DrawTool = inputTools.drawTools[i]
             }
             );
         }
 
-        interactableList.Add(new ColorSelectorButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new ColorSelectorButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight + 10,
         Button.buttonSize,
-        Button.buttonSize
-        )
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new BrushRadiusButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new BrushRadiusButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 150,
         Button.buttonSize,
-        Button.buttonSize
-        )
-        });
+        Button.buttonSize)));
 
 
-        interactableList.Add(new OpacityButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new OpacityButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 320,
         Button.buttonSize,
-        Button.buttonSize
-        )
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new CheckerSizeButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new CheckerSizeButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 490,
         Button.buttonSize,
-        Button.buttonSize
-        )
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new FilledShapeButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new FilledShapeButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         Canvas.CanvasHeight - 150,
         Button.buttonSize,
-        Button.buttonSize
-        )
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new CloseButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new CloseButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         10,
         Button.buttonSize,
-        Button.buttonSize)
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new SaveCanvasButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new SaveCanvasButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         100,
         Button.buttonSize,
-        Button.buttonSize)
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new LoadButton(program, canvas)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new LoadButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         190,
         Button.buttonSize,
-        Button.buttonSize)
-        });
+        Button.buttonSize), canvas));
 
-        interactableList.Add(new SettingsButton(program)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new SettingsButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
         280,
         Button.buttonSize,
-        Button.buttonSize)
-        });
+        Button.buttonSize)));
 
-        interactableList.Add(new OpenLayersButton(program, canvas)
-        {
-            buttonRect =
-        new Rectangle(
+        interactableList.Add(new OpenLayersButton(program, new Rectangle(
         Canvas.CanvasWidth - 80,
         Canvas.CanvasHeight + 10,
         Button.buttonSize,
-        Button.buttonSize)
-        });
+        Button.buttonSize), canvas));
 
         return interactableList;
     }

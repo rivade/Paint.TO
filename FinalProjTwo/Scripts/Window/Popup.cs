@@ -146,12 +146,12 @@ public sealed class LayerWindow : PopupWindow
     {
         buttons =
         [
-            new AddLayerButton(programInstance, canvasInstance) { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
-            new MoveLayerButton(programInstance, canvasInstance) { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
-            new LayerVisibilityButton(programInstance, canvasInstance) { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
-            new MergeLayersButton(programInstance, canvasInstance) { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
-            new MoveLayerButton(programInstance, canvasInstance) { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
-            new RemoveLayerButton(programInstance, canvasInstance) { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
+            new AddLayerButton(programInstance, new(670, 650, Button.buttonSize, Button.buttonSize), canvasInstance),
+            new MoveLayerButton(programInstance, new(770, 650, Button.buttonSize, Button.buttonSize), canvasInstance) { direction = MoveLayerButton.Direction.Down },
+            new LayerVisibilityButton(programInstance, new(870, 650, Button.buttonSize, Button.buttonSize), canvasInstance),
+            new MergeLayersButton(programInstance, new(970, 650, Button.buttonSize, Button.buttonSize), canvasInstance),
+            new MoveLayerButton(programInstance, new(1070, 650, Button.buttonSize, Button.buttonSize), canvasInstance) { direction = MoveLayerButton.Direction.Up },
+            new RemoveLayerButton(programInstance, new(1170, 650, Button.buttonSize, Button.buttonSize), canvasInstance)
         ];
     }
 
@@ -162,7 +162,7 @@ public sealed class LayerWindow : PopupWindow
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layerButtons.Add(new(program, canvas) { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, IsVisible = canvas.layers[i].isVisible });
+            layerButtons.Add(new(program, new(i * 250 + 360, 475, 200, 100), canvas) { ThisLayerNumber = i + 1, IsVisible = canvas.layers[i].isVisible });
         }
 
         layerButtons.ForEach(l => l.OnHover(mousePos));
@@ -264,8 +264,8 @@ public sealed class SettingsWindow : PopupWindow
     {
         buttons =
         [
-            new GUIColorButton(programInstance, () => GUIarea.colorInt++, "Change GUI color") { buttonRect = new(340, 475, 1230, 100) },
-            new GUIColorButton(programInstance, () => ToolButton.colorSetInt++, "Change toolbutton color") { buttonRect = new(340, 600, 1230, 100) }
+            new GUIColorButton(programInstance, new(340, 475, 1230, 100), () => GUIarea.colorInt++, "Change GUI color"),
+            new GUIColorButton(programInstance, new(340, 600, 1230, 100), () => ToolButton.colorSetInt++, "Change toolbutton color")
         ];
     }
 
