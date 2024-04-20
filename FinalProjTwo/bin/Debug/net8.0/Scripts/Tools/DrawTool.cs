@@ -54,9 +54,6 @@ public abstract class DrawTool
             }
         }
     }
-
-
-
 }
 
 public sealed class Pencil : DrawTool

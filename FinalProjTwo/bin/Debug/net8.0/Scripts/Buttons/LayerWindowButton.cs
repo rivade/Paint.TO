@@ -3,42 +3,33 @@ namespace DrawingProgram;
 public abstract class LayerWindowButton : Button
 {
     protected Texture2D icon;
+    protected LayerWindowButton(ProgramManager programInstance) : base(programInstance) { }
+    protected Canvas canvas;
 
-    protected LayerWindowButton(ProgramManager programInstance) : base(programInstance) {}
-
-    public virtual void Update(Vector2 mousePos, Canvas canvas)
+    public LayerWindowButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance)
     {
-        isHoveredOn = false;
-        if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
-        {
-            isHoveredOn = true;
-
-            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
-                Click(canvas);
-        }
-
-        infoWindow = null;
+        canvas = canvasInstance;
     }
-
-    public virtual void Click(Canvas canvas) { }
 }
 
 public sealed class LayerButton : LayerWindowButton
 {
-    public LayerButton(ProgramManager programInstance) : base(programInstance) {}
+    public LayerButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance, canvasInstance) { }
 
     public int ThisLayerNumber { get; set; }
-    public bool isVisible { get; set; }
+    public bool IsVisible { get; set; }
+
+    private Color buttonColor;
 
     public override void Draw()
     {
-        if (isVisible)
-            GetButtonColor(Color.Lime, Color.Green, Color.White, false);
+        if (IsVisible)
+            buttonColor = GetButtonColor(Color.Lime, Color.Green, Color.White, false);
 
         else
-            GetButtonColor(Color.Gray, Color.LightGray, Color.White, false);
+            buttonColor = GetButtonColor(Color.Gray, Color.LightGray, Color.White, false);
 
-        if (Canvas.currentLayer == ThisLayerNumber - 1)
+        if (canvas.currentLayer == ThisLayerNumber - 1)
             Raylib.DrawRectangle((int)buttonRect.X - 5, (int)buttonRect.Y - 5, (int)buttonRect.Width + 10, (int)buttonRect.Height + 10, Color.Red);
 
         Raylib.DrawRectangleRec(buttonRect, buttonColor);
@@ -48,75 +39,59 @@ public sealed class LayerButton : LayerWindowButton
         (int)buttonRect.Y + 20, 30, 0, Color.Black);
     }
 
-
     public override void OnClick()
     {
-        Canvas.currentLayer = ThisLayerNumber - 1;
+        canvas.currentLayer = ThisLayerNumber - 1;
     }
 }
 
 public sealed class AddLayerButton : LayerWindowButton
 {
-    public AddLayerButton(ProgramManager programInstance) : base(programInstance)
+    public AddLayerButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance, canvasInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/plus.png");
+        infoWindow = new("Add new layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
-    public override void Update(Vector2 mousePos, Canvas canvas)
-    {
-        base.Update(mousePos, canvas);
-
-        if (isHoveredOn)
-            infoWindow = new("Add new layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
-    }
     public override void Draw()
     {
-        GetButtonColor(Color.Lime, Color.Green, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Lime, Color.Green, Color.White, false));
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }
 
-    public override void Click(Canvas canvas)
+    public override void OnClick()
     {
         if (canvas.layers.Count < 5)
             canvas.layers.Add(new(program));
 
-        Canvas.currentLayer = canvas.layers.Count - 1;
+        canvas.currentLayer = canvas.layers.Count - 1;
     }
 }
 
 public sealed class RemoveLayerButton : LayerWindowButton
 {
-    public RemoveLayerButton(ProgramManager programInstance) : base(programInstance)
+    public RemoveLayerButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance, canvasInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/x.png");
-    }
-
-    public override void Update(Vector2 mousePos, Canvas canvas)
-    {
-        base.Update(mousePos, canvas);
-
-        if (isHoveredOn)
-            infoWindow = new("Remove current layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        infoWindow = new("Remove current layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
     public override void Draw()
     {
-        GetButtonColor(Color.Red, Color.Pink, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Red, Color.Pink, Color.White, false));
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }
 
-    public override void Click(Canvas canvas)
+    public override void OnClick()
     {
         if (canvas.layers.Count != 1)
         {
-            canvas.layers.Remove(canvas.layers[Canvas.currentLayer]);
+            canvas.layers.Remove(canvas.layers[canvas.currentLayer]);
 
-            if (Canvas.currentLayer != 0) Canvas.currentLayer--;
-            else Canvas.currentLayer = 0;
+            if (canvas.currentLayer != 0) canvas.currentLayer--;
+            else canvas.currentLayer = 0;
         }
     }
 }
@@ -126,59 +101,48 @@ public sealed class LayerVisibilityButton : LayerWindowButton
     private List<Texture2D> icons = new();
     public int currentIcon = 0;
 
-    public LayerVisibilityButton(ProgramManager programInstance) : base(programInstance)
+    public LayerVisibilityButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance, canvasInstance)
     {
         icons.Add(Raylib.LoadTexture("Textures/Icons/visible.png"));
         icons.Add(Raylib.LoadTexture("Textures/Icons/invisible.png"));
+        infoWindow = new("Toggle layer visibility", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
     public override void Draw()
     {
-        GetButtonColor(Color.LightGray, Color.White, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.LightGray, Color.White, Color.White, false));
         Raylib.DrawTexture(icons[currentIcon], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }
 
-    public override void Update(Vector2 mousePos, Canvas canvas)
+    public override void OnHover(Vector2 mousePos)
     {
-        currentIcon = canvas.layers[Canvas.currentLayer].isVisible ? 0 : 1;
-        base.Update(mousePos, canvas);
-
-        if (isHoveredOn)
-            infoWindow = new("Toggle layer visibility", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        currentIcon = canvas.layers[canvas.currentLayer].isVisible ? 0 : 1;
+        base.OnHover(mousePos);
     }
 
-    public override void Click(Canvas canvas)
+    public override void OnClick()
     {
-        canvas.layers[Canvas.currentLayer].isVisible = !canvas.layers[Canvas.currentLayer].isVisible;
+        canvas.layers[canvas.currentLayer].isVisible = !canvas.layers[canvas.currentLayer].isVisible;
     }
 }
 
 public sealed class MergeLayersButton : LayerWindowButton
 {
-    public MergeLayersButton(ProgramManager programInstance) : base(programInstance)
+    public MergeLayersButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance, canvasInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/compressicon.png");
+        infoWindow = new("Merge all layers", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
     }
 
     public override void Draw()
     {
-        GetButtonColor(Color.LightGray, Color.White, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.LightGray, Color.White, Color.White, false));
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }
 
-    public override void Update(Vector2 mousePos, Canvas canvas)
-    {
-        base.Update(mousePos, canvas);
-
-        if (isHoveredOn)
-            infoWindow = new("Merge all layers", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
-    }
-
-    public override void Click(Canvas canvas)
+    public override void OnClick()
     {
         canvas.CompressLayers();
     }
@@ -194,14 +158,14 @@ public sealed class MoveLayerButton : LayerWindowButton
     public Direction direction { get; set; }
     private Texture2D[] icons;
 
-    public MoveLayerButton(ProgramManager programInstance) : base(programInstance)
+    public MoveLayerButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance, canvasInstance)
     {
         icons = [Raylib.LoadTexture("Textures/Icons/rightarrow.png"), Raylib.LoadTexture("Textures/Icons/leftarrow.png")];
     }
 
-    public override void Update(Vector2 mousePos, Canvas canvas)
+    public override void OnHover(Vector2 mousePos)
     {
-        base.Update(mousePos, canvas);
+        base.OnHover(mousePos);
 
         if (isHoveredOn)
         {
@@ -209,18 +173,17 @@ public sealed class MoveLayerButton : LayerWindowButton
             {
                 case Direction.Up:
                     infoWindow = new("Move layer up hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
-                break;
+                    break;
                 case Direction.Down:
                     infoWindow = new("Move layer down hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
-                break;
+                    break;
             }
         }
     }
 
     public override void Draw()
     {
-        GetButtonColor(Color.LightGray, Color.White, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.LightGray, Color.White, Color.White, false));
         switch (direction)
         {
             case Direction.Up:
@@ -233,23 +196,23 @@ public sealed class MoveLayerButton : LayerWindowButton
         base.Draw();
     }
 
-    public override void Click(Canvas canvas)
+    public override void OnClick()
     {
         switch (direction)
         {
             case Direction.Up:
-                if (canvas.layers.Count != 1 && Canvas.currentLayer != canvas.layers.Count - 1)
+                if (canvas.layers.Count != 1 && canvas.currentLayer != canvas.layers.Count - 1)
                 {
-                    Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer + 1);
-                    Canvas.currentLayer++;
+                    Swap(ref canvas.layers, canvas.currentLayer, canvas.currentLayer + 1);
+                    canvas.currentLayer++;
                 }
                 break;
 
             case Direction.Down:
-                if (Canvas.currentLayer != 0 && canvas.layers.Count != 1)
+                if (canvas.currentLayer != 0 && canvas.layers.Count != 1)
                 {
-                    Swap(ref canvas.layers, Canvas.currentLayer, Canvas.currentLayer - 1);
-                    Canvas.currentLayer--;
+                    Swap(ref canvas.layers, canvas.currentLayer, canvas.currentLayer - 1);
+                    canvas.currentLayer--;
                 }
                 break;
 

@@ -7,7 +7,7 @@ public class Canvas : IDrawable
     public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
 
     public List<Layer> layers = new();
-    public static int currentLayer = 0;
+    public int currentLayer = 0;
 
     public List<Texture2D> layerTextures = new();
     private Texture2D transparencyBG = Raylib.LoadTexture("Textures/transparent.png");

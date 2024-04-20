@@ -37,7 +37,7 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.76"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.80"], (int)windowRect.Y + 30, 80, 0, Color.Black);
         TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to merge layers into one", "-Small tweaks to popup windows"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
@@ -56,7 +56,6 @@ public sealed class SavePopup : PopupWindow
             alphabet.Add((KeyboardKey)i, ((char)(i + 32)).ToString());
         }
 
-        // Add numbers 0-9
         for (int i = 48; i <= 57; i++)
         {
             alphabet.Add((KeyboardKey)i, ((char)i).ToString());
@@ -143,17 +142,17 @@ public sealed class LayerWindow : PopupWindow
 
     private List<LayerWindowButton> buttons;
 
-    public LayerWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
+    public LayerWindow(ProgramManager programInstance, Canvas canvasInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
         buttons =
-    [
-        new AddLayerButton(programInstance) { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton(programInstance) { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
-        new LayerVisibilityButton(programInstance) { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
-        new MergeLayersButton(programInstance) { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton(programInstance) { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
-        new RemoveLayerButton(programInstance) { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
-    ];
+        [
+            new AddLayerButton(programInstance, canvasInstance) { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
+            new MoveLayerButton(programInstance, canvasInstance) { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
+            new LayerVisibilityButton(programInstance, canvasInstance) { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
+            new MergeLayersButton(programInstance, canvasInstance) { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
+            new MoveLayerButton(programInstance, canvasInstance) { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
+            new RemoveLayerButton(programInstance, canvasInstance) { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
+        ];
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
@@ -163,11 +162,11 @@ public sealed class LayerWindow : PopupWindow
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layerButtons.Add(new(program) { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, isVisible = canvas.layers[i].isVisible });
+            layerButtons.Add(new(program, canvas) { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, IsVisible = canvas.layers[i].isVisible });
         }
 
         layerButtons.ForEach(l => l.OnHover(mousePos));
-        buttons.ForEach(b => b.Update(mousePos, canvas));
+        buttons.ForEach(b => b.OnHover(mousePos));
 
     }
 
@@ -303,12 +302,10 @@ public static class CheckerPreview
                 int xPos = col * Checker.checkerSize;
                 int yPos = row * Checker.checkerSize;
 
-                // Offset to center the square within the 200x200 area
                 int xOffset = (200 - (cols * Checker.checkerSize)) / 2;
                 int yOffset = (200 - (rows * Checker.checkerSize)) / 2;
 
-                // Adjusting position based on offset and center of previous shape
-                xPos += xOffset + centerX - 100; // 100 is half of the side length of the square
+                xPos += xOffset + centerX - 100;
                 yPos += yOffset + centerY - 100;
 
                 if ((row + col) % 2 == 0)

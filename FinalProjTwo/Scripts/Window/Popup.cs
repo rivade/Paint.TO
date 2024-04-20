@@ -56,7 +56,6 @@ public sealed class SavePopup : PopupWindow
             alphabet.Add((KeyboardKey)i, ((char)(i + 32)).ToString());
         }
 
-        // Add numbers 0-9
         for (int i = 48; i <= 57; i++)
         {
             alphabet.Add((KeyboardKey)i, ((char)i).ToString());
@@ -143,17 +142,17 @@ public sealed class LayerWindow : PopupWindow
 
     private List<LayerWindowButton> buttons;
 
-    public LayerWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
+    public LayerWindow(ProgramManager programInstance, Canvas canvasInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
         buttons =
-    [
-        new AddLayerButton(programInstance) { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton(programInstance) { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
-        new LayerVisibilityButton(programInstance) { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
-        new MergeLayersButton(programInstance) { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
-        new MoveLayerButton(programInstance) { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
-        new RemoveLayerButton(programInstance) { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
-    ];
+        [
+            new AddLayerButton(programInstance, canvasInstance) { buttonRect = new(670, 650, Button.buttonSize, Button.buttonSize) },
+            new MoveLayerButton(programInstance, canvasInstance) { buttonRect = new(770, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Down },
+            new LayerVisibilityButton(programInstance, canvasInstance) { buttonRect = new(870, 650, Button.buttonSize, Button.buttonSize) },
+            new MergeLayersButton(programInstance, canvasInstance) { buttonRect = new(970, 650, Button.buttonSize, Button.buttonSize) },
+            new MoveLayerButton(programInstance, canvasInstance) { buttonRect = new(1070, 650, Button.buttonSize, Button.buttonSize), direction = MoveLayerButton.Direction.Up },
+            new RemoveLayerButton(programInstance, canvasInstance) { buttonRect = new(1170, 650, Button.buttonSize, Button.buttonSize) }
+        ];
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
@@ -163,11 +162,11 @@ public sealed class LayerWindow : PopupWindow
 
         for (int i = 0; i < canvas.layers.Count; i++)
         {
-            layerButtons.Add(new(program) { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, isVisible = canvas.layers[i].isVisible });
+            layerButtons.Add(new(program, canvas) { buttonRect = new(i * 250 + 360, 475, 200, 100), ThisLayerNumber = i + 1, IsVisible = canvas.layers[i].isVisible });
         }
 
         layerButtons.ForEach(l => l.OnHover(mousePos));
-        buttons.ForEach(b => b.Update(mousePos, canvas));
+        buttons.ForEach(b => b.OnHover(mousePos));
 
     }
 

@@ -116,7 +116,7 @@ public static class InterListInit
         Button.buttonSize)
         });
 
-        interactableList.Add(new OpenLayersButton(program)
+        interactableList.Add(new OpenLayersButton(program, canvas)
         {
             buttonRect =
         new Rectangle(

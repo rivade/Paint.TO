@@ -15,14 +15,12 @@ public abstract class Button : IHoverable, IDrawable
 
     public const int buttonSize = 80;
     public Rectangle buttonRect;
-    protected Color buttonColor;
     protected bool isHoveredOn;
     protected InfoWindow infoWindow;
 
     public virtual void OnHover(Vector2 mousePos)
     {
         isHoveredOn = false;
-        infoWindow = null;
         if (Raylib.CheckCollisionPointRec(mousePos, buttonRect))
         {
             isHoveredOn = true;
@@ -32,25 +30,28 @@ public abstract class Button : IHoverable, IDrawable
         }
     }
 
-    public virtual void OnClick()
+    public virtual void OnClick() 
     {
 
     }
 
     public virtual void Draw()
     {
-        infoWindow?.Draw();
+        if (isHoveredOn)
+            infoWindow.Draw();
     }
 
-    protected void GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive)
+    protected Color GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive)
     {
-        buttonColor = defaultColor;
+        Color color = defaultColor;
 
         if (isHoveredOn && !isActive)
-            buttonColor = hoverColor;
+            color = hoverColor;
 
         else if (isActive)
-            buttonColor = activeColor;
+            color = activeColor;
+
+        return color;
     }
 
     public bool PaintBrushTypeConditions()
@@ -89,17 +90,10 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
     public ToolButton(ProgramManager programInstance, string hovText) : base(programInstance)
     {
         hoverText = hovText;
+        infoWindow = new(hoverText, (int)buttonRect.X, (int)buttonRect.Y - 40);
     }
 
     private bool IsActiveTool() => program.currentTool == DrawTool;
-
-    public override void OnHover(Vector2 mousePos)
-    {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new(hoverText, (int)buttonRect.X, (int)buttonRect.Y - 40);
-    }
 
     public override void OnClick()
     {
@@ -109,8 +103,7 @@ public sealed class ToolButton : Button, IHoverable, IDrawable
 
     public override void Draw()
     {
-        GetButtonColor(activeColorSet[0], activeColorSet[1], activeColorSet[2], IsActiveTool());
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(activeColorSet[0], activeColorSet[1], activeColorSet[2], IsActiveTool()));
         base.Draw();
     }
 }
@@ -271,14 +264,9 @@ public sealed class FilledShapeButton : Button, IDrawable, IHoverable
 
 public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
 {
-    public SaveCanvasButton(ProgramManager programInstance) : base(programInstance) {}
-
-    public override void OnHover(Vector2 mousePos)
+    public SaveCanvasButton(ProgramManager programInstance) : base(programInstance)
     {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new("Save image", (int)buttonRect.X - Raylib.MeasureText("Save image", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
+        infoWindow = new("Save image", (int)buttonRect.X - Raylib.MeasureText("Save image", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
 
     public override void OnClick()
@@ -288,26 +276,19 @@ public sealed class SaveCanvasButton : Button, IDrawable, IHoverable
 
     public override void Draw()
     {
-        GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Orange, Color.Yellow, Color.White, false));
         base.Draw();
     }
 }
 
 public sealed class LoadButton : Button, IDrawable, IHoverable
 {
-    Canvas canvas;
+    private Canvas canvas;
 
     public LoadButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance)
     {
         canvas = canvasInstance;
-    }
-    public override void OnHover(Vector2 mousePos)
-    {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new("Open image", (int)buttonRect.X - Raylib.MeasureText("Open image", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
+        infoWindow = new("Open image", (int)buttonRect.X - Raylib.MeasureText("Open image", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
 
     public override void OnClick()
@@ -328,8 +309,7 @@ public sealed class LoadButton : Button, IDrawable, IHoverable
 
     public override void Draw()
     {
-        GetButtonColor(Color.Orange, Color.Yellow, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Orange, Color.Yellow, Color.White, false));
         base.Draw();
     }
 }
@@ -338,9 +318,10 @@ public sealed class OpenLayersButton : Button, IDrawable, IHoverable
 {
     private LayerWindow layerWindow;
 
-    public OpenLayersButton(ProgramManager programInstance) : base(programInstance)
+    public OpenLayersButton(ProgramManager programInstance, Canvas canvasInstance) : base(programInstance)
     {
-        layerWindow = new(programInstance, 1300, 500, ["Layers:"]);
+        layerWindow = new(programInstance, canvasInstance, 1300, 500, ["Layers:"]);
+        infoWindow = new("Layers", (int)buttonRect.X, (int)buttonRect.Y - 40);
     }
 
     public override void OnClick()
@@ -348,32 +329,18 @@ public sealed class OpenLayersButton : Button, IDrawable, IHoverable
         program.popupWindow = layerWindow;
     }
 
-    public override void OnHover(Vector2 mousePos)
-    {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new("Layers", (int)buttonRect.X, (int)buttonRect.Y - 40);
-    }
-
     public override void Draw()
     {
-        GetButtonColor(Color.White, Color.LightGray, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.White, Color.LightGray, Color.White, false));
         base.Draw();
     }
 }
 
 public sealed class CloseButton : Button, IDrawable, IHoverable
 {
-    public CloseButton(ProgramManager programInstance) : base(programInstance) {}
-
-    public override void OnHover(Vector2 mousePos)
+    public CloseButton(ProgramManager programInstance) : base(programInstance)
     {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new("Close program", (int)buttonRect.X - Raylib.MeasureText("Close program", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
+        infoWindow = new("Close program", (int)buttonRect.X - Raylib.MeasureText("Close program", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
 
     public override void OnClick()
@@ -383,8 +350,7 @@ public sealed class CloseButton : Button, IDrawable, IHoverable
 
     public override void Draw()
     {
-        GetButtonColor(Color.Red, Color.Pink, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Red, Color.Pink, Color.White, false));
         base.Draw();
     }
 }
@@ -396,15 +362,9 @@ public sealed class SettingsButton : Button, IHoverable, IDrawable
     public SettingsButton(ProgramManager programInstance) : base(programInstance)
     {
         settingsWindow = new(programInstance, 1300, 400, ["Settings"]);
+        infoWindow = new("Settings", (int)buttonRect.X - Raylib.MeasureText("Settings", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
 
-    public override void OnHover(Vector2 mousePos)
-    {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new("Settings", (int)buttonRect.X - Raylib.MeasureText("Settings", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
-    }
     public override void OnClick()
     {
         program.popupWindow = settingsWindow;
@@ -412,8 +372,7 @@ public sealed class SettingsButton : Button, IHoverable, IDrawable
 
     public override void Draw()
     {
-        GetButtonColor(Color.Gray, Color.LightGray, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Gray, Color.LightGray, Color.White, false));
         base.Draw();
     }
 }
@@ -436,8 +395,7 @@ public sealed class GUIColorButton : Button, IHoverable, IDrawable
 
     public override void Draw()
     {
-        GetButtonColor(Color.Lime, Color.Green, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Lime, Color.Green, Color.White, false));
         TextHandling.DrawCenteredTextPro([text], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
     }
 }
@@ -451,14 +409,7 @@ public sealed class ClosePopupButton : Button, IHoverable, IDrawable
     public ClosePopupButton(ProgramManager programInstance, Rectangle popupRect) : base(programInstance)
     {
         buttonRect = new((popupRect.X + popupRect.Width) - buttonWidth, popupRect.Y, buttonWidth, buttonHeight);
-    }
-
-    public override void OnHover(Vector2 mousePos)
-    {
-        base.OnHover(mousePos);
-
-        if (isHoveredOn)
-            infoWindow = new("Close window", (int)buttonRect.X - Raylib.MeasureText("Close window", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
+        infoWindow = new("Close window", (int)buttonRect.X - Raylib.MeasureText("Close window", InfoWindow.FontSize) - 20, (int)buttonRect.Y);
     }
 
     public override void OnClick()
@@ -469,8 +420,7 @@ public sealed class ClosePopupButton : Button, IHoverable, IDrawable
 
     public override void Draw()
     {
-        GetButtonColor(Color.Red, Color.Pink, Color.White, false);
-        Raylib.DrawRectangleRec(buttonRect, buttonColor);
+        Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Red, Color.Pink, Color.White, false));
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }

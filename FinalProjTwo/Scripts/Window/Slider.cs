@@ -47,7 +47,6 @@ public class Slider
         if (updateSliderPos && Raylib.IsMouseButtonDown(MouseButton.Left) && IsCursorAboveBelowSlider(mousePos))
             SliderCircle.Middle += new Vector2(Raylib.GetMouseDelta().X, 0);
         SetSliderWithinBounds();
-
     }
 
     private bool IsCursorAboveBelowSlider(Vector2 mousePos)
