@@ -104,8 +104,8 @@ public sealed class Checker : DrawTool
 
     private void SetCheckers(Image canvas, Vector2 mousePos)
     {
-        int rows = (int)Math.Ceiling((double)Canvas.CanvasHeight / checkerSize);
-        int cols = (int)Math.Ceiling((double)Canvas.CanvasWidth / checkerSize);
+        int rows = (int)Math.Ceiling((double)Canvas.CanvasHeight + Canvas.CanvasOffset / checkerSize);
+        int cols = (int)Math.Ceiling((double)Canvas.CanvasWidth + Canvas.CanvasOffset / checkerSize);
 
         for (int row = 0; row < rows; row++)
         {
@@ -130,6 +130,8 @@ public sealed class Checker : DrawTool
 
 public sealed class Bucket : DrawTool
 {
+    private readonly Vector2 CanvasArea = new(Canvas.CanvasWidth + Canvas.CanvasOffset, Canvas.CanvasHeight + Canvas.CanvasOffset);
+
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
@@ -160,7 +162,7 @@ public sealed class Bucket : DrawTool
             y1++;
             bool spanLeft = false;
             bool spanRight = false;
-            while (y1 < Canvas.CanvasHeight && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
+            while (y1 < CanvasArea.Y && Raylib.GetImageColor(img, (int)temp.X, y1).Equals(targetColor))
             {
                 Raylib.ImageDrawPixel(ref img, (int)temp.X, y1, drawingColor);
 
@@ -173,12 +175,12 @@ public sealed class Bucket : DrawTool
                 {
                     spanLeft = false;
                 }
-                if (!spanRight && temp.X < Canvas.CanvasWidth - 1 && Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
+                if (!spanRight && temp.X < CanvasArea.X - 1 && Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
                 {
                     pixels.Push(new Vector2(temp.X + 1, y1));
                     spanRight = true;
                 }
-                else if (spanRight && temp.X < Canvas.CanvasWidth - 1 && !Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
+                else if (spanRight && temp.X < CanvasArea.X - 1 && !Raylib.GetImageColor(img, (int)temp.X + 1, y1).Equals(targetColor))
                 {
                     spanRight = false;
                 }

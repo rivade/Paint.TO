@@ -4,29 +4,47 @@ public class ShapeToolPreviews : IDrawable
 {
     private ProgramManager program;
 
+    private Rectangle previewRect;
+    private Circle previewCircle;
+    private Line previewLine;
+
     public ShapeToolPreviews(ProgramManager programInstance)
     {
         program = programInstance;
     }
 
+    private void SetPreviewShapes()
+    {
+        previewRect = new(RectangleTool.rectToDraw.X - Canvas.CanvasOffset,
+                        RectangleTool.rectToDraw.Y - Canvas.CanvasOffset,
+                        RectangleTool.rectToDraw.Width,
+                        RectangleTool.rectToDraw.Height);
+        
+        previewCircle = Circle.CreateCircle(CircleTool.circleToDraw.Middle -= Vector2.One * Canvas.CanvasOffset,
+                                            CircleTool.circleToDraw.Middle + Vector2.UnitX * CircleTool.circleToDraw.Radius);
+        
+        previewLine = new(LineTool.lineToDraw.startPos - Vector2.One * Canvas.CanvasOffset, LineTool.lineToDraw.endPos - Vector2.One * Canvas.CanvasOffset);
+    }
+
     public void Draw()
     {
+        SetPreviewShapes();
         switch(program.currentTool)
         {
             case RectangleTool:
                 if (ShapeTool.drawFilled)
-                    Raylib.DrawRectangleRec(RectangleTool.rectToDraw, DrawTool.drawingColor);   
-                else Raylib.DrawRectangleLines((int)RectangleTool.rectToDraw.X, (int)RectangleTool.rectToDraw.Y, (int)RectangleTool.rectToDraw.Width, (int)RectangleTool.rectToDraw.Height, DrawTool.drawingColor); 
+                    Raylib.DrawRectangleRec(previewRect, DrawTool.drawingColor);   
+                else Raylib.DrawRectangleLines((int)previewRect.X, (int)previewRect.Y, (int)previewRect.Width, (int)previewRect.Height, DrawTool.drawingColor); 
                 break;
 
             case CircleTool:
                 if (ShapeTool.drawFilled)
-                    Raylib.DrawCircle((int)CircleTool.circleToDraw.Middle.X, (int)CircleTool.circleToDraw.Middle.Y, CircleTool.circleToDraw.Radius, DrawTool.drawingColor);
-                else Raylib.DrawCircleLines((int)CircleTool.circleToDraw.Middle.X, (int)CircleTool.circleToDraw.Middle.Y, CircleTool.circleToDraw.Radius, DrawTool.drawingColor);
+                    Raylib.DrawCircle((int)previewCircle.Middle.X, (int)previewCircle.Middle.Y, previewCircle.Radius, DrawTool.drawingColor);
+                else Raylib.DrawCircleLines((int)previewCircle.Middle.X, (int)previewCircle.Middle.Y, previewCircle.Radius, DrawTool.drawingColor);
                 break;
 
             case LineTool:
-                DrawTool.DrawThickLine(new Image(), LineTool.lineToDraw.startPos, LineTool.lineToDraw.endPos, DrawTool.drawingColor, false);
+                DrawTool.DrawThickLine(new Image(), previewLine.startPos, previewLine.endPos, DrawTool.drawingColor, false);
                 break;
         
             default: return;       

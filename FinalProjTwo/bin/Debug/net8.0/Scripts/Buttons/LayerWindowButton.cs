@@ -143,7 +143,7 @@ public sealed class MergeLayersButton : LayerWindowButton
 
     public override void OnClick()
     {
-        canvas.CompressLayers();
+        canvas.CompressLayersInProject();
     }
 }
 
@@ -202,7 +202,7 @@ public sealed class MoveLayerButton : LayerWindowButton
             case Direction.Up:
                 if (canvas.layers.Count != 1 && canvas.currentLayer != canvas.layers.Count - 1)
                 {
-                    Swap(ref canvas.layers, canvas.currentLayer, canvas.currentLayer + 1);
+                    SwapListIndices(ref canvas.layers, canvas.currentLayer, canvas.currentLayer + 1);
                     canvas.currentLayer++;
                 }
                 break;
@@ -210,15 +210,14 @@ public sealed class MoveLayerButton : LayerWindowButton
             case Direction.Down:
                 if (canvas.currentLayer != 0 && canvas.layers.Count != 1)
                 {
-                    Swap(ref canvas.layers, canvas.currentLayer, canvas.currentLayer - 1);
+                    SwapListIndices(ref canvas.layers, canvas.currentLayer, canvas.currentLayer - 1);
                     canvas.currentLayer--;
                 }
                 break;
-
         }
     }
 
-    private static void Swap<T>(ref List<T> list, int index1, int index2)
+    private static void SwapListIndices<T>(ref List<T> list, int index1, int index2)
     {
         T tmp = list[index1];
         list[index1] = list[index2];

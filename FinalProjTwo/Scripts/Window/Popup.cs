@@ -37,8 +37,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.80"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to merge layers into one", "-Small tweaks to popup windows"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.84"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Fixed issues when drawing on the left corner of the canvas", "-Small tweaks and fixes"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

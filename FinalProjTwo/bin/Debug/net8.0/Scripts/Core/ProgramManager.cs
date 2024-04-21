@@ -52,6 +52,7 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
+
         if (Raylib.IsMouseButtonPressed(MouseButton.Left)) isMouseInputEnabled = true;
 
         popupWindow?.Logic(canvas, mousePos);

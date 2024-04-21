@@ -81,14 +81,14 @@ public sealed class CircleTool : ShapeTool
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
         {
             if (drawFilled)
-                Raylib.ImageDrawCircleV(ref canvas, circleToDraw.Middle, circleToDraw.Radius, drawingColor);
+                Raylib.ImageDrawCircleV(ref canvas, circleToDraw.Middle + Vector2.One * Canvas.CanvasOffset, circleToDraw.Radius, drawingColor);
             else
             {
-                unsafe //av någon anledning är imagedrawcirclelines jättedåligt konstruerad så detta behövs
+                unsafe //For some reason, you can't pass the target image with the ref keyword in ImageDrawCircleLines
+                //Therefore it needs to be passed with a pointer (guessing this is due to a bad port of raylib from C++ lol)
                 {
                     Raylib.ImageDrawCircleLinesV(&canvas, circleToDraw.Middle, circleToDraw.Radius, drawingColor);
                 }
-                //i imagedrawcirclelines går det ej att passera imagen med ref, så canvas behövs passeras med en pointer som är 'unsafe'
             }
             circleToDraw = new();
         }

@@ -32,10 +32,7 @@ public abstract class Button : IHoverable, IDrawable
         }
     }
 
-    public virtual void OnClick()
-    {
-
-    }
+    public virtual void OnClick() {}
 
     public virtual void Draw()
     {

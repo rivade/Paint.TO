@@ -143,7 +143,7 @@ public sealed class MergeLayersButton : LayerWindowButton
 
     public override void OnClick()
     {
-        canvas.CompressLayers();
+        canvas.CompressLayersInProject();
     }
 }
 

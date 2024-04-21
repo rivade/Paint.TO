@@ -5,6 +5,8 @@ public class Canvas : IDrawable
 {
     public const int CanvasWidth = ProgramManager.ScreenWidth - 200;
     public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
+    public const int CanvasOffset = 500;
+    public const int CanvasImgSize = 2500;
 
     public List<Layer> layers = new();
     public int currentLayer = 0;
@@ -14,16 +16,26 @@ public class Canvas : IDrawable
 
     private ProgramManager program;
 
+    public static Vector2 relativeMousePos;
+    public static Vector2 relativeLastMousePos;
+
     public Canvas(ProgramManager programInstance)
     {
         program = programInstance;
         layers.Add(new(program));
-        Raylib.ImageDrawRectangle(ref layers[0].canvasImg, 0, 0, CanvasWidth, CanvasHeight, Color.White);
+        Raylib.ImageDrawRectangle(ref layers[0].canvasImg, CanvasOffset, CanvasOffset, CanvasWidth, CanvasHeight, Color.White);
+    }
+
+    private static void UpdateRelativeMousePos(Vector2 mousePos, Vector2 lastMousePos)
+    {
+        relativeMousePos = mousePos += Vector2.One * CanvasOffset;
+        relativeLastMousePos = lastMousePos += Vector2.One * CanvasOffset;
     }
 
     public void Update(Vector2 mousePos, Vector2 lastMousePos, DrawTool tool)
     {
-        layers[currentLayer].Logic(mousePos, lastMousePos, tool);
+        UpdateRelativeMousePos(mousePos, lastMousePos);
+        layers[currentLayer].Logic(mousePos, tool);
     }
 
     public void SaveProject(string fileName, string directory)
@@ -38,36 +50,37 @@ public class Canvas : IDrawable
         currentLayer = 0;
         Raylib.ImageResize(ref newImage, CanvasWidth, CanvasHeight);
         layers = [new(program)];
-        layers[currentLayer].canvasImg = CropCanvas(newImage, Raylib.GenImageColor(2500, 1600, Color.Blank));
+        layers[currentLayer].canvasImg = Raylib.GenImageColor(CanvasImgSize, CanvasImgSize, Color.Blank);
+        Raylib.ImageDraw(ref layers[currentLayer].canvasImg, newImage, new(0, 0, CanvasWidth, CanvasHeight), new(CanvasOffset, CanvasOffset, CanvasWidth, CanvasHeight), Color.White);
     }
 
     public static Image CropCanvas(Image canvas, Image newImage)
     {
-        for (int x = 0; x < CanvasWidth; x++)
+        for (int x = CanvasOffset; x < CanvasWidth + CanvasOffset; x++)
         {
-            for (int y = 0; y < CanvasHeight; y++)
+            for (int y = CanvasOffset; y < CanvasHeight + CanvasOffset; y++)
             {
                 Color pixelColor = Raylib.GetImageColor(canvas, x, y);
-                Raylib.ImageDrawPixel(ref newImage, x, y, pixelColor);
+                Raylib.ImageDrawPixel(ref newImage, x - CanvasOffset, y - CanvasOffset, pixelColor);
             }
         }
         return newImage;
     }
 
-    private Image FuseLayers(List<Layer> layers)
+    private static Image FuseLayers(List<Layer> layers)
     {
-        Image result = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank);
+        Image result = Raylib.GenImageColor(CanvasImgSize, CanvasImgSize, Color.Blank);
         foreach (Layer layer in layers)
         {
-            Raylib.ImageDraw(ref result, layer.canvasImg, new(0, 0, CanvasWidth, CanvasHeight), new(0, 0, CanvasWidth, CanvasHeight), Color.White);
+            Raylib.ImageDraw(ref result, layer.canvasImg, new(0, 0, CanvasImgSize, CanvasImgSize), new(0, 0, CanvasImgSize, CanvasImgSize), Color.White);
         }
         return result;
     }
 
-    public void CompressLayers()
+    public void CompressLayersInProject()
     {
         currentLayer = 0;
-        layers = [new(program) {canvasImg = FuseLayers(layers)}];
+        layers = [new(program) { canvasImg = FuseLayers(layers) }];
     }
 
     public void Draw()
@@ -91,7 +104,7 @@ public class Layer
     public Layer(ProgramManager programInstance)
     {
         program = programInstance;
-        canvasImg = Raylib.GenImageColor(2500, 1600, Color.Blank);
+        canvasImg = Raylib.GenImageColor(Canvas.CanvasImgSize, Canvas.CanvasImgSize, Color.Blank);
         strokes = new();
     }
 
@@ -100,24 +113,24 @@ public class Layer
         if (isVisible)
         {
             canvasTexture = Raylib.LoadTextureFromImage(canvasImg);
-            Raylib.DrawTexture(canvasTexture, 0, 0, Color.White);
+            Raylib.DrawTexture(canvasTexture, -Canvas.CanvasOffset, -Canvas.CanvasOffset, Color.White);
         }
     }
 
-    public void Logic(Vector2 mousePos, Vector2 lastMousePos, DrawTool tool)
+    public void Logic(Vector2 mousePos, DrawTool tool)
     {
         if (IsCursorOnCanvas(mousePos))
         {
             PreStrokeSaveCanvas(canvasImg);
-            tool.Stroke(canvasImg, mousePos, lastMousePos);
+            tool.Stroke(canvasImg, Canvas.relativeMousePos, Canvas.relativeLastMousePos);
         }
 
         canvasImg = UndoStroke(canvasImg);
     }
 
-    private bool IsCursorOnCanvas(Vector2 cursor)
+    private bool IsCursorOnCanvas(Vector2 mousePos)
     {
-        return cursor.X < Canvas.CanvasWidth && cursor.Y < Canvas.CanvasHeight;
+        return mousePos.X < Canvas.CanvasWidth && mousePos.Y < Canvas.CanvasHeight;
     }
 
     Stack<Image> CleanupStrokeStack(Stack<Image> strokes)
