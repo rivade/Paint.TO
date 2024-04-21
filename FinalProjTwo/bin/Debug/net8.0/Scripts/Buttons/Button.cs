@@ -8,8 +8,8 @@ namespace DrawingProgram;
 public abstract class Button : IHoverable, IDrawable
 {
     protected ProgramManager program;
-
     public Rectangle buttonRect;
+
     public Button(ProgramManager programInstance, Rectangle button)
     {
         program = programInstance;

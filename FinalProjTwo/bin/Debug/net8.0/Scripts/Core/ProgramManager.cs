@@ -27,7 +27,7 @@ public class ProgramManager
         canvas = new(this);
 
         interactables = InterListInit.GenerateInteractables(this, tools, canvas);
-        drawables = [canvas, new ShapeIndicators(), new GUIarea()];
+        drawables = [canvas, new ShapeToolPreviews(this), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
 

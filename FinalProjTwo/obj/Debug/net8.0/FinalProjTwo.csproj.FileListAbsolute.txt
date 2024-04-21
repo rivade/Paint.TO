@@ -64,5 +64,5 @@ c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bi
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\IDrawable.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\Infowindow.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\Popup.cs
-c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\ShapeIndicators.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\Slider.cs
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\ShapeToolPreviews.cs
