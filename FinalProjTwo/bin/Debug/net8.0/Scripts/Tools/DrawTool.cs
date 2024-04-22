@@ -8,7 +8,14 @@ public abstract class DrawTool
 
     public virtual void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
-
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            if (!PaletteButton.paletteColors.Contains(drawingColor))
+            {
+                PaletteButton.paletteColors.Enqueue(drawingColor);
+                PaletteButton.LimitQueueSize();
+            }
+        }
     }
 
     // vvvv Tack chatgpt, youtube, stackoverflow och gud för denna algoritm nedan vvvv
@@ -60,6 +67,7 @@ public sealed class Pencil : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
+        base.Stroke(canvas, mousePos, lastMousePos);
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             Raylib.ImageDrawLine(ref canvas,
@@ -74,6 +82,7 @@ public sealed class PaintBrush : DrawTool
 {
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
+        base.Stroke(canvas, mousePos, lastMousePos);
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             DrawThickLine(canvas, lastMousePos, mousePos, drawingColor, true);
@@ -98,6 +107,7 @@ public sealed class Checker : DrawTool
 
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
+        base.Stroke(canvas, mousePos, lastMousePos);
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
             SetCheckers(canvas, mousePos);
     }
@@ -134,6 +144,7 @@ public sealed class Bucket : DrawTool
 
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
+        base.Stroke(canvas, mousePos, lastMousePos);
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             Color targetColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
@@ -199,5 +210,6 @@ public sealed class EyeDropper : DrawTool
         {
             drawingColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
         }
+        base.Stroke(canvas, mousePos, lastMousePos);
     }
 }

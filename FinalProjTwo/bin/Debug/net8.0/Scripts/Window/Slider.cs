@@ -40,7 +40,6 @@ public class Slider
         if (Raylib.CheckCollisionPointCircle(mousePos, SliderCircle.Middle, SliderCircle.Radius) && Raylib.IsMouseButtonPressed(MouseButton.Left))
             updateSliderPos = true;
 
-
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
             updateSliderPos = false;
 
@@ -62,5 +61,15 @@ public class Slider
 
         else if (SliderCircle.Middle.X < minSlideValue)
             SliderCircle.Middle = new(minSlideValue, SliderCircle.Middle.Y);
+    }
+
+    public void TranslateValueToSlider(int value)
+    {
+        int sliderWidth = (int)SliderBar.Width;
+
+        float percentage = (float)value / 255f;
+        float posX = SliderBar.X + percentage * sliderWidth;
+
+        SliderCircle.Middle = new Vector2(posX, SliderCircle.Middle.Y);
     }
 }

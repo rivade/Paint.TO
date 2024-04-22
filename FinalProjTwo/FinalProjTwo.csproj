@@ -12,6 +12,7 @@
     <Content Include="Textures\*.*" CopyToOutputDirectory="Always"/>
     <Content Include="Textures\**\*.*" CopyToOutputDirectory="Always"/>
     <Content Include="Scripts\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Scripts\Window\**\*.*" CopyToOutputDirectory="Always"/>
   </ItemGroup>
 
 </Project>

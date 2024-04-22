@@ -5,7 +5,11 @@ public class Canvas : IDrawable
 {
     public const int CanvasWidth = ProgramManager.ScreenWidth - 200;
     public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
+
+    // Makes it so that the top left corner of the screen isn't (0,0)
+    // That caused issues when for example drawing a circle there as it would reach out of bounds
     public const int CanvasOffset = 500;
+
     public const int CanvasImgSize = 2500;
 
     public List<Layer> layers = new();

@@ -106,36 +106,6 @@ public sealed class SavePopup : PopupWindow
     }
 }
 
-public sealed class ColorSelector : PopupWindow
-{
-    private Texture2D colors;
-    private Image colorsImg;
-    private Rectangle colorsRect;
-    public ColorSelector(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
-    {
-        colors = Raylib.LoadTexture("Textures/colors.png");
-        colorsImg = Raylib.LoadImageFromTexture(colors);
-        colorsRect = new(ProgramManager.ScreenWidth / 2 - colors.Width / 2, 300, colors.Width, colors.Height);
-    }
-
-    public override void Draw()
-    {
-        base.Draw();
-        Raylib.DrawTexture(colors, (int)colorsRect.X, (int)colorsRect.Y, Color.White);
-    }
-
-    public override void Logic(Canvas canvas, Vector2 mousePos)
-    {
-        base.Logic(canvas, mousePos);
-        if (Raylib.CheckCollisionPointRec(mousePos, colorsRect) && Raylib.IsMouseButtonDown(MouseButton.Left))
-        {
-            Color newColor = Raylib.GetImageColor(colorsImg, (int)mousePos.X - (int)colorsRect.X, (int)mousePos.Y - (int)colorsRect.Y);
-            newColor.A = DrawTool.drawingColor.A;
-            DrawTool.drawingColor = newColor;
-        }
-    }
-}
-
 public sealed class LayerWindow : PopupWindow
 {
     private List<LayerButton> layerButtons = new();

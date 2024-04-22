@@ -7,6 +7,7 @@ public abstract class ShapeTool : DrawTool
 
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
+        base.Stroke(canvas, mousePos, lastMousePos);
         DrawShape(canvas, mousePos, lastMousePos);
     }
 
@@ -87,7 +88,7 @@ public sealed class CircleTool : ShapeTool
                 unsafe //For some reason, you can't pass the target image with the ref keyword in ImageDrawCircleLines
                 //Therefore it needs to be passed with a pointer (guessing this is due to a bad port of raylib from C++ lol)
                 {
-                    Raylib.ImageDrawCircleLinesV(&canvas, circleToDraw.Middle, circleToDraw.Radius, drawingColor);
+                    Raylib.ImageDrawCircleLinesV(&canvas, circleToDraw.Middle + Vector2.One * Canvas.CanvasOffset, circleToDraw.Radius, drawingColor);
                 }
             }
             circleToDraw = new();

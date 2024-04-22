@@ -110,7 +110,7 @@ public sealed class ColorSelectorButton : Button
 
     public ColorSelectorButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
-        colorSelectorWindow = new(programInstance, 660, 750, ["Select a color"]);
+        colorSelectorWindow = new(programInstance, 750, 750, ["Select a color"]);
     }
 
     public override void OnClick()
@@ -182,54 +182,6 @@ public sealed class CheckerSizeButton : Button
             Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
             TextHandling.DrawCenteredTextPro([$"{Checker.checkerSize}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
-    }
-}
-
-public sealed class OpacityButton : Button
-{
-    private ValueSetterWindow valueSetterWindow;
-
-    public OpacityButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
-    {
-        valueSetterWindow =
-        new(programInstance, 800, 500, ["Set opacity"]) { minValue = 0, maxValue = 255, thisChanges = ValueSetterWindow.Changes.Opacity };
-    }
-
-    public override void OnHover(Vector2 mousePos)
-    {
-        base.OnHover(mousePos);
-        buttonRect.Y = IsBottomButton() ? Canvas.CanvasHeight - 150 : Canvas.CanvasHeight - 320;
-    }
-
-    public override void OnClick()
-    {
-        if (Conditions())
-            valueSetterWindow.SetSlider(DrawTool.drawingColor.A);
-        program.popupWindow = valueSetterWindow;
-    }
-
-    public override void Draw()
-    {
-        if (Conditions())
-        {
-            TextHandling.DrawCenteredTextPro(["Opacity"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 35, 30, 30, Color.Black);
-            Raylib.DrawRectangleRec(buttonRect, Color.Black);
-            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
-            TextHandling.DrawCenteredTextPro([$"{DrawTool.drawingColor.A}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 25, 40, 0, Color.Black);
-        }
-    }
-
-    private bool Conditions()
-    {
-        return (PaintBrushTypeConditions() ||
-                program.currentTool.GetType().Name == "Bucket" ||
-                program.currentTool.GetType().Name == "Pencil"
-                || program.currentTool is ShapeTool) && program.currentTool.GetType().Name != "Eraser";
-    }
-
-    private bool IsBottomButton()
-    {
-        return program.currentTool.GetType().Name == "Bucket" || program.currentTool.GetType().Name == "Pencil";
     }
 }
 
@@ -419,5 +371,34 @@ public sealed class ClosePopupButton : Button
         Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.Red, Color.Pink, Color.White, false));
         Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
+    }
+}
+
+public sealed class PaletteButton : Button
+{
+    public Color paletteColor;
+    public ColorSelector window;
+    public static Queue<Color> paletteColors = new([Color.Black, Color.Black, Color.Black, Color.Black]);
+
+    public PaletteButton(ProgramManager programInstance, Rectangle button, ColorSelector windowInstance) : base(programInstance, button)
+    {
+        window = windowInstance;
+    }
+
+    public static void LimitQueueSize()
+    {
+        if (paletteColors.Count > 4) paletteColors.Dequeue();
+    }
+
+    public override void OnClick()
+    {
+        DrawTool.drawingColor = paletteColor;
+        window.SetSliders();
+    }
+
+    public override void Draw()
+    {
+        Raylib.DrawRectangle((int)buttonRect.X - 5, (int)buttonRect.Y - 5, (int)buttonRect.Width + 10, (int)buttonRect.Height + 10, Color.White);
+        Raylib.DrawRectangleRec(buttonRect, paletteColor);
     }
 }

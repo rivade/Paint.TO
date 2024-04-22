@@ -31,16 +31,9 @@ public static class InterListInit
         Button.buttonSize,
         Button.buttonSize)));
 
-
-        interactableList.Add(new OpacityButton(program, new Rectangle(
-        Canvas.CanvasWidth + 60,
-        Canvas.CanvasHeight - 320,
-        Button.buttonSize,
-        Button.buttonSize)));
-
         interactableList.Add(new CheckerSizeButton(program, new Rectangle(
         Canvas.CanvasWidth + 60,
-        Canvas.CanvasHeight - 490,
+        Canvas.CanvasHeight - 320,
         Button.buttonSize,
         Button.buttonSize)));
 
