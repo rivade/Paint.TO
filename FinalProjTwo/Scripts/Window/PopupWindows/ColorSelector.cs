@@ -4,21 +4,25 @@ public sealed class ColorSelector : PopupWindow
 {
     private List<Slider> sliders = new();
     private static List<PaletteButton> paletteButtons = new();
+    private ColorPresets colorPresetsWindow = new();
 
     public ColorSelector(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
         int sliderWidth = 500;
         int sliderHeight = 15;
         int sliderPadding = 50;
-        int sliderX = (int)(windowRect.X + windowRect.Width / 2 - sliderWidth / 2);
+        int sliderX = ProgramManager.ScreenWidth / 2 - sliderWidth / 2;
 
         for (int i = 0; i < 4; i++)
         {
             sliders.Add(new(20, new(sliderX, 550 + i * sliderPadding, sliderWidth, sliderHeight)));
-            paletteButtons.Add(new(program, new Rectangle(760 + i * 100, 800, Button.buttonSize, Button.buttonSize), this));
+            paletteButtons.Add(new(program, this, new Rectangle(760 + i * 100, 800, Button.buttonSize, Button.buttonSize)));
         }
 
         sliders[3].TranslateValueToSlider(255);
+
+        windowRect = new(200, ProgramManager.ScreenHeight / 2 - height / 2, width, height);
+        closeButton = new(program, windowRect);
     }
 
     public override void Draw()
@@ -29,6 +33,7 @@ public sealed class ColorSelector : PopupWindow
         DrawSliders();
         TextHandling.DrawScreenCenteredText(["Recent:"], 750, 40, 0, Color.Black);
         paletteButtons.ForEach(p => p.Draw());
+        colorPresetsWindow.Draw();
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)
@@ -40,7 +45,9 @@ public sealed class ColorSelector : PopupWindow
         DrawTool.drawingColor.A = (byte)sliders[3].GetValue(mousePos, 0, 255);
 
         Queue<Color> tmp = new(PaletteButton.paletteColors);
+
         paletteButtons.ForEach(p => { p.paletteColor = tmp.Dequeue(); p.OnHover(mousePos); });
+        colorPresetsWindow.Logic(mousePos, SetSliders);
     }
 
     public void SetSliders()
@@ -63,5 +70,40 @@ public sealed class ColorSelector : PopupWindow
             slider.Draw();
             Raylib.DrawText($"{slider.GetValue(new(), 0, 255)}", (int)slider.SliderBar.X + (int)slider.SliderBar.Width + 40, (int)slider.SliderBar.Y - 5, 30, Color.Black);
         }
+    }
+}
+
+public class ColorPresets : IDrawable
+{
+    private Rectangle colorsRect;
+    private Texture2D colorsTexture = Raylib.LoadTexture("Textures/colors.png");
+    private Image colorsImg;
+
+    public ColorPresets()
+    {
+        colorsImg = Raylib.LoadImageFromTexture(colorsTexture);
+        colorsRect = new(275, 450, colorsTexture.Width, colorsTexture.Height);
+    }
+
+    public void Draw()
+    {
+        TextHandling.DrawCenteredTextPro(["Presets:"], (int)colorsRect.X, (int)(colorsRect.X + colorsRect.Width), (int)colorsRect.Y - 70, 50, 0, Color.Black);
+        Raylib.DrawRectangle((int)colorsRect.X - 5, (int)colorsRect.Y - 5, (int)colorsRect.Width + 10, (int)colorsRect.Height + 10, Color.White);
+        Raylib.DrawTexture(colorsTexture, (int)colorsRect.X, (int)colorsRect.Y, Color.White);
+    }
+
+    public void Logic(Vector2 mousePos, Action setSliders)
+    {
+        if (Raylib.CheckCollisionPointRec(mousePos, colorsRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            Vector2 pos = TranslatePosToImg(mousePos, colorsRect);
+            DrawTool.drawingColor = Raylib.GetImageColor(colorsImg, (int)pos.X, (int)pos.Y);
+            setSliders.Invoke();
+        }
+    }
+
+    private Vector2 TranslatePosToImg(Vector2 mousePos, Rectangle imgRect)
+    {
+        return mousePos - new Vector2(imgRect.X, imgRect.Y);
     }
 }

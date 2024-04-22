@@ -110,7 +110,7 @@ public sealed class ColorSelectorButton : Button
 
     public ColorSelectorButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
-        colorSelectorWindow = new(programInstance, 750, 750, ["Select a color"]);
+        colorSelectorWindow = new(programInstance, 1150, 750, ["Select a color"]);
     }
 
     public override void OnClick()
@@ -380,7 +380,7 @@ public sealed class PaletteButton : Button
     public ColorSelector window;
     public static Queue<Color> paletteColors = new([Color.Black, Color.Black, Color.Black, Color.Black]);
 
-    public PaletteButton(ProgramManager programInstance, Rectangle button, ColorSelector windowInstance) : base(programInstance, button)
+    public PaletteButton(ProgramManager programInstance, ColorSelector windowInstance, Rectangle button) : base(programInstance, button)
     {
         window = windowInstance;
     }
