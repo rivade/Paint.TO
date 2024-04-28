@@ -16,7 +16,7 @@ public abstract class Button : IHoverable, IDrawable
         buttonRect = button;
     }
 
-    public const int buttonSize = 80;
+    public const int ButtonSize = 80;
     protected bool isHoveredOn;
     protected InfoWindow infoWindow;
 
@@ -32,7 +32,7 @@ public abstract class Button : IHoverable, IDrawable
         }
     }
 
-    public virtual void OnClick() {}
+    public virtual void OnClick() { }
 
     public virtual void Draw()
     {
@@ -51,15 +51,6 @@ public abstract class Button : IHoverable, IDrawable
             color = activeColor;
 
         return color;
-    }
-
-    public bool PaintBrushTypeConditions()
-    {
-        return program.currentTool.GetType().Name != "Pencil" &&
-        program.currentTool.GetType().Name != "Bucket" &&
-        program.currentTool.GetType().Name != "EyeDropper" &&
-        program.currentTool is not ShapeTool ||
-        program.currentTool is LineTool;
     }
 }
 
@@ -124,7 +115,7 @@ public sealed class ColorSelectorButton : Button
         colorPreview.A = 255;
         Raylib.DrawText("Color", Canvas.CanvasWidth + 62, (int)buttonRect.Y - 35, 30, Color.Black);
         Raylib.DrawRectangleRec(buttonRect, Color.Black);
-        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, colorPreview);
+        Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, ButtonSize - 10, ButtonSize - 10, colorPreview);
     }
 }
 
@@ -151,9 +142,18 @@ public sealed class BrushRadiusButton : Button
         {
             TextHandling.DrawCenteredTextPro(["Brush", "radius"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
-            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
+            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, ButtonSize - 10, ButtonSize - 10, Color.White);
             TextHandling.DrawCenteredTextPro([$"{DrawTool.brushRadius}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
+    }
+
+    private bool PaintBrushTypeConditions()
+    {
+        return program.currentTool.GetType().Name != "Pencil" &&
+        program.currentTool.GetType().Name != "Bucket" &&
+        program.currentTool.GetType().Name != "EyeDropper" &&
+        program.currentTool is not ShapeTool ||
+        program.currentTool is LineTool;
     }
 }
 
@@ -179,7 +179,7 @@ public sealed class CheckerSizeButton : Button
         {
             TextHandling.DrawCenteredTextPro(["Checker", "size"], Canvas.CanvasWidth, ProgramManager.ScreenWidth, (int)buttonRect.Y - 65, 30, 30, Color.Black);
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
-            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.White);
+            Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, ButtonSize - 10, ButtonSize - 10, Color.White);
             TextHandling.DrawCenteredTextPro([$"{Checker.checkerSize}"], (int)buttonRect.X, (int)buttonRect.X + (int)buttonRect.Width, (int)buttonRect.Y + 20, 50, 0, Color.Black);
         }
     }
@@ -203,9 +203,9 @@ public sealed class FilledShapeButton : Button
             Raylib.DrawRectangleRec(buttonRect, Color.Black);
 
             if (ShapeTool.drawFilled)
-                Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.Green);
+                Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, ButtonSize - 10, ButtonSize - 10, Color.Green);
             else
-                Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, buttonSize - 10, buttonSize - 10, Color.Red);
+                Raylib.DrawRectangle((int)buttonRect.X + 5, (int)buttonRect.Y + 5, ButtonSize - 10, ButtonSize - 10, Color.Red);
         }
     }
 }

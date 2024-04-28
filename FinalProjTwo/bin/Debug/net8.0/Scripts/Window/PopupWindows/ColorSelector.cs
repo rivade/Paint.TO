@@ -16,12 +16,12 @@ public sealed class ColorSelector : PopupWindow
         for (int i = 0; i < 4; i++)
         {
             sliders.Add(new(20, new(sliderX, 550 + i * sliderPadding, sliderWidth, sliderHeight)));
-            paletteButtons.Add(new(program, this, new Rectangle(760 + i * 100, 800, Button.buttonSize, Button.buttonSize)));
+            paletteButtons.Add(new(program, this, new Rectangle(760 + i * 100, 800, Button.ButtonSize, Button.ButtonSize)));
         }
 
         sliders[3].TranslateValueToSlider(255);
 
-        windowRect = new(400, ProgramManager.ScreenHeight / 2 - height / 2, width, height);
+        windowRect = new(200, ProgramManager.ScreenHeight / 2 - height / 2, width, height);
         closeButton = new(program, windowRect);
     }
 

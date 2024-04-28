@@ -81,8 +81,9 @@ public sealed class CircleTool : ShapeTool
 
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
         {
-            if (drawFilled)
+            if (drawFilled)    
                 Raylib.ImageDrawCircleV(ref canvas, circleToDraw.Middle + Vector2.One * Canvas.CanvasOffset, circleToDraw.Radius, drawingColor);
+                
             else
             {
                 unsafe //For some reason, you can't pass the target image with the ref keyword in ImageDrawCircleLines

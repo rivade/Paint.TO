@@ -49,7 +49,7 @@ public sealed class AddLayerButton : LayerWindowButton
     public AddLayerButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/plus.png");
-        infoWindow = new("Add new layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        infoWindow = new("Add new layer", (int)buttonRect.X, (int)buttonRect.Y + ButtonSize + 5);
     }
 
     public override void Draw()
@@ -73,7 +73,7 @@ public sealed class RemoveLayerButton : LayerWindowButton
     public RemoveLayerButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/x.png");
-        infoWindow = new("Remove current layer", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        infoWindow = new("Remove current layer", (int)buttonRect.X, (int)buttonRect.Y + ButtonSize + 5);
     }
 
     public override void Draw()
@@ -104,7 +104,7 @@ public sealed class LayerVisibilityButton : LayerWindowButton
     {
         icons.Add(Raylib.LoadTexture("Textures/Icons/visible.png"));
         icons.Add(Raylib.LoadTexture("Textures/Icons/invisible.png"));
-        infoWindow = new("Toggle layer visibility", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        infoWindow = new("Toggle layer visibility", (int)buttonRect.X, (int)buttonRect.Y + ButtonSize + 5);
     }
 
     public override void Draw()
@@ -131,7 +131,7 @@ public sealed class MergeLayersButton : LayerWindowButton
     public MergeLayersButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
     {
         icon = Raylib.LoadTexture("Textures/Icons/compressicon.png");
-        infoWindow = new("Merge all layers", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+        infoWindow = new("Merge all layers", (int)buttonRect.X, (int)buttonRect.Y + ButtonSize + 5);
     }
 
     public override void Draw()
@@ -171,10 +171,10 @@ public sealed class MoveLayerButton : LayerWindowButton
             switch (direction)
             {
                 case Direction.Up:
-                    infoWindow = new("Move layer up hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+                    infoWindow = new("Move layer up hierarchy", (int)buttonRect.X, (int)buttonRect.Y + ButtonSize + 5);
                     break;
                 case Direction.Down:
-                    infoWindow = new("Move layer down hierarchy", (int)buttonRect.X, (int)buttonRect.Y + buttonSize + 5);
+                    infoWindow = new("Move layer down hierarchy", (int)buttonRect.X, (int)buttonRect.Y + ButtonSize + 5);
                     break;
             }
         }

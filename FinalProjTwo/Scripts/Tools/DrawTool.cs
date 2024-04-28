@@ -108,11 +108,14 @@ public sealed class Checker : DrawTool
     public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
     {
         base.Stroke(canvas, mousePos, lastMousePos);
+
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
-            SetCheckers(canvas, mousePos);
+            SetCheckers(canvas, mousePos, false);
+        else if (Raylib.IsMouseButtonDown(MouseButton.Right))
+            SetCheckers(canvas, mousePos, true);
     }
 
-    private void SetCheckers(Image canvas, Vector2 mousePos)
+    private void SetCheckers(Image canvas, Vector2 mousePos, bool offsetByOneUnit)
     {
         int rows = (int)Math.Ceiling((double)Canvas.CanvasHeight + Canvas.CanvasOffset / checkerSize);
         int cols = (int)Math.Ceiling((double)Canvas.CanvasWidth + Canvas.CanvasOffset / checkerSize);
@@ -123,6 +126,8 @@ public sealed class Checker : DrawTool
             {
                 int xPos = col * checkerSize;
                 int yPos = row * checkerSize;
+
+                if (offsetByOneUnit) xPos += checkerSize;
 
                 Vector2 squareCenter = new Vector2(xPos + checkerSize / 2, yPos + checkerSize / 2);
 

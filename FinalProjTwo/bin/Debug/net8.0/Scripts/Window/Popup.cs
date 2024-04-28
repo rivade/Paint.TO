@@ -37,8 +37,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.86"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Revamped color selector system", "-Small tweaks and fixes"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v1.88"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to offset checkertool by right-clicking", "-Small improvements to code"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }
@@ -116,12 +116,12 @@ public sealed class LayerWindow : PopupWindow
     {
         buttons =
         [
-            new AddLayerButton(programInstance, new(670, 650, Button.buttonSize, Button.buttonSize), canvasInstance),
-            new MoveLayerButton(programInstance, new(770, 650, Button.buttonSize, Button.buttonSize), canvasInstance) { direction = MoveLayerButton.Direction.Down },
-            new LayerVisibilityButton(programInstance, new(870, 650, Button.buttonSize, Button.buttonSize), canvasInstance),
-            new MergeLayersButton(programInstance, new(970, 650, Button.buttonSize, Button.buttonSize), canvasInstance),
-            new MoveLayerButton(programInstance, new(1070, 650, Button.buttonSize, Button.buttonSize), canvasInstance) { direction = MoveLayerButton.Direction.Up },
-            new RemoveLayerButton(programInstance, new(1170, 650, Button.buttonSize, Button.buttonSize), canvasInstance)
+            new AddLayerButton(programInstance, new(670, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new MoveLayerButton(programInstance, new(770, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Down },
+            new LayerVisibilityButton(programInstance, new(870, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new MergeLayersButton(programInstance, new(970, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new MoveLayerButton(programInstance, new(1070, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Up },
+            new RemoveLayerButton(programInstance, new(1170, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance)
         ];
     }
 
@@ -154,7 +154,6 @@ public sealed class ValueSetterWindow : PopupWindow
     public enum Changes
     {
         BrushRadius,
-        Opacity,
         CheckerSize
     }
 
@@ -186,9 +185,6 @@ public sealed class ValueSetterWindow : PopupWindow
             case Changes.BrushRadius:
                 DrawTool.brushRadius = value;
                 break;
-            case Changes.Opacity:
-                DrawTool.drawingColor.A = (byte)value;
-                break;
             case Changes.CheckerSize:
                 Checker.checkerSize = value;
                 break;
@@ -206,10 +202,6 @@ public sealed class ValueSetterWindow : PopupWindow
                 Color colorPreview = DrawTool.drawingColor;
                 colorPreview.A = 255;
                 Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 650, value, colorPreview);
-                break;
-            case Changes.Opacity:
-                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 650, 105, Color.White);
-                Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 650, 100, DrawTool.drawingColor);
                 break;
             case Changes.CheckerSize:
                 CheckerPreview.DrawCheckerPreview();

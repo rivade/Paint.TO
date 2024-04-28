@@ -26,7 +26,7 @@ public class ProgramManager
         Raylib.SetExitKey(KeyboardKey.Null);
         canvas = new(this);
 
-        interactables = InterListInit.GenerateInteractables(this, tools, canvas);
+        interactables = ButtonCreator.GenerateButtons(this, tools, canvas);
         drawables = [canvas, new ShapeToolPreviews(this), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
