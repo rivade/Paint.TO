@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-
 namespace DrawingProgram;
 
 public class ProgramManager
@@ -16,6 +14,7 @@ public class ProgramManager
     public DrawTool currentTool;
     public PopupWindow popupWindow;
     public bool isMouseInputEnabled;
+
 
     private Vector2 lastMousePos;
 
@@ -51,7 +50,6 @@ public class ProgramManager
     private void Logic()
     {
         Vector2 mousePos = Raylib.GetMousePosition();
-
 
         if (Raylib.IsMouseButtonPressed(MouseButton.Left)) isMouseInputEnabled = true;
 

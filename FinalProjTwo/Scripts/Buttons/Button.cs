@@ -1,8 +1,3 @@
-using System.Collections.ObjectModel;
-using System.IO.Compression;
-using System.Security.Principal;
-using System.Text.Json.Serialization.Metadata;
-
 namespace DrawingProgram;
 
 public abstract class Button : IHoverable, IDrawable

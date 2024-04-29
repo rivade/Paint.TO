@@ -1,8 +1,5 @@
 namespace DrawingProgram;
-using System.Diagnostics;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 //Not even gonna try understanding this haha, thank you stackoverflow

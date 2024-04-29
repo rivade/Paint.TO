@@ -1,5 +1,4 @@
 namespace DrawingProgram;
-using System.IO;
 
 public class Canvas : IDrawable
 {
@@ -151,7 +150,7 @@ public class Layer
     }
     void PreStrokeSaveCanvas(Image canvas)
     {
-        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left) || Raylib.IsMouseButtonPressed(MouseButton.Right))
             strokes.Push(Raylib.ImageCopy(canvas));
 
         if (strokes.Count > 20)
