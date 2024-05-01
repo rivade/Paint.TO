@@ -61,14 +61,12 @@ public sealed class ColorSelector : PopupWindow
     private void DrawSliders()
     {
         string[] values = ["R", "G", "B", "A"];
+        Color[] colors = [Color.Red, Color.Green, Color.Blue, new(DrawTool.drawingColor.R, DrawTool.drawingColor.G, DrawTool.drawingColor.B, (byte)255)];
         for (int i = 0; i < sliders.Count; i++)
         {
             Raylib.DrawText($"{values[i]}", (int)sliders[i].SliderBar.X - 50, (int)sliders[i].SliderBar.Y - 5, 30, Color.Black);
-        }
-        foreach (Slider slider in sliders)
-        {
-            slider.Draw();
-            Raylib.DrawText($"{slider.GetValue(new(), 0, 255)}", (int)slider.SliderBar.X + (int)slider.SliderBar.Width + 40, (int)slider.SliderBar.Y - 5, 30, Color.Black);
+            sliders[i].DrawGradient(Color.Black, colors[i]);
+            Raylib.DrawText($"{sliders[i].GetValue(new(), 0, 255)}", (int)sliders[i].SliderBar.X + (int)sliders[i].SliderBar.Width + 40, (int)sliders[i].SliderBar.Y - 5, 30, Color.Black);
         }
     }
 }

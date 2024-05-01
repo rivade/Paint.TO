@@ -63,7 +63,7 @@ public sealed class LineTool : ShapeTool
 
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
         {
-            DrawThickLine(canvas, lineToDraw.startPos, lineToDraw.endPos, drawingColor, true);
+            DrawThickLine(canvas, lineToDraw.StartPos, lineToDraw.EndPos, drawingColor, true);
             lineToDraw = new(new Vector2(-10000, -10000), new Vector2(-10000, -10000));
         }
     }
@@ -77,13 +77,13 @@ public sealed class CircleTool : ShapeTool
     {
         base.DrawShape(canvas, mousePos, lastMousePos);
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
-            circleToDraw = Circle.CreateCircle(startPos, mousePos);
+            circleToDraw = new(startPos, mousePos);
 
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
         {
-            if (drawFilled)    
+            if (drawFilled)
                 Raylib.ImageDrawCircleV(ref canvas, circleToDraw.Middle + Vector2.One * Canvas.CanvasOffset, circleToDraw.Radius, drawingColor);
-                
+
             else
             {
                 unsafe //For some reason, you can't pass the target image with the ref keyword in ImageDrawCircleLines

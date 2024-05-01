@@ -19,22 +19,22 @@ public class ShapeToolPreviews : IDrawable
                         RectangleTool.rectToDraw.Y - Canvas.CanvasOffset,
                         RectangleTool.rectToDraw.Width,
                         RectangleTool.rectToDraw.Height);
-        
-        previewCircle = Circle.CreateCircle(CircleTool.circleToDraw.Middle -= Vector2.One * Canvas.CanvasOffset,
-                                            CircleTool.circleToDraw.Middle + Vector2.UnitX * CircleTool.circleToDraw.Radius);
-        
-        previewLine = new(LineTool.lineToDraw.startPos - Vector2.One * Canvas.CanvasOffset, LineTool.lineToDraw.endPos - Vector2.One * Canvas.CanvasOffset);
+
+        previewCircle = new(CircleTool.circleToDraw.Middle -= Vector2.One * Canvas.CanvasOffset,
+                            CircleTool.circleToDraw.Middle + Vector2.UnitX * CircleTool.circleToDraw.Radius);
+
+        previewLine = new(LineTool.lineToDraw.StartPos - Vector2.One * Canvas.CanvasOffset, LineTool.lineToDraw.EndPos - Vector2.One * Canvas.CanvasOffset);
     }
 
     public void Draw()
     {
         SetPreviewShapes();
-        switch(program.currentTool)
+        switch (program.currentTool)
         {
             case RectangleTool:
                 if (ShapeTool.drawFilled)
-                    Raylib.DrawRectangleRec(previewRect, DrawTool.drawingColor);   
-                else Raylib.DrawRectangleLines((int)previewRect.X, (int)previewRect.Y, (int)previewRect.Width, (int)previewRect.Height, DrawTool.drawingColor); 
+                    Raylib.DrawRectangleRec(previewRect, DrawTool.drawingColor);
+                else Raylib.DrawRectangleLines((int)previewRect.X, (int)previewRect.Y, (int)previewRect.Width, (int)previewRect.Height, DrawTool.drawingColor);
                 break;
 
             case CircleTool:
@@ -44,10 +44,10 @@ public class ShapeToolPreviews : IDrawable
                 break;
 
             case LineTool:
-                DrawTool.DrawThickLine(new Image(), previewLine.startPos, previewLine.endPos, DrawTool.drawingColor, false);
+                DrawTool.DrawThickLine(new Image(), previewLine.StartPos, previewLine.EndPos, DrawTool.drawingColor, false);
                 break;
-        
-            default: return;       
+
+            default: return;
         }
     }
 }

@@ -33,6 +33,12 @@ public class Slider
         Raylib.DrawCircleV(SliderCircle.Middle, SliderCircle.Radius, Color.Gold);
     }
 
+    public void DrawGradient(Color color1, Color color2)
+    {
+        Raylib.DrawRectangleGradientH((int)SliderBar.X, (int)SliderBar.Y, (int)SliderBar.Width, (int)SliderBar.Height, color1, color2);
+        Raylib.DrawCircleV(SliderCircle.Middle, SliderCircle.Radius, Color.Gold);
+    }
+
     private void Update(Vector2 mousePos)
     {
         if (Raylib.CheckCollisionPointCircle(mousePos, SliderCircle.Middle, SliderCircle.Radius) && Raylib.IsMouseButtonPressed(MouseButton.Left))

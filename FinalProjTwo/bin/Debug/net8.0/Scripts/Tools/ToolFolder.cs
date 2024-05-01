@@ -18,5 +18,6 @@ public sealed class DrawingTools : ToolFolder
         drawTools.Add(new RectangleTool());
         drawTools.Add(new LineTool());
         drawTools.Add(new CircleTool());
+        drawTools.Add(new RectangleSelect());
     }
 }

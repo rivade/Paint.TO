@@ -8,7 +8,7 @@ public static class ButtonCreator
     private static readonly string[] toolNames =
     [ "Pencil", "Brush", "Eraser", "Fill color",
         "Color picker", "Checker/Dither", "Draw rectangle",
-        "Draw line", "Draw circle"];
+        "Draw line", "Draw circle", "Rectangle select"];
 
     private static readonly Dictionary<Type, Rectangle> ButtonPositions = new()
     {

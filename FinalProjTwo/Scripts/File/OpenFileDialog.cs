@@ -2,7 +2,7 @@ namespace DrawingProgram;
 using System;
 using System.Runtime.InteropServices;
 
-//Not even gonna try understanding this haha, thank you stackoverflow
+//Not at this level yet haha, thank you stackoverflow
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
 public struct OpenFileName
 {
@@ -44,7 +44,7 @@ public struct BROWSEINFO
     public int iImage;
 }
 
-public class OpenDialog
+public static class OpenDialog
 {
     [DllImport("comdlg32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     private static extern bool GetOpenFileName(ref OpenFileName ofn);

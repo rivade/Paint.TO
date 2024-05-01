@@ -37,8 +37,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v1.89"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Added ability to offset checkertool by right-clicking", "-Small improvements to code"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v2.0"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Started to work on an edit/selection system", "-Tweaks"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

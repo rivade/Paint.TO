@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 namespace DrawingProgram;
 
 public class ProgramManager
@@ -41,6 +43,8 @@ public class ProgramManager
 
         drawables.ForEach(d => d.Draw());
         popupWindow?.Draw();
+        RectangleSelect.Draw();
+        RectangleSelect.corners?.ForEach(c => c.Draw());
 
         Raylib.EndDrawing();
 
