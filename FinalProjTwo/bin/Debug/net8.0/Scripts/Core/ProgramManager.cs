@@ -10,7 +10,7 @@ public class ProgramManager
     private Canvas canvas;
     private ToolFolder tools = new DrawingTools();
 
-    private List<IHoverable> interactables;
+    private List<IMouseInteractable> interactables;
     private List<IDrawable> drawables;
 
     public DrawTool currentTool;
@@ -58,7 +58,7 @@ public class ProgramManager
         if (Raylib.IsMouseButtonPressed(MouseButton.Left)) isMouseInputEnabled = true;
 
         popupWindow?.Logic(canvas, mousePos);
-        if (popupWindow == null && isMouseInputEnabled) 
+        if (popupWindow == null && isMouseInputEnabled)
             canvas.Update(mousePos, lastMousePos, currentTool);
 
         interactables.ForEach(i => i.OnHover(mousePos));

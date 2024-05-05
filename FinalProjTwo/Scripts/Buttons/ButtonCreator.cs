@@ -23,9 +23,9 @@ public static class ButtonCreator
         { typeof(OpenLayersButton), new Rectangle(Canvas.CanvasWidth - 80, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) }
     };
 
-    public static List<IHoverable> GenerateButtons(ProgramManager program, ToolFolder inputTools, Canvas canvas)
+    public static List<IMouseInteractable> GenerateButtons(ProgramManager program, ToolFolder inputTools, Canvas canvas)
     {
-        var interactableList = new List<IHoverable>();
+        var interactableList = new List<IMouseInteractable>();
 
         for (int i = 0; i < inputTools.drawTools.Count(); i++)
         {

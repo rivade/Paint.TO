@@ -1,6 +1,6 @@
 namespace DrawingProgram;
 
-public abstract class Button : IHoverable, IDrawable
+public abstract class Button : IMouseInteractable, IDrawable
 {
     protected ProgramManager program;
     public Rectangle buttonRect;

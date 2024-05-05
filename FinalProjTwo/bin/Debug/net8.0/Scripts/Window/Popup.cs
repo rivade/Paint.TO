@@ -37,8 +37,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v2.0"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Started to work on an edit/selection system", "-Tweaks"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v2.02"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Selection in rectangleselect can be resizes", "Small tweaks and fixes (far from done with edittool)"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

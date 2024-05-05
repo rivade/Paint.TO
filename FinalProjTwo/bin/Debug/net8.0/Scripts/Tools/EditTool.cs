@@ -14,7 +14,7 @@ public sealed class RectangleSelect : EditTool
     private Image selection;
     private Vector2 startPos;
     private bool hasMadeSelection;
-    private bool hasCopiedSelection;
+    private bool isResizing;
     private bool isMoving;
     private static Color selectionColor = new(0, 78, 129, 175);
 
@@ -23,7 +23,7 @@ public sealed class RectangleSelect : EditTool
     public RectangleSelect()
     {
         hasMadeSelection = false;
-        hasCopiedSelection = false;
+        isResizing = false;
     }
 
     public static void Draw()
@@ -44,7 +44,6 @@ public sealed class RectangleSelect : EditTool
         {
             if (selectionRec.Width < 5 && selectionRec.Height < 5) return;
             hasMadeSelection = true;
-            hasCopiedSelection = false;
 
             corners =
             [
@@ -66,29 +65,30 @@ public sealed class RectangleSelect : EditTool
 
         else
         {
-            if (!hasCopiedSelection)
+            if (isMoving || isResizing) selectionColor = new(0, 78, 129, 255);
+
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
             {
-                selection = Raylib.ImageCopy(canvas);
-                hasCopiedSelection = true;
+                Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
+                selection = Raylib.GenImageColor((int)selectionRec.Width, (int)selectionRec.Height, Color.White);
+                Raylib.ImageDraw(ref selection, canvas, relativeSelectionRec, new(0, 0, selectionRec.Width, selectionRec.Height), Color.White);
+
+                if (Raylib.CheckCollisionPointRec(mousePos, selectionRec) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)))
+                {
+                    ClearSelectionOnCanvas(canvas);
+                    isMoving = true;
+                }
             }
 
-            if (Raylib.CheckCollisionPointRec(mousePos, selectionRec) && Raylib.IsMouseButtonPressed(MouseButton.Left) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)))
-            {
-                Raylib.ImageDrawRectangleRec(ref canvas, new(sourceRec.X + Canvas.CanvasOffset, sourceRec.Y + Canvas.CanvasOffset, sourceRec.Width, sourceRec.Height), Color.Blank);
-                isMoving = true;
-            }
-            
             if (Raylib.CheckCollisionPointRec(mousePos, selectionRec) && Raylib.IsMouseButtonReleased(MouseButton.Left))
             {
-                Rectangle relativeSourceRec = new(new Vector2(sourceRec.X, sourceRec.Y) + Vector2.One * Canvas.CanvasOffset, new(sourceRec.Width, sourceRec.Height));
                 Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
-                Raylib.ImageDraw(ref canvas, selection, relativeSourceRec, relativeSelectionRec, Color.White);
+                Raylib.ImageDraw(ref canvas, selection, new(0, 0, sourceRec.Width, sourceRec.Height), relativeSelectionRec, Color.White);
                 isMoving = false;
             }
 
             if (isMoving)
             {
-                selectionColor = new(0, 78, 129, 255);
                 Vector2 rectSize = new(selectionRec.Width, selectionRec.Height);
                 Vector2 mouseDelta = Raylib.GetMouseDelta();
                 Vector2 newPos = new(selectionRec.X + mouseDelta.X, selectionRec.Y + mouseDelta.Y);
@@ -103,11 +103,12 @@ public sealed class RectangleSelect : EditTool
 
             if (Raylib.IsKeyPressed(KeyboardKey.Delete) || Raylib.IsKeyPressed(KeyboardKey.Backspace))
             {
-                Raylib.ImageDrawRectangleRec(ref canvas, new(sourceRec.X + Canvas.CanvasOffset, sourceRec.Y + Canvas.CanvasOffset, sourceRec.Width, sourceRec.Height), Color.Blank);
+                ClearSelectionOnCanvas(canvas);
             }
 
             corners.ForEach(c => c.Update(ref selectionRec, () => sourceRec = selectionRec, mousePos));
             ResetCorners();
+            ResizeSelection(mousePos, canvas);
         }
     }
 
@@ -129,10 +130,25 @@ public sealed class RectangleSelect : EditTool
         corners[3].cornerCircle.Middle = new(selectionRec.X + selectionRec.Width, selectionRec.Y + selectionRec.Height);
     }
 
-    private void ResizeSelection(Image canvas)
+    private void ResizeSelection(Vector2 mousePos, Image canvas)
     {
+        if (corners.Any(c => Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)) && Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            isResizing = true;
+            ClearSelectionOnCanvas(canvas);
+        }
+
+        if (Raylib.IsMouseButtonReleased(MouseButton.Left) && isResizing)
+        {
+            Raylib.ImageResize(ref selection, (int)selectionRec.Width, (int)selectionRec.Height);
+            Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
+            Raylib.ImageDraw(ref canvas, selection, new(0, 0, selectionRec.Width, selectionRec.Height), relativeSelectionRec, Color.White);
+            isResizing = false;
+        }
 
     }
+
+    private void ClearSelectionOnCanvas(Image canvas) => Raylib.ImageDrawRectangleRec(ref canvas, new(sourceRec.X + Canvas.CanvasOffset, sourceRec.Y + Canvas.CanvasOffset, sourceRec.Width, sourceRec.Height), Color.Blank);
 }
 
 public abstract class SelectionCorner
@@ -154,10 +170,7 @@ public abstract class SelectionCorner
             isMoving = false;
     }
 
-    public void Draw()
-    {
-        Raylib.DrawCircle((int)cornerCircle.Middle.X, (int)cornerCircle.Middle.Y, cornerCircle.Radius, Color.Red);
-    } 
+    public void Draw() => Raylib.DrawCircle((int)cornerCircle.Middle.X, (int)cornerCircle.Middle.Y, cornerCircle.Radius, Color.Red);
 }
 
 public sealed class TopLeftSelectionCorner : SelectionCorner

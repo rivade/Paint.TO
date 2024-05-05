@@ -18,7 +18,7 @@ public abstract class DrawTool
         }
     }
 
-    // vvvv Tack chatgpt, youtube, stackoverflow och gud för denna algoritm nedan vvvv
+    // Bresenhams line algorithm
     public static void DrawThickLine(Image canvas, Vector2 startPos, Vector2 endPos, Color color, bool drawOnCanvas)
     {
         // Avgör var på linjen den itererar, börjar på startpos
