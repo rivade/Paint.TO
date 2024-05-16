@@ -52,10 +52,11 @@ public sealed class RectangleSelect : EditTool
             ];
 
             Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
-            selection = Raylib.GenImageColor((int)selectionRec.Width, (int)selectionRec.Height, Color.White);
+            selection = Raylib.GenImageColor((int)selectionRec.Width, (int)selectionRec.Height, Color.Blank);
             Raylib.ImageDraw(ref selection, canvas, relativeSelectionRec, new(0, 0, selectionRec.Width, selectionRec.Height), Color.White);
             Raylib.UnloadTexture(selectionPreview);
             selectionPreview = Raylib.LoadTextureFromImage(selection);
+            ClearSelectionOnCanvas(canvas);
         }
     }
 
@@ -80,7 +81,6 @@ public sealed class RectangleSelect : EditTool
             {
                 if (Raylib.CheckCollisionPointRec(mousePos, selectionRec) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)))
                 {
-                    ClearSelectionOnCanvas(canvas);
                     isMoving = true;
                 }
             }
@@ -145,14 +145,11 @@ public sealed class RectangleSelect : EditTool
         if (corners.Any(c => Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             isResizing = true;
-            ClearSelectionOnCanvas(canvas);
         }
 
         if (Raylib.IsMouseButtonReleased(MouseButton.Left) && isResizing)
         {
             Raylib.ImageResize(ref selection, (int)selectionRec.Width, (int)selectionRec.Height);
-            Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
-            Raylib.ImageDraw(ref canvas, selection, new(0, 0, selectionRec.Width, selectionRec.Height), relativeSelectionRec, Color.White);
             isResizing = false;
         }
 

@@ -4,7 +4,7 @@ public class ShapeAndSelectionToolPreviews : IDrawable
 {
     private ProgramManager program;
     private RectangleSelect selectionTool;
-
+    
     private Rectangle previewRect;
     private Circle previewCircle;
     private Line previewLine;
