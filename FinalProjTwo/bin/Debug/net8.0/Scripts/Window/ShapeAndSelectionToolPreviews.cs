@@ -1,16 +1,18 @@
 namespace DrawingProgram;
 
-public class ShapeToolPreviews : IDrawable
+public class ShapeAndSelectionToolPreviews : IDrawable
 {
     private ProgramManager program;
+    private RectangleSelect selectionTool;
 
     private Rectangle previewRect;
     private Circle previewCircle;
     private Line previewLine;
 
-    public ShapeToolPreviews(ProgramManager programInstance)
+    public ShapeAndSelectionToolPreviews(ProgramManager programInstance, RectangleSelect selectionToolInstance)
     {
         program = programInstance;
+        selectionTool = selectionToolInstance;
     }
 
     private void SetPreviewShapes()
@@ -46,6 +48,13 @@ public class ShapeToolPreviews : IDrawable
             case LineTool:
                 DrawTool.DrawThickLine(new Image(), previewLine.StartPos, previewLine.EndPos, DrawTool.drawingColor, false);
                 break;
+            
+            case RectangleSelect:
+                Raylib.DrawTexture(selectionTool.selectionPreview, (int)selectionTool.selectionRec.X, (int)selectionTool.selectionRec.Y, Color.White);
+                Raylib.DrawRectangleRec(selectionTool.selectionRec, RectangleSelect.selectionColor);
+                selectionTool.corners?.ForEach(c => c.Draw());
+                break;
+
 
             default: return;
         }

@@ -37,8 +37,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v2.02"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Selection in rectangleselect can be resized", "Small tweaks and fixes"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v2.1"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Changenotes:", "-Rectangle selection changes are now visible in real time", "Small tweaks and fixes"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }
@@ -109,7 +109,6 @@ public sealed class SavePopup : PopupWindow
 public sealed class LayerWindow : PopupWindow
 {
     private List<LayerButton> layerButtons = new();
-
     private List<LayerWindowButton> buttons;
 
     public LayerWindow(ProgramManager programInstance, Canvas canvasInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)

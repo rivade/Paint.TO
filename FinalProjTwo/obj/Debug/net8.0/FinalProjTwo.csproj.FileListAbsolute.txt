@@ -63,10 +63,16 @@ c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bi
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\Infowindow.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\Popup.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\Slider.cs
-C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\ShapeToolPreviews.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\PopupWindows\ColorSelector.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\colorss.png
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Buttons\ButtonCreator.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Tools\EditTool.cs
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\rectselecticon.png
 c:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Buttons\IMouseInteractable.cs
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\eraserX.png
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\eyedropperX.png
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\foldericonX.png
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\paintbrushX.png
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\pencilX.png
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\bucketX.png
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\ShapeAndSelectionToolPreviews.cs

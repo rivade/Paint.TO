@@ -4,46 +4,47 @@ using static System.Activator;
 public static class ButtonCreator
 {
     private const int ButtonPadding = 10;
+    private const int NonToolButtonX = Canvas.CanvasWidth + 60;
 
     private static readonly string[] toolNames =
     [ "Pencil", "Brush", "Eraser", "Fill color",
         "Color picker", "Checker/Dither", "Draw rectangle",
         "Draw line", "Draw circle", "Rectangle select"];
 
-    private static readonly Dictionary<Type, Rectangle> ButtonPositions = new()
+    private static readonly Dictionary<Type, Rectangle> buttonPositions = new()
     {
-        { typeof(ColorSelectorButton), new Rectangle(Canvas.CanvasWidth + 60, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(BrushRadiusButton), new Rectangle(Canvas.CanvasWidth + 60, Canvas.CanvasHeight - 150, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(CheckerSizeButton), new Rectangle(Canvas.CanvasWidth + 60, Canvas.CanvasHeight - 320, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(FilledShapeButton), new Rectangle(Canvas.CanvasWidth + 60, Canvas.CanvasHeight - 150, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(CloseButton), new Rectangle(Canvas.CanvasWidth + 60, 10, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(SaveCanvasButton), new Rectangle(Canvas.CanvasWidth + 60, 100, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(LoadButton), new Rectangle(Canvas.CanvasWidth + 60, 190, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(SettingsButton), new Rectangle(Canvas.CanvasWidth + 60, 280, Button.ButtonSize, Button.ButtonSize) },
-        { typeof(OpenLayersButton), new Rectangle(Canvas.CanvasWidth - 80, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) }
+        { typeof(ColorSelectorButton), new Rectangle(NonToolButtonX, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(BrushRadiusButton), new Rectangle(NonToolButtonX, Canvas.CanvasHeight - 150, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(CheckerSizeButton), new Rectangle(NonToolButtonX, Canvas.CanvasHeight - 320, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(FilledShapeButton), new Rectangle(NonToolButtonX, Canvas.CanvasHeight - 150, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(CloseButton), new Rectangle(NonToolButtonX, 10, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(SaveCanvasButton), new Rectangle(NonToolButtonX, 100, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(LoadButton), new Rectangle(NonToolButtonX, 190, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(SettingsButton), new Rectangle(NonToolButtonX, 280, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(OpenLayersButton), new Rectangle(NonToolButtonX - 140, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) }
     };
 
     public static List<IMouseInteractable> GenerateButtons(ProgramManager program, ToolFolder inputTools, Canvas canvas)
     {
         var interactableList = new List<IMouseInteractable>();
 
-        for (int i = 0; i < inputTools.drawTools.Count(); i++)
+        for (int i = 0; i < inputTools.toolList.Count(); i++)
         {
             var toolButton = new ToolButton(program, new Rectangle(i * 90 + ButtonPadding, Canvas.CanvasHeight + ButtonPadding, Button.ButtonSize, Button.ButtonSize), toolNames[i])
             {
-                DrawTool = inputTools.drawTools[i]
+                DrawTool = inputTools.toolList[i]
             };
             interactableList.Add(toolButton);
         }
 
-        foreach (var buttonType in ButtonPositions.Keys)
+        foreach (var buttonType in buttonPositions.Keys)
         {
             Button button;
             if (buttonType == typeof(LoadButton) || buttonType == typeof(OpenLayersButton))
             {
-                button = (Button)CreateInstance(buttonType, program, ButtonPositions[buttonType], canvas);
+                button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType], canvas);
             }
-            else button = (Button)CreateInstance(buttonType, program, ButtonPositions[buttonType]);
+            else button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType]);
 
             interactableList.Add(button);
         }

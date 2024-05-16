@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace DrawingProgram;
 
 public abstract class EditTool : DrawTool
@@ -9,16 +7,17 @@ public abstract class EditTool : DrawTool
 
 public sealed class RectangleSelect : EditTool
 {
-    private static Rectangle selectionRec = new(0, 0, 0, 0);
-    private static Rectangle sourceRec = new(0, 0, 0, 0);
+    public Rectangle selectionRec = new(0, 0, 0, 0);
+    private Rectangle sourceRec = new(0, 0, 0, 0);
     private Image selection;
+    public Texture2D selectionPreview;
     private Vector2 startPos;
     private bool hasMadeSelection;
     private bool isResizing;
     private bool isMoving;
-    private static Color selectionColor = new(0, 78, 129, 175);
+    public static readonly Color selectionColor = new(0, 78, 129, 125);
 
-    public static List<SelectionCorner> corners;
+    public List<SelectionCorner> corners;
 
     public RectangleSelect()
     {
@@ -26,12 +25,7 @@ public sealed class RectangleSelect : EditTool
         isResizing = false;
     }
 
-    public static void Draw()
-    {
-        Raylib.DrawRectangleRec(selectionRec, selectionColor);
-    }
-
-    public void CreateSelection(Vector2 mousePos)
+    public void CreateSelection(Vector2 mousePos, Image canvas)
     {
         corners = [];
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
@@ -42,7 +36,11 @@ public sealed class RectangleSelect : EditTool
 
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
         {
-            if (selectionRec.Width < 5 && selectionRec.Height < 5) return;
+            if (selectionRec.Width < 5 && selectionRec.Height < 5) 
+            {
+                selectionPreview = new();
+                return;
+            }
             hasMadeSelection = true;
 
             corners =
@@ -52,27 +50,34 @@ public sealed class RectangleSelect : EditTool
                 new BottomLeftSelectionCorner(new Vector2(selectionRec.X, selectionRec.Y + selectionRec.Height)),
                 new BottomRightSelectionCorner(new Vector2(selectionRec.X + selectionRec.Width, selectionRec.Y + selectionRec.Height)),
             ];
+
+            Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
+            selection = Raylib.GenImageColor((int)selectionRec.Width, (int)selectionRec.Height, Color.White);
+            Raylib.ImageDraw(ref selection, canvas, relativeSelectionRec, new(0, 0, selectionRec.Width, selectionRec.Height), Color.White);
+            Raylib.UnloadTexture(selectionPreview);
+            selectionPreview = Raylib.LoadTextureFromImage(selection);
         }
     }
 
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 s)
+    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 _)
     {
         mousePos -= Vector2.One * Canvas.CanvasOffset;
-        selectionColor = new(0, 78, 129, 175);
 
         if (!hasMadeSelection)
-            CreateSelection(mousePos);
+            CreateSelection(mousePos, canvas);
 
         else
         {
-            if (isMoving || isResizing) selectionColor = new(0, 78, 129, 255);
+            if (isResizing)
+            {
+                Image temp = Raylib.ImageCopy(selection);
+                Raylib.ImageResize(ref temp, (int)selectionRec.Width, (int)selectionRec.Height);
+                Raylib.UnloadTexture(selectionPreview);
+                selectionPreview = Raylib.LoadTextureFromImage(temp);
+            }
 
             if (Raylib.IsMouseButtonPressed(MouseButton.Left))
             {
-                Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
-                selection = Raylib.GenImageColor((int)selectionRec.Width, (int)selectionRec.Height, Color.White);
-                Raylib.ImageDraw(ref selection, canvas, relativeSelectionRec, new(0, 0, selectionRec.Width, selectionRec.Height), Color.White);
-
                 if (Raylib.CheckCollisionPointRec(mousePos, selectionRec) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)))
                 {
                     ClearSelectionOnCanvas(canvas);
@@ -82,8 +87,6 @@ public sealed class RectangleSelect : EditTool
 
             if (Raylib.CheckCollisionPointRec(mousePos, selectionRec) && Raylib.IsMouseButtonReleased(MouseButton.Left))
             {
-                Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
-                Raylib.ImageDraw(ref canvas, selection, new(0, 0, sourceRec.Width, sourceRec.Height), relativeSelectionRec, Color.White);
                 isMoving = false;
             }
 
@@ -97,12 +100,18 @@ public sealed class RectangleSelect : EditTool
 
             if (!Raylib.CheckCollisionPointRec(mousePos, selectionRec) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)) && Raylib.IsMouseButtonPressed(MouseButton.Left))
             {
+                Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
+                Raylib.ImageDraw(ref canvas, selection, new(0, 0, sourceRec.Width, sourceRec.Height), relativeSelectionRec, Color.White);
+                selectionPreview = new();
                 hasMadeSelection = false;
                 startPos = mousePos;
             }
 
             if (Raylib.IsKeyPressed(KeyboardKey.Delete) || Raylib.IsKeyPressed(KeyboardKey.Backspace))
             {
+                hasMadeSelection = false;
+                selectionRec = new();
+                selectionPreview = new();
                 ClearSelectionOnCanvas(canvas);
             }
 
@@ -121,6 +130,7 @@ public sealed class RectangleSelect : EditTool
         selectionRec = new Rectangle(x, y, width, height);
         sourceRec = new Rectangle(x, y, width, height);
     }
+    
 
     private void ResetCorners()
     {

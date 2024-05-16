@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-
 namespace DrawingProgram;
 
 public class ProgramManager
@@ -8,7 +6,7 @@ public class ProgramManager
     public const int ScreenHeight = 1080;
 
     private Canvas canvas;
-    private ToolFolder tools = new DrawingTools();
+    private ToolFolder tools = new ToolFolder();
 
     private List<IMouseInteractable> interactables;
     private List<IDrawable> drawables;
@@ -16,7 +14,6 @@ public class ProgramManager
     public DrawTool currentTool;
     public PopupWindow popupWindow;
     public bool isMouseInputEnabled;
-
 
     private Vector2 lastMousePos;
 
@@ -28,12 +25,12 @@ public class ProgramManager
         canvas = new(this);
 
         interactables = ButtonCreator.GenerateButtons(this, tools, canvas);
-        drawables = [canvas, new ShapeToolPreviews(this), new GUIarea()];
+        drawables = [canvas, new ShapeAndSelectionToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
 
         popupWindow = new StartPopup(this, 800, 300, []);
-        currentTool = tools.drawTools[0];
+        currentTool = tools.toolList[0];
     }
 
     private void DrawGraphics()
@@ -43,12 +40,8 @@ public class ProgramManager
 
         drawables.ForEach(d => d.Draw());
         popupWindow?.Draw();
-        RectangleSelect.Draw();
-        RectangleSelect.corners?.ForEach(c => c.Draw());
 
         Raylib.EndDrawing();
-
-        canvas.layers.ForEach(layer => Raylib.UnloadTexture(layer.canvasTexture));
     }
 
     private void Logic()

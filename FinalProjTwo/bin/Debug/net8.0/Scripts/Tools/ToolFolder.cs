@@ -1,23 +1,20 @@
 namespace DrawingProgram;
 
-public abstract class ToolFolder
+public struct ToolFolder
 {
-    public List<DrawTool> drawTools = new();  
-}
+    public List<DrawTool> toolList = new();
 
-public sealed class DrawingTools : ToolFolder
-{
-    public DrawingTools()
+    public ToolFolder()
     {
-        drawTools.Add(new Pencil());
-        drawTools.Add(new PaintBrush());
-        drawTools.Add(new Eraser());
-        drawTools.Add(new Bucket());
-        drawTools.Add(new EyeDropper());
-        drawTools.Add(new Checker());
-        drawTools.Add(new RectangleTool());
-        drawTools.Add(new LineTool());
-        drawTools.Add(new CircleTool());
-        drawTools.Add(new RectangleSelect());
+        toolList.Add(new Pencil());
+        toolList.Add(new PaintBrush());
+        toolList.Add(new Eraser());
+        toolList.Add(new Bucket());
+        toolList.Add(new EyeDropper());
+        toolList.Add(new Checker());
+        toolList.Add(new RectangleTool());
+        toolList.Add(new LineTool());
+        toolList.Add(new CircleTool());
+        toolList.Add(new RectangleSelect());
     }
 }
