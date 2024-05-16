@@ -32,7 +32,7 @@ public static class ButtonCreator
         {
             var toolButton = new ToolButton(program, new Rectangle(i * 90 + ButtonPadding, Canvas.CanvasHeight + ButtonPadding, Button.ButtonSize, Button.ButtonSize), toolNames[i])
             {
-                DrawTool = inputTools.toolList[i]
+                tool = inputTools.toolList[i]
             };
             interactableList.Add(toolButton);
         }

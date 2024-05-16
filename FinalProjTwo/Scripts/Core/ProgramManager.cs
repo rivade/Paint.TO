@@ -11,11 +11,9 @@ public class ProgramManager
     private List<IMouseInteractable> interactables;
     private List<IDrawable> drawables;
 
-    public DrawTool currentTool;
+    public ITool currentTool;
     public PopupWindow popupWindow;
     public bool isMouseInputEnabled;
-
-    private Vector2 lastMousePos;
 
     public ProgramManager()
     {
@@ -52,14 +50,12 @@ public class ProgramManager
 
         popupWindow?.Logic(canvas, mousePos);
         if (popupWindow == null && isMouseInputEnabled)
-            canvas.Update(mousePos, lastMousePos, currentTool);
+            canvas.Update(mousePos, currentTool);
 
         interactables.ForEach(i => i.OnHover(mousePos));
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
             popupWindow = null;
-
-        lastMousePos = mousePos;
     }
 
     public void Run()

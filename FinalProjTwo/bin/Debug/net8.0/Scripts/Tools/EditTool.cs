@@ -1,8 +1,11 @@
 namespace DrawingProgram;
 
-public abstract class EditTool : DrawTool
+public abstract class EditTool : ITool
 {
+    public virtual void Update(Image c, Vector2 d)
+    {
 
+    }
 }
 
 public sealed class RectangleSelect : EditTool
@@ -60,7 +63,7 @@ public sealed class RectangleSelect : EditTool
         }
     }
 
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 _)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
         mousePos -= Vector2.One * Canvas.CanvasOffset;
 

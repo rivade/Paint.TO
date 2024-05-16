@@ -2,7 +2,7 @@ namespace DrawingProgram;
 
 public struct ToolFolder
 {
-    public List<DrawTool> toolList = new();
+    public List<ITool> toolList = new();
 
     public ToolFolder()
     {

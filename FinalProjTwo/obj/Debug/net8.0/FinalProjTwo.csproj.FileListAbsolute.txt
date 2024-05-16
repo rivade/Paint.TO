@@ -76,3 +76,4 @@ C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bi
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\pencilX.png
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Textures\Icons\bucketX.png
 C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Window\ShapeAndSelectionToolPreviews.cs
+C:\Users\theo.lindqvist\Documents\NTI Programmering\FinalProjTwo\FinalProjTwo\bin\Debug\net8.0\Scripts\Tools\ITool.cs

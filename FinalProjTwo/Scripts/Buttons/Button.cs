@@ -51,7 +51,7 @@ public abstract class Button : IMouseInteractable, IDrawable
 
 public sealed class ToolButton : Button
 {
-    public DrawTool DrawTool { get; set; }
+    public ITool tool { get; set; }
 
     private static List<Color>[] colorSets =
     [
@@ -75,12 +75,12 @@ public sealed class ToolButton : Button
         infoWindow = new(hovText, (int)buttonRect.X, (int)buttonRect.Y - 40);
     }
 
-    private bool IsActiveTool() => program.currentTool == DrawTool;
+    private bool IsActiveTool() => program.currentTool == tool;
 
     public override void OnClick()
     {
         if (!IsActiveTool())
-            program.currentTool = DrawTool;
+            program.currentTool = tool;
     }
 
     public override void Draw()

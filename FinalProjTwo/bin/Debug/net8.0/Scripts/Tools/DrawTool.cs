@@ -1,12 +1,15 @@
 namespace DrawingProgram;
 
-public abstract class DrawTool
+public abstract class DrawTool : ITool
 {
     public static Color drawingColor = Color.Black;
     public static int brushRadius = 1;
+    
+    protected static Vector2 lastMousePos;
 
+    public static void UpdateLastMousePos(Vector2 mousePos) => lastMousePos = mousePos;
 
-    public virtual void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public virtual void Update(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
@@ -65,9 +68,9 @@ public abstract class DrawTool
 
 public sealed class Pencil : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
-        base.Stroke(canvas, mousePos, lastMousePos);
+        base.Update(canvas, mousePos);
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             Raylib.ImageDrawLine(ref canvas,
@@ -80,9 +83,9 @@ public sealed class Pencil : DrawTool
 
 public sealed class PaintBrush : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
-        base.Stroke(canvas, mousePos, lastMousePos);
+        base.Update(canvas, mousePos);
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
             DrawThickLine(canvas, lastMousePos, mousePos, drawingColor, true);
@@ -92,7 +95,7 @@ public sealed class PaintBrush : DrawTool
 
 public sealed class Eraser : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
         {
@@ -105,9 +108,9 @@ public sealed class Checker : DrawTool
 {
     public static int checkerSize = 5;
 
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
-        base.Stroke(canvas, mousePos, lastMousePos);
+        base.Update(canvas, mousePos);
 
         if (Raylib.IsMouseButtonDown(MouseButton.Left))
             SetCheckers(canvas, mousePos, false);
@@ -147,9 +150,9 @@ public sealed class Bucket : DrawTool
 {
     private readonly Vector2 CanvasArea = new(Canvas.CanvasWidth + Canvas.CanvasOffset, Canvas.CanvasHeight + Canvas.CanvasOffset);
 
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
-        base.Stroke(canvas, mousePos, lastMousePos);
+        base.Update(canvas, mousePos);
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             Color targetColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
@@ -208,13 +211,13 @@ public sealed class Bucket : DrawTool
 
 public sealed class EyeDropper : DrawTool
 {
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
         Rectangle canvasRect = new(0, 0, new Vector2(canvas.Width, canvas.Height));
         if (Raylib.IsMouseButtonDown(MouseButton.Left) && Raylib.CheckCollisionPointRec(mousePos, canvasRect))
         {
             drawingColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
         }
-        base.Stroke(canvas, mousePos, lastMousePos);
+        base.Update(canvas, mousePos);
     }
 }

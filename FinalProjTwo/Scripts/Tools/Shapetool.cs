@@ -5,9 +5,9 @@ public abstract class ShapeTool : DrawTool
     protected Vector2 startPos;
     public static bool drawFilled = true;
 
-    public override void Stroke(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
+    public override void Update(Image canvas, Vector2 mousePos)
     {
-        base.Stroke(canvas, mousePos, lastMousePos);
+        base.Update(canvas, mousePos);
         DrawShape(canvas, mousePos, lastMousePos);
     }
 

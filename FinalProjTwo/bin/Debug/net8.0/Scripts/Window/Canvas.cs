@@ -20,7 +20,6 @@ public class Canvas : IDrawable
     private ProgramManager program;
 
     public static Vector2 relativeMousePos;
-    public static Vector2 relativeLastMousePos;
 
     public Canvas(ProgramManager programInstance)
     {
@@ -29,16 +28,12 @@ public class Canvas : IDrawable
         Raylib.ImageDrawRectangle(ref layers[0].canvasImg, CanvasOffset, CanvasOffset, CanvasWidth, CanvasHeight, Color.White);
     }
 
-    private static void UpdateRelativeMousePos(Vector2 mousePos, Vector2 lastMousePos)
-    {
-        relativeMousePos = mousePos += Vector2.One * CanvasOffset;
-        relativeLastMousePos = lastMousePos += Vector2.One * CanvasOffset;
-    }
 
-    public void Update(Vector2 mousePos, Vector2 lastMousePos, DrawTool tool)
+    public void Update(Vector2 mousePos, ITool tool)
     {
-        UpdateRelativeMousePos(mousePos, lastMousePos);
+        relativeMousePos = mousePos + Vector2.One * Canvas.CanvasOffset;
         layers[currentLayer].Logic(mousePos, tool);
+        DrawTool.UpdateLastMousePos(relativeMousePos);
     }
 
     public void SaveProject(string fileName, string directory)
@@ -121,12 +116,12 @@ public class Layer
         }
     }
 
-    public void Logic(Vector2 mousePos, DrawTool tool)
+    public void Logic(Vector2 mousePos, ITool tool)
     {
         if (IsCursorOnCanvas(mousePos))
         {
             PreStrokeSaveCanvas(canvasImg);
-            tool.Stroke(canvasImg, Canvas.relativeMousePos, Canvas.relativeLastMousePos);
+            tool.Update(canvasImg, Canvas.relativeMousePos);
         }
 
         canvasImg = UndoStroke(canvasImg);
