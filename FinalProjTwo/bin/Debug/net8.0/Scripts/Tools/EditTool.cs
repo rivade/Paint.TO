@@ -2,9 +2,11 @@ namespace DrawingProgram;
 
 public abstract class EditTool : ITool
 {
-    public virtual void Update(Image c, Vector2 d)
+    protected Vector2 startPos;
+    public virtual void Update(Image canvas, Vector2 mousePos)
     {
-
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+            startPos = mousePos;
     }
 }
 
@@ -14,7 +16,6 @@ public sealed class RectangleSelect : EditTool
     private Rectangle sourceRec = new(0, 0, 0, 0);
     private Image selection;
     public Texture2D selectionPreview;
-    private Vector2 startPos;
     private bool hasMadeSelection;
     private bool isResizing;
     private bool isMoving;
@@ -39,7 +40,7 @@ public sealed class RectangleSelect : EditTool
 
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
         {
-            if (selectionRec.Width < 5 && selectionRec.Height < 5) 
+            if (selectionRec.Width < 5 && selectionRec.Height < 5)
             {
                 selectionPreview = new();
                 return;
@@ -48,10 +49,10 @@ public sealed class RectangleSelect : EditTool
 
             corners =
             [
-                new TopLeftSelectionCorner(new Vector2(selectionRec.X, selectionRec.Y)),
-                new TopRightSelectionCorner(new Vector2(selectionRec.X + selectionRec.Width, selectionRec.Y)),
-                new BottomLeftSelectionCorner(new Vector2(selectionRec.X, selectionRec.Y + selectionRec.Height)),
-                new BottomRightSelectionCorner(new Vector2(selectionRec.X + selectionRec.Width, selectionRec.Y + selectionRec.Height)),
+                new SelectionCorner(new Vector2(selectionRec.X, selectionRec.Y)) {ThisCornerType = CornerType.TopLeft},
+                new SelectionCorner(new Vector2(selectionRec.X + selectionRec.Width, selectionRec.Y)) {ThisCornerType = CornerType.TopRight},
+                new SelectionCorner(new Vector2(selectionRec.X, selectionRec.Y + selectionRec.Height)) {ThisCornerType = CornerType.BottomLeft},
+                new SelectionCorner(new Vector2(selectionRec.X + selectionRec.Width, selectionRec.Y + selectionRec.Height)) {ThisCornerType = CornerType.BottomRight},
             ];
 
             Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
@@ -74,10 +75,10 @@ public sealed class RectangleSelect : EditTool
         {
             if (isResizing)
             {
-                Image temp = Raylib.ImageCopy(selection);
-                Raylib.ImageResize(ref temp, (int)selectionRec.Width, (int)selectionRec.Height);
+                Image previewImg = Raylib.ImageCopy(selection);
+                Raylib.ImageResize(ref previewImg, (int)selectionRec.Width, (int)selectionRec.Height);
                 Raylib.UnloadTexture(selectionPreview);
-                selectionPreview = Raylib.LoadTextureFromImage(temp);
+                selectionPreview = Raylib.LoadTextureFromImage(previewImg);
             }
 
             if (Raylib.IsMouseButtonPressed(MouseButton.Left))
@@ -133,7 +134,6 @@ public sealed class RectangleSelect : EditTool
         selectionRec = new Rectangle(x, y, width, height);
         sourceRec = new Rectangle(x, y, width, height);
     }
-    
 
     private void ResetCorners()
     {
@@ -155,14 +155,15 @@ public sealed class RectangleSelect : EditTool
             Raylib.ImageResize(ref selection, (int)selectionRec.Width, (int)selectionRec.Height);
             isResizing = false;
         }
-
     }
 
     private void ClearSelectionOnCanvas(Image canvas) => Raylib.ImageDrawRectangleRec(ref canvas, new(sourceRec.X + Canvas.CanvasOffset, sourceRec.Y + Canvas.CanvasOffset, sourceRec.Width, sourceRec.Height), Color.Blank);
 }
 
-public abstract class SelectionCorner
+public class SelectionCorner
 {
+    public CornerType ThisCornerType { get; set; }
+
     public Circle cornerCircle;
     public const int circleRadius = 15;
     protected bool isMoving;
@@ -172,81 +173,51 @@ public abstract class SelectionCorner
         cornerCircle = new(cornerPos, cornerPos + Vector2.UnitX * circleRadius);
     }
 
-    public virtual void Update(ref Rectangle selectionWindow, Action updateSourceRec, Vector2 mousePos)
+    public void Update(ref Rectangle selectionWindow, Action updateSourceRec, Vector2 mousePos)
     {
         if (Raylib.CheckCollisionPointCircle(mousePos, cornerCircle.Middle, cornerCircle.Radius) && Raylib.IsMouseButtonPressed(MouseButton.Left))
             isMoving = true;
         if (Raylib.IsMouseButtonReleased(MouseButton.Left))
             isMoving = false;
+
+        if (!isMoving) return;
+
+        Vector2 mouseDelta = Raylib.GetMouseDelta();
+
+        switch (ThisCornerType)
+        {
+            case CornerType.TopLeft:
+                selectionWindow.X += mouseDelta.X;
+                selectionWindow.Y += mouseDelta.Y;
+                selectionWindow.Width -= mouseDelta.X;
+                selectionWindow.Height -= mouseDelta.Y;
+                break;
+            case CornerType.TopRight:
+                selectionWindow.Y += mouseDelta.Y;
+                selectionWindow.Width += mouseDelta.X;
+                selectionWindow.Height -= mouseDelta.Y;
+                break;
+            case CornerType.BottomLeft:
+                selectionWindow.X += mouseDelta.X;
+                selectionWindow.Width -= mouseDelta.X;
+                selectionWindow.Height += mouseDelta.Y;
+                break;
+            case CornerType.BottomRight:
+                selectionWindow.Width += mouseDelta.X;
+                selectionWindow.Height += mouseDelta.Y;
+                break;
+        }
+
+        updateSourceRec.Invoke();
     }
 
     public void Draw() => Raylib.DrawCircle((int)cornerCircle.Middle.X, (int)cornerCircle.Middle.Y, cornerCircle.Radius, Color.Red);
 }
 
-public sealed class TopLeftSelectionCorner : SelectionCorner
+public enum CornerType
 {
-    public TopLeftSelectionCorner(Vector2 cornerPos) : base(cornerPos) { }
-
-    public override void Update(ref Rectangle selectionWindow, Action updateSourceRec, Vector2 mousePos)
-    {
-        base.Update(ref selectionWindow, updateSourceRec, mousePos);
-        if (!isMoving) return;
-        Vector2 mouseDelta = Raylib.GetMouseDelta();
-        float newX = selectionWindow.X + mouseDelta.X;
-        float newY = selectionWindow.Y + mouseDelta.Y;
-        float newWidth = selectionWindow.Width - mouseDelta.X;
-        float newHeight = selectionWindow.Height - mouseDelta.Y;
-        selectionWindow = new Rectangle(newX, newY, newWidth, newHeight);
-        updateSourceRec.Invoke();
-    }
-}
-
-public sealed class TopRightSelectionCorner : SelectionCorner
-{
-    public TopRightSelectionCorner(Vector2 cornerPos) : base(cornerPos) { }
-
-    public override void Update(ref Rectangle selectionWindow, Action updateSourceRec, Vector2 mousePos)
-    {
-        base.Update(ref selectionWindow, updateSourceRec, mousePos);
-        if (!isMoving) return;
-        Vector2 mouseDelta = Raylib.GetMouseDelta();
-        float newY = selectionWindow.Y + mouseDelta.Y;
-        float newWidth = selectionWindow.Width + mouseDelta.X;
-        float newHeight = selectionWindow.Height - mouseDelta.Y;
-        selectionWindow = new Rectangle(selectionWindow.X, newY, newWidth, newHeight);
-        updateSourceRec.Invoke();
-    }
-}
-
-public sealed class BottomLeftSelectionCorner : SelectionCorner
-{
-    public BottomLeftSelectionCorner(Vector2 cornerPos) : base(cornerPos) { }
-
-    public override void Update(ref Rectangle selectionWindow, Action updateSourceRec, Vector2 mousePos)
-    {
-        base.Update(ref selectionWindow, updateSourceRec, mousePos);
-        if (!isMoving) return;
-        Vector2 mouseDelta = Raylib.GetMouseDelta();
-        float newX = selectionWindow.X + mouseDelta.X;
-        float newWidth = selectionWindow.Width - mouseDelta.X;
-        float newHeight = selectionWindow.Height + mouseDelta.Y;
-        selectionWindow = new Rectangle(newX, selectionWindow.Y, newWidth, newHeight);
-        updateSourceRec.Invoke();
-    }
-}
-
-public sealed class BottomRightSelectionCorner : SelectionCorner
-{
-    public BottomRightSelectionCorner(Vector2 cornerPos) : base(cornerPos) { }
-
-    public override void Update(ref Rectangle selectionWindow, Action updateSourceRec, Vector2 mousePos)
-    {
-        base.Update(ref selectionWindow, updateSourceRec, mousePos);
-        if (!isMoving) return;
-        Vector2 mouseDelta = Raylib.GetMouseDelta();
-        float newWidth = selectionWindow.Width + mouseDelta.X;
-        float newHeight = selectionWindow.Height + mouseDelta.Y;
-        selectionWindow = new Rectangle(selectionWindow.X, selectionWindow.Y, newWidth, newHeight);
-        updateSourceRec.Invoke();
-    }
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight
 }
