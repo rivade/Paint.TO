@@ -7,8 +7,11 @@ public abstract class ShapeTool : DrawTool
 
     public override void Update(Image canvas, Vector2 mousePos)
     {
-        base.Update(canvas, mousePos);
-        DrawShape(canvas, mousePos, lastMousePos);
+        lock (lockObj)
+        {
+            base.Update(canvas, mousePos);
+            DrawShape(canvas, mousePos, lastMousePos);
+        }
     }
 
     protected virtual void DrawShape(Image canvas, Vector2 mousePos, Vector2 lastMousePos)
