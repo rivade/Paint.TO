@@ -14,11 +14,7 @@ public abstract class DrawTool : ITool
     {
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
-            if (!PaletteButton.paletteColors.Contains(drawingColor))
-            {
-                PaletteButton.paletteColors.Enqueue(drawingColor);
-                PaletteButton.LimitQueueSize();
-            }
+            PaletteButton.UpdatePalette();
         }
     }
 
@@ -72,13 +68,11 @@ public sealed class Pencil : DrawTool
     public override void Update(Image canvas, Vector2 mousePos)
     {
         base.Update(canvas, mousePos);
-        if (Raylib.IsMouseButtonDown(MouseButton.Left))
+
+        lock (lockObj)
         {
-            lock (lockObj)
-                Raylib.ImageDrawLine(ref canvas,
-                (int)lastMousePos.X, (int)lastMousePos.Y,
-                (int)mousePos.X, (int)mousePos.Y,
-                drawingColor);
+            if (Raylib.IsMouseButtonDown(MouseButton.Left))
+                Raylib.ImageDrawLine(ref canvas, (int)lastMousePos.X, (int)lastMousePos.Y, (int)mousePos.X, (int)mousePos.Y, drawingColor);
         }
     }
 }
@@ -88,9 +82,10 @@ public sealed class PaintBrush : DrawTool
     public override void Update(Image canvas, Vector2 mousePos)
     {
         base.Update(canvas, mousePos);
-        if (Raylib.IsMouseButtonDown(MouseButton.Left))
+
+        lock (lockObj)
         {
-            lock (lockObj)
+            if (Raylib.IsMouseButtonDown(MouseButton.Left))
                 DrawThickLine(canvas, lastMousePos, mousePos, drawingColor, true);
         }
     }
@@ -100,9 +95,9 @@ public sealed class Eraser : DrawTool
 {
     public override void Update(Image canvas, Vector2 mousePos)
     {
-        if (Raylib.IsMouseButtonDown(MouseButton.Left))
+        lock (lockObj)
         {
-            lock (lockObj)
+            if (Raylib.IsMouseButtonDown(MouseButton.Left))
                 DrawThickLine(canvas, lastMousePos, mousePos, new Color(0, 0, 0, 0), true);
         }
     }
@@ -115,6 +110,7 @@ public sealed class Checker : DrawTool
     public override void Update(Image canvas, Vector2 mousePos)
     {
         base.Update(canvas, mousePos);
+
         lock (lockObj)
         {
             if (Raylib.IsMouseButtonDown(MouseButton.Left))
@@ -159,6 +155,7 @@ public sealed class Bucket : DrawTool
     public override async void Update(Image canvas, Vector2 mousePos)
     {
         base.Update(canvas, mousePos);
+
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             Color targetColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);

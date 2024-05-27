@@ -380,9 +380,18 @@ public sealed class PaletteButton : Button
         window = windowInstance;
     }
 
-    public static void LimitQueueSize()
+    private static void LimitQueueSize()
     {
         if (paletteColors.Count > 4) paletteColors.Dequeue();
+    }
+
+    public static void UpdatePalette()
+    {
+        if (!paletteColors.Contains(DrawTool.drawingColor))
+        {
+            paletteColors.Enqueue(DrawTool.drawingColor);
+            LimitQueueSize();
+        }
     }
 
     public override void OnClick()

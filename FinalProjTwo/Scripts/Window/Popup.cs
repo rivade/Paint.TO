@@ -37,7 +37,7 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v2.104"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Paint.TO v2.105"], (int)windowRect.Y + 30, 80, 0, Color.Black);
         TextHandling.DrawScreenCenteredText(["Patch notes:", "-(2.1)Rectangle selection changes are now visible in real time", "-Small code tweaks"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
