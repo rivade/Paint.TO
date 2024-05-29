@@ -19,8 +19,6 @@ public class Canvas : IDrawable
 
     private ProgramManager program;
 
-    public static Vector2 relativeMousePos;
-
     public Canvas(ProgramManager programInstance)
     {
         program = programInstance;
@@ -29,12 +27,7 @@ public class Canvas : IDrawable
     }
 
 
-    public void Update(Vector2 mousePos, ITool tool)
-    {
-        relativeMousePos = mousePos + Vector2.One * Canvas.CanvasOffset;
-        layers[currentLayer].Logic(mousePos, tool);
-        DrawTool.UpdateLastMousePos(relativeMousePos);
-    }
+    public void Update(Vector2 mousePos, ITool tool) => layers[currentLayer].Logic(mousePos, tool);
 
     public void SaveProject(string fileName, string directory)
     {
@@ -121,7 +114,7 @@ public class Layer
         if (IsCursorOnCanvas(mousePos))
         {
             PreStrokeSaveCanvas(canvasImg);
-            tool.Update(canvasImg, Canvas.relativeMousePos);
+            tool.Update(canvasImg, mousePos + Vector2.One * Canvas.CanvasOffset);
         }
 
         canvasImg = UndoStroke(canvasImg);

@@ -56,6 +56,8 @@ public class ProgramManager
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
             popupWindow = null;
+
+        DrawTool.UpdateLastMousePos(mousePos);
     }
 
     public void Run()

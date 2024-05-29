@@ -8,7 +8,7 @@ public abstract class DrawTool : ITool
     protected static readonly object lockObj = new();
 
     protected static Vector2 lastMousePos;
-    public static void UpdateLastMousePos(Vector2 mousePos) => lastMousePos = mousePos;
+    public static void UpdateLastMousePos(Vector2 mousePos) => lastMousePos = mousePos + Vector2.One * Canvas.CanvasOffset;
 
     public virtual void Update(Image canvas, Vector2 mousePos)
     {
