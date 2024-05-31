@@ -2,8 +2,8 @@ namespace DrawingProgram;
 
 public class ProgramManager
 {
-    public const int ScreenWidth = 1920;
-    public const int ScreenHeight = 1080;
+    public static readonly int ScreenWidth = Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor());
+    public static readonly int ScreenHeight = Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor());
 
     private Canvas canvas;
     private ToolFolder tools = new ToolFolder();
@@ -21,7 +21,6 @@ public class ProgramManager
         Raylib.ToggleFullscreen();
         Raylib.SetExitKey(KeyboardKey.Null);
         canvas = new(this);
-
         interactables = ButtonCreator.GenerateButtons(this, tools, canvas);
         drawables = [canvas, new ShapeAndSelectionToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());

@@ -4,7 +4,7 @@ using static System.Activator;
 public static class ButtonCreator
 {
     private const int ButtonPadding = 10;
-    private const int NonToolButtonX = Canvas.CanvasWidth + 60;
+    private static readonly int NonToolButtonX = Canvas.CanvasWidth + 60;
 
     private static readonly string[] toolNames =
     [ "Pencil", "Brush", "Eraser", "Fill color",

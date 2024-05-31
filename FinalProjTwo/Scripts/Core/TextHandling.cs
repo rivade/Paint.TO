@@ -9,7 +9,7 @@ public static class TextHandling
             int textWidth = Raylib.MeasureText(texts[i], fontSize);
 
             int xOffset = (ProgramManager.ScreenWidth - textWidth) / 2;
-            Raylib.DrawText(texts[i], xOffset, startY + i*lineHeight, fontSize, textColor);
+            Raylib.DrawText(texts[i], xOffset, startY + i * lineHeight, fontSize, textColor);
         }
     }
 
@@ -22,7 +22,7 @@ public static class TextHandling
 
             int xOffset = (textBoxWidth - textWidth) / 2;
             xOffset += fromX;
-            Raylib.DrawText(texts[i], xOffset, startY + i*lineHeight, fontSize, textColor);
+            Raylib.DrawText(texts[i], xOffset, startY + i * lineHeight, fontSize, textColor);
         }
     }
 }

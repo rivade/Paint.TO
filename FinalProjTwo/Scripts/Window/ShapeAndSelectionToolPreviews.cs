@@ -4,7 +4,7 @@ public class ShapeAndSelectionToolPreviews : IDrawable
 {
     private ProgramManager program;
     private RectangleSelect selectionTool;
-    
+
     private Rectangle previewRect;
     private Circle previewCircle;
     private Line previewLine;
@@ -48,7 +48,7 @@ public class ShapeAndSelectionToolPreviews : IDrawable
             case LineTool:
                 DrawTool.DrawThickLine(new Image(), previewLine.StartPos, previewLine.EndPos, DrawTool.drawingColor, false);
                 break;
-            
+
             case RectangleSelect:
                 Raylib.DrawTexture(selectionTool.selectionPreview, (int)selectionTool.selectionRec.X, (int)selectionTool.selectionRec.Y, Color.White);
                 Raylib.DrawRectangleRec(selectionTool.selectionRec, RectangleSelect.selectionColor);

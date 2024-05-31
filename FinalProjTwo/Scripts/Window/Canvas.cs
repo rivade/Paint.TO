@@ -2,8 +2,8 @@ namespace DrawingProgram;
 
 public class Canvas : IDrawable
 {
-    public const int CanvasWidth = ProgramManager.ScreenWidth - 200;
-    public const int CanvasHeight = ProgramManager.ScreenHeight - 100;
+    public static readonly int CanvasWidth = ProgramManager.ScreenWidth - 200;
+    public static readonly int CanvasHeight = ProgramManager.ScreenHeight - 100;
 
     // Makes it so that the top left corner of the canvas on screen isn't (0,0)
     // That caused issues when for example drawing a circle there as it would reach out of bounds (negative x and y coordinates)
