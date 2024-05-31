@@ -104,10 +104,7 @@ public sealed class RectangleSelect : EditTool
 
             if (!Raylib.CheckCollisionPointRec(mousePos, selectionRec) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)) && Raylib.IsMouseButtonPressed(MouseButton.Left))
             {
-                Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
-                Raylib.ImageDraw(ref canvas, selection, new(0, 0, sourceRec.Width, sourceRec.Height), relativeSelectionRec, Color.White);
-                selectionPreview = new();
-                hasMadeSelection = false;
+                PlaceSelection(canvas);
                 startPos = mousePos;
             }
 
@@ -133,6 +130,14 @@ public sealed class RectangleSelect : EditTool
         int height = Math.Abs((int)mousePos.Y - (int)startPos.Y);
         selectionRec = new Rectangle(x, y, width, height);
         sourceRec = new Rectangle(x, y, width, height);
+    }
+
+    private void PlaceSelection(Image canvas)
+    {
+        Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
+        Raylib.ImageDraw(ref canvas, selection, new(0, 0, sourceRec.Width, sourceRec.Height), relativeSelectionRec, Color.White);
+        selectionPreview = new();
+        hasMadeSelection = false;
     }
 
     private void ResetCorners()
