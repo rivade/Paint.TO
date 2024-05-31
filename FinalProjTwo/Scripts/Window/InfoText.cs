@@ -1,12 +1,12 @@
 namespace DrawingProgram;
 
-public class InfoWindow : IDrawable
+public class InfoText : IDrawable
 {
     private Rectangle textbox;
     private string text;
     public const int FontSize = 20;
 
-    public InfoWindow(string infoText, int startX, int startY)
+    public InfoText(string infoText, int startX, int startY)
     {
         text = infoText;
         int boxWidth = Raylib.MeasureText(infoText, FontSize) + 10;
