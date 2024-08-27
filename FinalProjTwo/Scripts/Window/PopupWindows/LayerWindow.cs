@@ -7,15 +7,22 @@ public sealed class LayerWindow : PopupWindow
 
     public LayerWindow(ProgramManager programInstance, Canvas canvasInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
+        int buttonSpacing = 10;
+        int numberOfButtons = 7;
+        int totalWidth = numberOfButtons * Button.ButtonSize + (numberOfButtons - 1) * buttonSpacing;
+        int startX = (ProgramManager.ScreenWidth - totalWidth) / 2;
+
         buttons =
         [
-            new AddLayerButton(programInstance, new(670, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
-            new MoveLayerButton(programInstance, new(770, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Down },
-            new LayerVisibilityButton(programInstance, new(870, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
-            new MergeLayersButton(programInstance, new(970, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
-            new MoveLayerButton(programInstance, new(1070, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Up },
-            new RemoveLayerButton(programInstance, new(1170, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance)
+            new AddLayerButton(programInstance, new(startX, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new MoveLayerButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 1, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Down },
+            new LayerVisibilityButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 2, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new MergeLayersButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 3, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new ChangeBackgroundButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 4, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new MoveLayerButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 5, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Up },
+            new RemoveLayerButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 6, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance)
         ];
+
     }
 
     public override void Logic(Canvas canvas, Vector2 mousePos)

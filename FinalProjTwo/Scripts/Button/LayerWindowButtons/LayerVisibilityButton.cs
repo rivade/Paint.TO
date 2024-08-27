@@ -3,7 +3,6 @@ namespace DrawingProgram;
 public sealed class LayerVisibilityButton : LayerWindowButton
 {
     private List<Texture2D> icons = new();
-    public int currentIcon = 0;
 
     public LayerVisibilityButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
     {
@@ -15,14 +14,8 @@ public sealed class LayerVisibilityButton : LayerWindowButton
     public override void Draw()
     {
         Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.LightGray, Color.White, Color.White, false));
-        Raylib.DrawTexture(icons[currentIcon], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        Raylib.DrawTexture(icons[canvas.layers[canvas.currentLayer].isVisible ? 0 : 1], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
-    }
-
-    public override void OnHover(Vector2 mousePos)
-    {
-        currentIcon = canvas.layers[canvas.currentLayer].isVisible ? 0 : 1;
-        base.OnHover(mousePos);
     }
 
     public override void OnClick()

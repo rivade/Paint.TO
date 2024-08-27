@@ -73,6 +73,8 @@ public sealed class RectangleSelect : EditTool
 
         else
         {
+            if (Raylib.IsKeyPressed(KeyboardKey.D)) PlaceSelection(canvas);
+
             if (isResizing)
             {
                 Image previewImg = Raylib.ImageCopy(selection);
@@ -105,6 +107,8 @@ public sealed class RectangleSelect : EditTool
             if (!Raylib.CheckCollisionPointRec(mousePos, selectionRec) && corners.All(c => !Raylib.CheckCollisionPointCircle(mousePos, c.cornerCircle.Middle, c.cornerCircle.Radius)) && Raylib.IsMouseButtonPressed(MouseButton.Left))
             {
                 PlaceSelection(canvas);
+                selectionPreview = new();
+                hasMadeSelection = false;
                 startPos = mousePos;
             }
 
@@ -136,8 +140,7 @@ public sealed class RectangleSelect : EditTool
     {
         Rectangle relativeSelectionRec = new(new Vector2(selectionRec.X, selectionRec.Y) + Vector2.One * Canvas.CanvasOffset, new(selectionRec.Width, selectionRec.Height));
         Raylib.ImageDraw(ref canvas, selection, new(0, 0, sourceRec.Width, sourceRec.Height), relativeSelectionRec, Color.White);
-        selectionPreview = new();
-        hasMadeSelection = false;
+        
     }
 
     private void ResetCorners()

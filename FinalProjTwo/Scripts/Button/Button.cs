@@ -27,7 +27,7 @@ public abstract class Button : IMouseInteractable, IDrawable
         }
     }
 
-    public virtual void OnClick() { }
+    public abstract void OnClick();
 
     public virtual void Draw()
     {

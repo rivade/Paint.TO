@@ -8,14 +8,15 @@ public class Canvas : IDrawable
     // Makes it so that the top left corner of the canvas on screen isn't (0,0)
     // That caused issues when for example drawing a circle there as it would reach out of bounds (negative x and y coordinates)
     public const int CanvasOffset = 500;
-
     public const int CanvasImgSize = 2500;
 
     public List<Layer> layers = new();
     public int currentLayer = 0;
 
-    public List<Texture2D> layerTextures = new();
     private Texture2D transparencyBG = Raylib.LoadTexture("Textures/transparent.png");
+
+    private Image backgroundImg;
+    private Texture2D backgroundTxt;
 
     private ProgramManager program;
 
@@ -23,7 +24,8 @@ public class Canvas : IDrawable
     {
         program = programInstance;
         layers.Add(new(program));
-        Raylib.ImageDrawRectangle(ref layers[0].canvasImg, CanvasOffset, CanvasOffset, CanvasWidth, CanvasHeight, Color.White);
+        backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White);
+        backgroundTxt = Raylib.LoadTextureFromImage(backgroundImg);
     }
 
 
@@ -32,7 +34,9 @@ public class Canvas : IDrawable
     public void SaveProject(string fileName, string directory)
     {
         string path = directory + @"\" + fileName;
-        Raylib.ExportImage(CropCanvas(FuseLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), path);
+        Image temp = Raylib.ImageCopy(backgroundImg);
+        Raylib.ImageDraw(ref temp, CropCanvas(FuseLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), new(0, 0, CanvasWidth, CanvasHeight), new(0, 0, CanvasWidth, CanvasHeight), Color.White);
+        Raylib.ExportImage(temp, path);
         program.popupWindow = null;
     }
 
@@ -74,9 +78,19 @@ public class Canvas : IDrawable
         layers = [new(program) { canvasImg = FuseLayers(layers) }];
     }
 
+    public void ChangeBackgroundColor(Color newColor)
+    {
+        Raylib.UnloadImage(backgroundImg);
+        Raylib.UnloadTexture(backgroundTxt);
+        backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, newColor);
+        backgroundTxt = Raylib.LoadTextureFromImage(backgroundImg);
+
+    }
+
     public void Draw()
     {
         Raylib.DrawTexture(transparencyBG, 0, 0, Color.White);
+        Raylib.DrawTexture(backgroundTxt, 0, 0, Color.White);
         layers.ForEach(l => l.Draw());
     }
 
