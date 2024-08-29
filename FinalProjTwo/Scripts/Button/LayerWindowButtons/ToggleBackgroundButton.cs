@@ -3,7 +3,6 @@ using DrawingProgram;
 public sealed class ToggleBackgroundButton : LayerWindowButton
 {
     private List<Texture2D> icons = new();
-    private bool isBackgroundEnabled = true;
 
     public ToggleBackgroundButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
     {
@@ -14,17 +13,13 @@ public sealed class ToggleBackgroundButton : LayerWindowButton
 
     public override void OnClick()
     {
-        isBackgroundEnabled = !isBackgroundEnabled;
-
-        if (isBackgroundEnabled) canvas.backgroundColor = Color.White;
-        else canvas.backgroundColor = Color.Blank;
-        canvas.UpdateBackgroundColor();
+        canvas.isBackgroundEnabled = !canvas.isBackgroundEnabled;
     }
 
     public override void Draw()
     {
         Raylib.DrawRectangleRec(buttonRect, GetButtonColor(Color.LightGray, Color.White, Color.White, false));
-        Raylib.DrawTexture(icons[isBackgroundEnabled ? 0 : 1], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
+        Raylib.DrawTexture(icons[canvas.isBackgroundEnabled ? 0 : 1], (int)buttonRect.X, (int)buttonRect.Y, Color.White);
         base.Draw();
     }
 }

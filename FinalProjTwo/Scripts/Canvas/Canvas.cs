@@ -17,6 +17,7 @@ public class Canvas : IDrawable
 
     private Image backgroundImg;
     private Texture2D backgroundTxt;
+    public bool isBackgroundEnabled;
     public Color backgroundColor;
 
     private ProgramManager program;
@@ -28,6 +29,7 @@ public class Canvas : IDrawable
         backgroundColor = Color.White;
         backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, backgroundColor);
         backgroundTxt = Raylib.LoadTextureFromImage(backgroundImg);
+        isBackgroundEnabled = true;
     }
 
 
@@ -92,7 +94,7 @@ public class Canvas : IDrawable
     public void Draw()
     {
         Raylib.DrawTexture(transparencyBG, 0, 0, Color.White);
-        Raylib.DrawTexture(backgroundTxt, 0, 0, Color.White);
+        if (isBackgroundEnabled) Raylib.DrawTexture(backgroundTxt, 0, 0, Color.White);
         layers.ForEach(l => l.Draw());
     }
 
