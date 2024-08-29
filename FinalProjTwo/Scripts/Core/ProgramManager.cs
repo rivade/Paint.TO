@@ -1,4 +1,5 @@
 namespace DrawingProgram;
+using System.Threading.Tasks;
 
 public class ProgramManager
 {
@@ -28,6 +29,14 @@ public class ProgramManager
 
         popupWindow = new StartPopup(this, 800, 300, []);
         currentTool = tools.toolList[0];
+
+        CheckUpdate();
+    }
+
+    private async void CheckUpdate()
+    {
+        if(!await VersionControl.IsLatestVersion(this))
+        popupWindow = new UpdatePopup(this, 900, 300, ["A new version is avalible!"]);
     }
 
     private void DrawGraphics()

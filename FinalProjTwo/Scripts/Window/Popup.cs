@@ -1,6 +1,6 @@
 namespace DrawingProgram;
 
-public abstract class PopupWindow : IDrawable
+public class PopupWindow : IDrawable
 {
     protected Rectangle windowRect;
     public string[] messages;

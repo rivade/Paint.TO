@@ -4,7 +4,7 @@ public sealed class ClosePopupButton : Button
 {
     private const int buttonWidth = 50;
     private const int buttonHeight = 30;
-    private Texture2D icon = Raylib.LoadTexture("Textures/Icons/x2.png");
+    private static Texture2D icon = Raylib.LoadTexture("Textures/Icons/x2.png");
 
     public ClosePopupButton(ProgramManager programInstance, Rectangle popupRect) : base(programInstance, new())
     {
