@@ -6,7 +6,7 @@ public sealed class SettingsButton : Button
 
     public SettingsButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
-        settingsWindow = new(programInstance, 1300, 400, ["Settings"]);
+        settingsWindow = new(programInstance, 1300, 600, ["Settings"]);
         infoWindow = new("Settings", (int)buttonRect.X - Raylib.MeasureText("Settings", InfoText.FontSize) - 20, (int)buttonRect.Y);
     }
 

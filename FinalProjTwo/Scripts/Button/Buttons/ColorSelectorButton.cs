@@ -4,9 +4,10 @@ public sealed class ColorSelectorButton : Button
 {
     private ColorSelector colorSelectorWindow;
 
-    public ColorSelectorButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
+    public unsafe ColorSelectorButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
-        colorSelectorWindow = new(programInstance, 1150, 750, ["Select a color"]);
+        fixed(Color* colorPtr = &DrawTool.drawingColor)
+        colorSelectorWindow = new(programInstance, 1150, 750, ["Select a color"], colorPtr);
     }
 
     public override void OnClick()

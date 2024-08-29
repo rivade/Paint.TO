@@ -18,7 +18,7 @@ public sealed class LayerWindow : PopupWindow
             new MoveLayerButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 1, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Down },
             new LayerVisibilityButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 2, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
             new MergeLayersButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 3, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
-            new ChangeBackgroundButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 4, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
+            new ToggleBackgroundButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 4, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance),
             new MoveLayerButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 5, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance) { direction = MoveLayerButton.Direction.Up },
             new RemoveLayerButton(programInstance, new(startX + (Button.ButtonSize + buttonSpacing) * 6, 650, Button.ButtonSize, Button.ButtonSize), canvasInstance)
         ];

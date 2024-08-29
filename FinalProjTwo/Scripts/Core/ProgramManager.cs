@@ -5,7 +5,7 @@ public class ProgramManager
     public static readonly int ScreenWidth = Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor());
     public static readonly int ScreenHeight = Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor());
 
-    private Canvas canvas;
+    public Canvas canvas;
     private ToolFolder tools = new ToolFolder();
 
     private List<IMouseInteractable> interactables;

@@ -1,11 +1,11 @@
 using DrawingProgram;
 
-public sealed class ChangeBackgroundButton : LayerWindowButton
+public sealed class ToggleBackgroundButton : LayerWindowButton
 {
     private List<Texture2D> icons = new();
     private bool isBackgroundEnabled = true;
 
-    public ChangeBackgroundButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
+    public ToggleBackgroundButton(ProgramManager programInstance, Rectangle buttonRect, Canvas canvasInstance) : base(programInstance, buttonRect, canvasInstance)
     {
         icons.Add(Raylib.LoadTexture("Textures/Icons/yesbackground.png"));
         icons.Add(Raylib.LoadTexture("Textures/Icons/nobackground.png"));
@@ -16,8 +16,9 @@ public sealed class ChangeBackgroundButton : LayerWindowButton
     {
         isBackgroundEnabled = !isBackgroundEnabled;
 
-        if (isBackgroundEnabled) canvas.ChangeBackgroundColor(Color.White);
-        else canvas.ChangeBackgroundColor(Color.Blank);
+        if (isBackgroundEnabled) canvas.backgroundColor = Color.White;
+        else canvas.backgroundColor = Color.Blank;
+        canvas.UpdateBackgroundColor();
     }
 
     public override void Draw()

@@ -7,8 +7,8 @@ public sealed class StartPopup : PopupWindow
     public override void Draw()
     {
         base.Draw();
-        TextHandling.DrawScreenCenteredText(["Paint.TO v2.216"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Patch notes:", "-Changed canvas background system", "Small tweaks"],
+        TextHandling.DrawScreenCenteredText(["Paint.TO v2.316"], (int)windowRect.Y + 30, 80, 0, Color.Black);
+        TextHandling.DrawScreenCenteredText(["Patch notes:", "-Changed canvas background system", "Added background color changer"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

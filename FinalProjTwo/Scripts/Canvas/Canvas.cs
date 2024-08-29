@@ -17,6 +17,7 @@ public class Canvas : IDrawable
 
     private Image backgroundImg;
     private Texture2D backgroundTxt;
+    public Color backgroundColor;
 
     private ProgramManager program;
 
@@ -24,7 +25,8 @@ public class Canvas : IDrawable
     {
         program = programInstance;
         layers.Add(new(program));
-        backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.White);
+        backgroundColor = Color.White;
+        backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, backgroundColor);
         backgroundTxt = Raylib.LoadTextureFromImage(backgroundImg);
     }
 
@@ -78,11 +80,11 @@ public class Canvas : IDrawable
         layers = [new(program) { canvasImg = FuseLayers(layers) }];
     }
 
-    public void ChangeBackgroundColor(Color newColor)
+    public void UpdateBackgroundColor()
     {
         Raylib.UnloadImage(backgroundImg);
         Raylib.UnloadTexture(backgroundTxt);
-        backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, newColor);
+        backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, backgroundColor);
         backgroundTxt = Raylib.LoadTextureFromImage(backgroundImg);
 
     }
