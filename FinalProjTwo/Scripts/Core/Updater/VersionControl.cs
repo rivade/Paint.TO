@@ -8,10 +8,9 @@ using System.IO.Compression;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v2.417";
-    private const string GitHubToken = "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";
+    public const string CurrentVersion = "v2.418";
     private static string latestVersion;
-    private static PopupWindow errorWindow = new(null, 600, 200, ["An error has occured!"]);
+    private static string GitHubToken = APIKey.GetAPIKey();
 
     public static async Task<bool> IsLatestVersion(ProgramManager program)
     {
@@ -21,8 +20,10 @@ public static class VersionControl
 
     public static async Task UpdateProgram(ProgramManager program)
     {
+        program.popupWindow = new(program, 400, 200, ["Updating..."]);
         await DownloadUpdate(program);
         ExtractUpdate(program);
+        Environment.Exit(0);
     }
 
     private static async Task<string> GetLatestReleaseTag(ProgramManager program)
@@ -50,7 +51,7 @@ public static class VersionControl
             }
             else
             {
-                program.popupWindow = errorWindow;
+                program.popupWindow = new(program, 700, 200, ["An error has occured!", "Couldnt get latest ver"]);
             }
             return null;
         }
@@ -63,7 +64,7 @@ public static class VersionControl
             string downloadUrl = await GetZipDownloadUrl(latestVersion, program);
             if (downloadUrl == null)
             {
-                program.popupWindow = errorWindow;
+                program.popupWindow = new(program, 700, 200, ["An error has occured!", "Couldnt get URL"]);
                 return;
             }
 
@@ -85,42 +86,34 @@ public static class VersionControl
                 }
                 else
                 {
-                    program.popupWindow = errorWindow;
+                    program.popupWindow = new(program, 700, 200, ["An error has occured!", "Couldnt download update"]);
                 }
             }
         }
         catch
         {
-            program.popupWindow = errorWindow;
+            program.popupWindow = new(program, 700, 200, ["An error has occured!"]);
         }
 
     }
 
     private static void ExtractUpdate(ProgramManager program)
     {
-        try
+        string executableFolder = AppContext.BaseDirectory;
+        string zipFilePath = Path.Combine(executableFolder, "updatedver.zip");
+        string extractPath = Path.Combine(executableFolder, "update");
+
+        if (File.Exists(zipFilePath))
         {
-            string executableFolder = AppContext.BaseDirectory;
-            string zipFilePath = Path.Combine(executableFolder, "updatedver.zip");
-            string extractPath = Path.Combine(executableFolder, "update");
+            Directory.CreateDirectory(extractPath);
 
-            if (File.Exists(zipFilePath))
-            {
-                Directory.CreateDirectory(extractPath);
+            ZipFile.ExtractToDirectory(zipFilePath, extractPath);
 
-                ZipFile.ExtractToDirectory(zipFilePath, extractPath);
-
-                File.Delete(zipFilePath);
-                Environment.Exit(0);
-            }
-            else
-            {
-                program.popupWindow = errorWindow;
-            }
+            File.Delete(zipFilePath);
         }
-        catch
+        else
         {
-            program.popupWindow = errorWindow;
+            program.popupWindow = new(program, 700, 200, ["An error has occured!", "Download failed"]);
         }
     }
 
@@ -151,7 +144,6 @@ public static class VersionControl
                                 string name = nameElement.GetString();
                                 string downloadUrl = downloadUrlElement.GetString();
 
-                                // Filter by file extension or name if needed
                                 if (name.EndsWith($"{latestVersion.ToUpper()}.zip", StringComparison.OrdinalIgnoreCase))
                                 {
                                     return downloadUrl;
@@ -163,7 +155,7 @@ public static class VersionControl
             }
             else
             {
-                program.popupWindow = errorWindow;
+                program.popupWindow = new(program, 700, 200, ["An error has occured!", "Failed to get URL"]);
             }
             return null;
         }
