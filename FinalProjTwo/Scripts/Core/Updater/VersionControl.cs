@@ -1,14 +1,10 @@
 using DrawingProgram;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO.Compression;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v2.418";
+    public const string CurrentVersion = "v2.5";
     private static string latestVersion;
     private static string GitHubToken = APIKey.GetAPIKey();
 
@@ -23,7 +19,7 @@ public static class VersionControl
         program.popupWindow = new(program, 400, 200, ["Updating..."]);
         await DownloadUpdate(program);
         ExtractUpdate(program);
-        Environment.Exit(0);
+        UpdateInstaller.Update();
     }
 
     private static async Task<string> GetLatestReleaseTag(ProgramManager program)
