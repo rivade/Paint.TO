@@ -8,7 +8,7 @@ public sealed class StartPopup : PopupWindow
     {
         base.Draw();
         TextHandling.DrawScreenCenteredText([$"Paint.TO {VersionControl.CurrentVersion}"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Patch notes:", "-Fixed auto-update system", "-Added background color changer (2.316)"],
+        TextHandling.DrawScreenCenteredText(["Patch notes:", "-GUI and Toolbutton color now fully customisable", "-Fixed auto-update system(2.5)"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

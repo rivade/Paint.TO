@@ -9,7 +9,7 @@ public class PopupWindow : IDrawable
 
     public virtual void Draw()
     {
-        Raylib.DrawRectangleRec(windowRect, GUIarea.guiColor);
+        Raylib.DrawRectangleRec(windowRect, GUIarea.GUIColor);
         TextHandling.DrawScreenCenteredText(messages, (int)windowRect.Y + 20, 60, 70, Color.Black);
         closeButton.Draw();
     }

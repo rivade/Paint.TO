@@ -4,13 +4,16 @@ public sealed class SettingsWindow : PopupWindow
 {
     private List<Button> buttons;
 
-    public SettingsWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
+    public unsafe SettingsWindow(ProgramManager programInstance, int width, int height, string[] messagesExtern) : base(programInstance, width, height, messagesExtern)
     {
+        fixed(Color* GUIColorPtr = &GUIarea.GUIColor)
+        fixed(Color* ToolButtonColorPtr = &ToolButton.toolButtonColor)
+        fixed(Color* BGColorPtr = &program.canvas.backgroundColor)
         buttons =
         [
-            new GUIColorButton(programInstance, new(340, 475, 1230, 100), () => GUIarea.colorInt++, "Change GUI color"),
-            new GUIColorButton(programInstance, new(340, 600, 1230, 100), () => ToolButton.colorSetInt++, "Change toolbutton color"),
-            new ChangeBackgroundButton(programInstance, new(340, 725, 1230, 100))
+            new SettingsChangeButton(program, new(340, 450, 1230, 100), "Change GUI color", "Set GUI color", GUIColorPtr),
+            new SettingsChangeButton(program, new(340, 565, 1230, 100), "Change button color", "Set button color", ToolButtonColorPtr),
+            new SettingsChangeButton(program, new(340, 680, 1230, 100), "Change background Color", "Set BG color", BGColorPtr)
         ];
     }
 

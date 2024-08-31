@@ -18,9 +18,9 @@ public sealed class ColorSelector : PopupWindow
         colorPresetsWindow = new(colorToChange);
         color = colorToChange;
 
-        fixed(Color* drawColorPtr = &DrawTool.drawingColor)
+        fixed (Color* drawColorPtr = &DrawTool.drawingColor)
 
-        if (colorToChange == drawColorPtr) paletteButtons = new();
+            if (colorToChange == drawColorPtr) paletteButtons = new();
         for (int i = 0; i < 4; i++)
         {
             sliders.Add(new(20, new(sliderX, 550 + i * sliderPadding, sliderWidth, sliderHeight)));
@@ -38,11 +38,11 @@ public sealed class ColorSelector : PopupWindow
         Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 400, 105, Color.White);
         Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 400, 100, new(color->R, color->G, color->B, color->A));
         DrawSliders();
-        
-        fixed(Color* drawColorPtr = &DrawTool.drawingColor)
-        if (color == drawColorPtr)
-            TextHandling.DrawScreenCenteredText(["Recent:"], 750, 40, 0, Color.Black);
-        
+
+        fixed (Color* drawColorPtr = &DrawTool.drawingColor)
+            if (color == drawColorPtr)
+                TextHandling.DrawScreenCenteredText(["Recent:"], 750, 40, 0, Color.Black);
+
         paletteButtons?.ForEach(p => p.Draw());
         colorPresetsWindow.Draw();
     }
@@ -51,12 +51,12 @@ public sealed class ColorSelector : PopupWindow
     {
         base.Logic(canvas, mousePos);
 
-        fixed(Color* drawColorPtr = &DrawTool.drawingColor)
-        if (color == drawColorPtr)
-        {
-            Queue<Color> tmp = new(PaletteButton.paletteColors);
-            paletteButtons.ForEach(p => { p.paletteColor = tmp.Dequeue(); p?.OnHover(mousePos); });
-        }
+        fixed (Color* drawColorPtr = &DrawTool.drawingColor)
+            if (color == drawColorPtr)
+            {
+                Queue<Color> tmp = new(PaletteButton.paletteColors);
+                paletteButtons.ForEach(p => { p.paletteColor = tmp.Dequeue(); p?.OnHover(mousePos); });
+            }
 
         color->R = (byte)sliders[0].GetValue(mousePos, 0, 255);
         color->G = (byte)sliders[1].GetValue(mousePos, 0, 255);
@@ -84,7 +84,7 @@ public sealed class ColorSelector : PopupWindow
         {
             Raylib.DrawText($"{values[i]}", (int)sliders[i].SliderBar.X - 50, (int)sliders[i].SliderBar.Y - 5, 30, Color.Black);
             Raylib.DrawRectangle((int)sliders[i].SliderBar.X - 3, (int)sliders[i].SliderBar.Y - 3, (int)sliders[i].SliderBar.Width + 6, (int)sliders[i].SliderBar.Height + 6, Color.White);
-            Raylib.DrawRectangle((int)sliders[i].SliderBar.X, (int)sliders[i].SliderBar.Y, (int)sliders[i].SliderBar.Width, (int)sliders[i].SliderBar.Height, GUIarea.guiColor);
+            Raylib.DrawRectangle((int)sliders[i].SliderBar.X, (int)sliders[i].SliderBar.Y, (int)sliders[i].SliderBar.Width, (int)sliders[i].SliderBar.Height, GUIarea.GUIColor);
             if (i < 3)
                 sliders[i].DrawGradient(Color.Black, colors[i]);
             else if (i == 3)
@@ -99,7 +99,7 @@ public class ColorPresets : IDrawable
     private Rectangle colorsRect;
     private Texture2D colorsTexture = Raylib.LoadTexture("Textures/colors.png");
     private Image colorsImg;
-    
+
     private unsafe Color* color;
 
     public unsafe ColorPresets(Color* colorToChange)
