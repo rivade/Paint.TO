@@ -4,7 +4,7 @@ using System.IO.Compression;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v2.51";
+    public const string CurrentVersion = "v2.52";
     private static string latestVersion;
     private static string GitHubToken = APIKey.GetAPIKey();
 

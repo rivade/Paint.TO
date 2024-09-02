@@ -1,6 +1,6 @@
 namespace DrawingProgram;
 
-public class ShapeAndSelectionToolPreviews : IDrawable
+public class ToolPreviews : IDrawable
 {
     private ProgramManager program;
     private RectangleSelect selectionTool;
@@ -9,7 +9,7 @@ public class ShapeAndSelectionToolPreviews : IDrawable
     private Circle previewCircle;
     private Line previewLine;
 
-    public ShapeAndSelectionToolPreviews(ProgramManager programInstance, RectangleSelect selectionToolInstance)
+    public ToolPreviews(ProgramManager programInstance, RectangleSelect selectionToolInstance)
     {
         program = programInstance;
         selectionTool = selectionToolInstance;
@@ -53,6 +53,11 @@ public class ShapeAndSelectionToolPreviews : IDrawable
                 Raylib.DrawTexture(selectionTool.selectionPreview, (int)selectionTool.selectionRec.X, (int)selectionTool.selectionRec.Y, Color.White);
                 Raylib.DrawRectangleRec(selectionTool.selectionRec, RectangleSelect.selectionColor);
                 selectionTool.corners?.ForEach(c => c.Draw());
+                break;
+
+            case PaintBrush: case Eraser: case Checker:
+                Vector2 mousePos = Raylib.GetMousePosition();
+                Raylib.DrawCircleLines((int)mousePos.X, (int)mousePos.Y, DrawTool.brushRadius, Color.Black);
                 break;
 
 

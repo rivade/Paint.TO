@@ -21,9 +21,13 @@ public class ProgramManager
         Raylib.InitWindow(1920, 1080, "Paint.TO");
         Raylib.ToggleFullscreen();
         Raylib.SetExitKey(KeyboardKey.Null);
+        Image icon = Raylib.LoadImage("Textures/Icons/paintbrush.png");
+        Raylib.SetWindowIcon(icon);
+        Raylib.UnloadImage(icon);
+
         canvas = new(this);
         interactables = ButtonCreator.GenerateButtons(this, tools, canvas);
-        drawables = [canvas, new ShapeAndSelectionToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
+        drawables = [canvas, new ToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
 

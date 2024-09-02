@@ -9,8 +9,6 @@ SETLOCAL
 SET sourceDir=update\publish
 SET targetDir=%~dp0
 
-SLEEP 5
-
 xcopy ""%sourceDir%\*"" ""%targetDir%"" /E /Y /C /H /R
 
 IF ERRORLEVEL 0 (
@@ -18,7 +16,7 @@ IF ERRORLEVEL 0 (
     ""%~dp0FinalProjTwo.exe""
     del ""%~f0""
 ) ELSE (
-    echo Error occurred during the copy process.
+    echo Error occurred during the updating process.
     pause
 )";
 
