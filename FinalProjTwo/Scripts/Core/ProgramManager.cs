@@ -34,6 +34,7 @@ public class ProgramManager
         popupWindow = new StartPopup(this, 800, 300, []);
         currentTool = tools.toolList[0];
 
+        UserPrefs.LoadSettings();
         CheckUpdate();
     }
 

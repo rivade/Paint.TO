@@ -4,7 +4,7 @@ public sealed class ToolButton : Button
 {
     public ITool tool { get; set; }
 
-    public static Color toolButtonColor = Color.Blue;
+    public static Color toolButtonColor;
 
     public ToolButton(ProgramManager programInstance, Rectangle buttonRect, string hovText) : base(programInstance, buttonRect)
     {

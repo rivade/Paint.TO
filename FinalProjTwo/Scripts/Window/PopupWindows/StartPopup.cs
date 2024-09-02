@@ -8,7 +8,7 @@ public sealed class StartPopup : PopupWindow
     {
         base.Draw();
         TextHandling.DrawScreenCenteredText([$"Paint.TO {VersionControl.CurrentVersion}"], (int)windowRect.Y + 30, 80, 0, Color.Black);
-        TextHandling.DrawScreenCenteredText(["Patch notes:", "-Added program task icon", "-Added size previews for drawingtools"],
+        TextHandling.DrawScreenCenteredText(["Patch notes:", "-Made user settings save between sessions", "-Alpha value of GUI area is now constant"],
                                             (int)windowRect.Y + 175, 20, 30, Color.Black);
     }
 }

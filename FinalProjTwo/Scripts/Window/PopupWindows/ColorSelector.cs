@@ -1,14 +1,14 @@
 namespace DrawingProgram;
 
-public sealed class ColorSelector : PopupWindow
+public sealed unsafe class ColorSelector : PopupWindow
 {
     private List<Slider> sliders = new();
     private List<PaletteButton> paletteButtons;
     private ColorPresets colorPresetsWindow;
 
-    private unsafe Color* color;
+    private Color* color;
 
-    public unsafe ColorSelector(ProgramManager programInstance, int width, int height, string[] messagesExtern, Color* colorToChange) : base(programInstance, width, height, messagesExtern)
+    public ColorSelector(ProgramManager programInstance, int width, int height, string[] messagesExtern, Color* colorToChange) : base(programInstance, width, height, messagesExtern)
     {
         int sliderWidth = 500;
         int sliderHeight = 15;
@@ -32,7 +32,7 @@ public sealed class ColorSelector : PopupWindow
         SetSliders();
     }
 
-    public unsafe override void Draw()
+    public override void Draw()
     {
         base.Draw();
         Raylib.DrawCircle(ProgramManager.ScreenWidth / 2, 400, 105, Color.White);
@@ -47,7 +47,7 @@ public sealed class ColorSelector : PopupWindow
         colorPresetsWindow.Draw();
     }
 
-    public unsafe override void Logic(Canvas canvas, Vector2 mousePos)
+    public override void Logic(Canvas canvas, Vector2 mousePos)
     {
         base.Logic(canvas, mousePos);
 
@@ -68,7 +68,7 @@ public sealed class ColorSelector : PopupWindow
         canvas.UpdateBackgroundColor();
     }
 
-    public unsafe void SetSliders()
+    public void SetSliders()
     {
         sliders[0].TranslateValueToSlider(color->R);
         sliders[1].TranslateValueToSlider(color->G);
@@ -76,7 +76,7 @@ public sealed class ColorSelector : PopupWindow
         sliders[3].TranslateValueToSlider(color->A);
     }
 
-    private unsafe void DrawSliders()
+    private void DrawSliders()
     {
         string[] values = ["R", "G", "B", "A"];
         Color[] colors = [Color.Red, Color.Green, Color.Blue, new(color->R, color->G, color->B, (byte)255)];
@@ -94,15 +94,15 @@ public sealed class ColorSelector : PopupWindow
     }
 }
 
-public class ColorPresets : IDrawable
+public unsafe class ColorPresets : IDrawable
 {
     private Rectangle colorsRect;
     private Texture2D colorsTexture = Raylib.LoadTexture("Textures/colors.png");
     private Image colorsImg;
 
-    private unsafe Color* color;
+    private Color* color;
 
-    public unsafe ColorPresets(Color* colorToChange)
+    public ColorPresets(Color* colorToChange)
     {
         colorsImg = Raylib.LoadImageFromTexture(colorsTexture);
         colorsRect = new(275, 450, colorsTexture.Width, colorsTexture.Height);
@@ -116,7 +116,7 @@ public class ColorPresets : IDrawable
         Raylib.DrawTexture(colorsTexture, (int)colorsRect.X, (int)colorsRect.Y, Color.White);
     }
 
-    public unsafe void Logic(Vector2 mousePos, Action setSliders)
+    public void Logic(Vector2 mousePos, Action setSliders)
     {
         if (Raylib.CheckCollisionPointRec(mousePos, colorsRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {

@@ -9,6 +9,7 @@ public sealed class CloseButton : Button
 
     public override void OnClick()
     {
+        UserPrefs.SaveSettings();
         Environment.Exit(0);
     }
 
