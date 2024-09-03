@@ -8,6 +8,7 @@ public class ProgramManager
 
     public Canvas canvas;
     private ToolFolder tools = new ToolFolder();
+    private UserPrefs userPrefs;
 
     private List<IMouseInteractable> interactables;
     private List<IDrawable> drawables;
@@ -26,7 +27,8 @@ public class ProgramManager
         Raylib.UnloadImage(icon);
 
         canvas = new(this);
-        interactables = ButtonCreator.GenerateButtons(this, tools, canvas);
+        userPrefs = new();
+        interactables = ButtonCreator.GenerateButtons(this, tools, canvas, userPrefs);
         drawables = [canvas, new ToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
         drawables.Add(new Icons());
@@ -34,7 +36,6 @@ public class ProgramManager
         popupWindow = new StartPopup(this, 800, 300, []);
         currentTool = tools.toolList[0];
 
-        UserPrefs.LoadSettings();
         CheckUpdate();
     }
 

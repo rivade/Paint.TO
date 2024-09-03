@@ -4,7 +4,13 @@ using System.IO.Compression;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v2.53";
+    public const string CurrentVersion = "v2.531";
+    public static readonly string[] PatchNotes = 
+    {
+        "-Bug fixes",
+        "-Made user settings save between sessions (v2.53)"
+    };
+
     private static string latestVersion;
     private static string GitHubToken = APIKey.GetAPIKey();
 

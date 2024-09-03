@@ -24,7 +24,7 @@ public static class ButtonCreator
         { typeof(OpenLayersButton), new Rectangle(NonToolButtonX - 140, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) }
     };
 
-    public static List<IMouseInteractable> GenerateButtons(ProgramManager program, ToolFolder inputTools, Canvas canvas)
+    public static List<IMouseInteractable> GenerateButtons(ProgramManager program, ToolFolder inputTools, Canvas canvas, UserPrefs userPrefs)
     {
         var interactableList = new List<IMouseInteractable>();
 
@@ -41,9 +41,11 @@ public static class ButtonCreator
         {
             Button button;
             if (buttonType == typeof(LoadButton) || buttonType == typeof(OpenLayersButton))
-            {
                 button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType], canvas);
-            }
+            
+            else if (buttonType == typeof(CloseButton))
+                button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType], userPrefs);
+
             else button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType]);
 
             interactableList.Add(button);

@@ -18,7 +18,7 @@ public class Canvas : IDrawable
     private Image backgroundImg;
     private Texture2D backgroundTxt;
     public bool isBackgroundEnabled;
-    public Color backgroundColor;
+    public static Color backgroundColor;
 
     private ProgramManager program;
 

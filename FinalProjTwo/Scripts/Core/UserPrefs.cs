@@ -1,12 +1,12 @@
 using DrawingProgram;
 using System.Text.Json;
 
-public static class UserPrefs
+public class UserPrefs
 {
     private static readonly string appFilePath = AppContext.BaseDirectory;
     private static readonly string jsonFilePath = Path.Combine(appFilePath, "Assets/Settings.json");
 
-    public static void SaveSettings()
+    public void SaveSettings()
     {
         ColorData guiColorData = new()
         {
@@ -29,7 +29,7 @@ public static class UserPrefs
         File.WriteAllText(jsonFilePath, content);
     }
 
-    public static void LoadSettings()
+    public UserPrefs() // Constructor loads the saved settings
     {
         string content = File.ReadAllText(jsonFilePath);
         ColorData[] colorSettings = JsonSerializer.Deserialize<ColorData[]>(content);

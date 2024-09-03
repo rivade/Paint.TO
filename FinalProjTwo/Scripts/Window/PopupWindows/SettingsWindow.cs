@@ -8,7 +8,7 @@ public sealed class SettingsWindow : PopupWindow
     {
         fixed(Color* GUIColorPtr = &GUIarea.GUIColor)
         fixed(Color* ToolButtonColorPtr = &ToolButton.toolButtonColor)
-        fixed(Color* BGColorPtr = &program.canvas.backgroundColor)
+        fixed(Color* BGColorPtr = &Canvas.backgroundColor)
         buttons =
         [
             new SettingsChangeButton(program, new(340, 450, 1230, 100), "Change GUI color", "Set GUI color", GUIColorPtr),
