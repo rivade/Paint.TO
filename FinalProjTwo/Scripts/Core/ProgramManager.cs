@@ -31,7 +31,6 @@ public class ProgramManager
         interactables = ButtonCreator.GenerateButtons(this, tools, canvas, userPrefs);
         drawables = [canvas, new ToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
         drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
-        drawables.Add(new Icons());
 
         popupWindow = new StartPopup(this, 800, 300, []);
         currentTool = tools.toolList[0];

@@ -6,9 +6,10 @@ public sealed class ToolButton : Button
 
     public static Color toolButtonColor;
 
-    public ToolButton(ProgramManager programInstance, Rectangle buttonRect, string hovText) : base(programInstance, buttonRect)
+    public ToolButton(ProgramManager programInstance, Rectangle buttonRect, string hovText, Texture2D buttonIcon) : base(programInstance, buttonRect)
     {
         infoWindow = new(hovText, (int)buttonRect.X, (int)buttonRect.Y - 40);
+        icon = buttonIcon;
     }
 
     private bool IsActiveTool() => program.currentTool == tool;

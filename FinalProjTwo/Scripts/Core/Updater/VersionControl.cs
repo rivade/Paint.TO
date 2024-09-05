@@ -1,11 +1,12 @@
 using DrawingProgram;
 using System.Text.Json;
 using System.IO.Compression;
+using System.Linq.Expressions;
 
 public static class VersionControl
 {
     public const string CurrentVersion = "v2.531";
-    public static readonly string[] PatchNotes = 
+    public static readonly string[] PatchNotes =
     {
         "-Bug fixes",
         "-Made user settings save between sessions (v2.53)"
@@ -32,28 +33,36 @@ public static class VersionControl
     {
         using (HttpClient client = new HttpClient())
         {
-            string url = "https://api.github.com/repos/rivade/Paint.TO/releases/latest";
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("request");
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("token", GitHubToken);
-
-            HttpResponseMessage response = await client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string json = await response.Content.ReadAsStringAsync();
 
-                using (JsonDocument doc = JsonDocument.Parse(json))
+                string url = "https://api.github.com/repos/rivade/Paint.TO/releases/latest";
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("request");
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("token", GitHubToken);
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    JsonElement root = doc.RootElement;
-                    if (root.TryGetProperty("tag_name", out JsonElement tagNameElement))
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    using (JsonDocument doc = JsonDocument.Parse(json))
                     {
-                        return tagNameElement.GetString();
+                        JsonElement root = doc.RootElement;
+                        if (root.TryGetProperty("tag_name", out JsonElement tagNameElement))
+                        {
+                            return tagNameElement.GetString();
+                        }
                     }
                 }
+                else
+                {
+                    program.popupWindow = new(program, 700, 200, ["An error has occured!", "Couldnt get latest ver"]);
+                }
             }
-            else
+            catch (HttpRequestException)
             {
-                program.popupWindow = new(program, 700, 200, ["An error has occured!", "Couldnt get latest ver"]);
+                program.popupWindow = new(program, 700, 200, ["An error has occured!", "Internet connection issue"]);
             }
             return null;
         }

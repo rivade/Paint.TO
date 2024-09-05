@@ -6,6 +6,7 @@ public sealed class CloseButton : Button
 
     public CloseButton(ProgramManager programInstance, Rectangle buttonRect, UserPrefs userPrefsExtern) : base(programInstance, buttonRect)
     {
+        icon = Raylib.LoadTexture("Textures/Icons/powericon.png");
         infoWindow = new("Close program", (int)buttonRect.X - Raylib.MeasureText("Close program", InfoText.FontSize) - 20, (int)buttonRect.Y);
         userPrefs = userPrefsExtern;
     }

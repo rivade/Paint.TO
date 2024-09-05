@@ -8,6 +8,7 @@ public sealed class SettingsButton : Button
     {
         settingsWindow = new(programInstance, 1300, 525, ["Settings"]);
         infoWindow = new("Settings", (int)buttonRect.X - Raylib.MeasureText("Settings", InfoText.FontSize) - 20, (int)buttonRect.Y);
+        icon = Raylib.LoadTexture("Textures/Icons/settings.png");
     }
 
     public override void OnClick()

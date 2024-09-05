@@ -8,6 +8,7 @@ public sealed class OpenLayersButton : Button
     {
         layerWindow = new(programInstance, canvasInstance, 1300, 500, ["Layers:"]);
         infoWindow = new("Layers", (int)buttonRect.X, (int)buttonRect.Y - 40);
+        icon = Raylib.LoadTexture("Textures/Icons/layers.png");
     }
 
     public override void OnClick()

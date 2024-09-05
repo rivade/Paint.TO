@@ -5,6 +5,7 @@ public sealed class SaveCanvasButton : Button
     public SaveCanvasButton(ProgramManager programInstance, Rectangle buttonRect) : base(programInstance, buttonRect)
     {
         infoWindow = new("Save image", (int)buttonRect.X - Raylib.MeasureText("Save image", InfoText.FontSize) - 20, (int)buttonRect.Y);
+        icon = Raylib.LoadTexture("Textures/Icons/saveicon.png");
     }
 
     public override void OnClick()

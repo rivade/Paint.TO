@@ -4,6 +4,7 @@ public abstract class Button : IMouseInteractable, IDrawable
 {
     protected ProgramManager program;
     public Rectangle buttonRect;
+    protected Texture2D icon;
 
     public Button(ProgramManager programInstance, Rectangle button)
     {
@@ -33,6 +34,7 @@ public abstract class Button : IMouseInteractable, IDrawable
     {
         if (isHoveredOn)
             infoWindow.Draw();
+        Raylib.DrawTexture(icon, (int)buttonRect.X, (int)buttonRect.Y, Color.White);
     }
 
     protected Color GetButtonColor(Color defaultColor, Color hoverColor, Color activeColor, bool isActive)

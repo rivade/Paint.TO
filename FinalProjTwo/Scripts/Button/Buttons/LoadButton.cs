@@ -8,6 +8,7 @@ public sealed class LoadButton : Button
     {
         canvas = canvasInstance;
         infoWindow = new("Open image", (int)buttonRect.X - Raylib.MeasureText("Open image", InfoText.FontSize) - 20, (int)buttonRect.Y);
+        icon = Raylib.LoadTexture("Textures/Icons/foldericon.png");
     }
 
     public override void OnClick()

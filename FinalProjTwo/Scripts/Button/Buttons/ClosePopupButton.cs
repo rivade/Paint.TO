@@ -4,12 +4,12 @@ public sealed class ClosePopupButton : Button
 {
     private const int buttonWidth = 50;
     private const int buttonHeight = 30;
-    private static Texture2D icon = Raylib.LoadTexture("Textures/Icons/x2.png");
 
     public ClosePopupButton(ProgramManager programInstance, Rectangle popupRect) : base(programInstance, new())
     {
-        buttonRect = new((popupRect.X + popupRect.Width) - buttonWidth, popupRect.Y, buttonWidth, buttonHeight);
+        buttonRect = new(popupRect.X + popupRect.Width - buttonWidth, popupRect.Y, buttonWidth, buttonHeight);
         infoWindow = new("Close window", (int)buttonRect.X - Raylib.MeasureText("Close window", InfoText.FontSize) - 20, (int)buttonRect.Y);
+        icon = Raylib.LoadTexture("Textures/Icons/x2.png");
     }
 
     public override void OnClick()

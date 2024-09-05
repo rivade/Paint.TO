@@ -35,7 +35,7 @@ public class Layer
             tool.Update(canvasImg, mousePos + Vector2.One * Canvas.CanvasOffset);
         }
 
-        canvasImg = UndoStroke(canvasImg);
+        canvasImg = UndoStroke();
     }
 
     private bool IsCursorOnCanvas(Vector2 mousePos)
@@ -63,15 +63,15 @@ public class Layer
         if (strokes.Count > 20)
             strokes = CleanupStrokeStack(strokes);
     }
-    Image UndoStroke(Image canvas)
+    public Image UndoStroke()
     {
         try
         {
-            return (Raylib.IsKeyPressed(KeyboardKey.Z) && program.popupWindow == null) ? strokes.Pop() : canvas;
+            return (Raylib.IsKeyPressed(KeyboardKey.Z) && program.popupWindow == null) ? strokes.Pop() : canvasImg;
         }
         catch (InvalidOperationException)
         {
-            return canvas;
+            return canvasImg;
         }
     }
 }
