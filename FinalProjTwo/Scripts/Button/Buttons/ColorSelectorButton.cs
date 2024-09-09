@@ -12,6 +12,7 @@ public sealed class ColorSelectorButton : Button
 
     public override void OnClick()
     {
+        colorSelectorWindow.SetSliders();
         program.popupWindow = colorSelectorWindow;
     }
 

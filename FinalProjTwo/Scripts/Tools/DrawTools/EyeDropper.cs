@@ -8,6 +8,7 @@ public sealed class EyeDropper : DrawTool
         if (Raylib.IsMouseButtonDown(MouseButton.Left) && Raylib.CheckCollisionPointRec(mousePos, canvasRect))
         {
             drawingColor = Raylib.GetImageColor(canvas, (int)mousePos.X, (int)mousePos.Y);
+            if (drawingColor.Equals(Color.Blank)) drawingColor = Canvas.backgroundColor;
         }
         base.Update(canvas, mousePos);
     }

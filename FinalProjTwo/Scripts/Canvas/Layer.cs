@@ -5,6 +5,7 @@ public class Layer
     public Image canvasImg;
     public Texture2D canvasTexture;
     public Stack<Image> strokes;
+    public Stack<Image> undos;
 
     public bool isVisible = true;
 
@@ -15,6 +16,7 @@ public class Layer
         program = programInstance;
         canvasImg = Raylib.GenImageColor(Canvas.CanvasImgSize, Canvas.CanvasImgSize, Color.Blank);
         strokes = new();
+        undos = new();
     }
 
     public void Draw()
@@ -33,9 +35,14 @@ public class Layer
         {
             PreStrokeSaveCanvas(canvasImg);
             tool.Update(canvasImg, mousePos + Vector2.One * Canvas.CanvasOffset);
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+            {
+                undos.Clear();
+            }
         }
 
-        canvasImg = UndoStroke();
+        if(!Raylib.IsKeyDown(KeyboardKey.LeftShift) && Raylib.IsKeyPressed(KeyboardKey.Z)) UndoStroke();
+        if(Raylib.IsKeyDown(KeyboardKey.LeftShift) && Raylib.IsKeyPressed(KeyboardKey.Z)) RedoStroke();
     }
 
     private bool IsCursorOnCanvas(Vector2 mousePos)
@@ -63,15 +70,29 @@ public class Layer
         if (strokes.Count > 20)
             strokes = CleanupStrokeStack(strokes);
     }
-    public Image UndoStroke()
+    public void UndoStroke()
     {
         try
         {
-            return (Raylib.IsKeyPressed(KeyboardKey.Z) && program.popupWindow == null) ? strokes.Pop() : canvasImg;
+            if (program.popupWindow == null)
+            {
+                undos.Push(Raylib.ImageCopy(canvasImg));
+                canvasImg = strokes.Pop();
+            }
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException) {}
+    }
+
+    public void RedoStroke()
+    {
+        try
         {
-            return canvasImg;
+            if (program.popupWindow == null)
+            {
+                strokes.Push(Raylib.ImageCopy(canvasImg));
+                canvasImg = undos.Pop();
+            }
         }
+        catch (InvalidOperationException) {}
     }
 }

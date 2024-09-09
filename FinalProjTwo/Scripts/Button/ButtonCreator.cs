@@ -22,7 +22,7 @@ public static class ButtonCreator
         Raylib.LoadTexture("Textures/Icons/rectangle.png"),
         Raylib.LoadTexture("Textures/Icons/line.png"),
         Raylib.LoadTexture("Textures/Icons/circle.png"),
-        Raylib.LoadTexture("Textures/Icons/rectselecticon.png")
+        Raylib.LoadTexture("Textures/Icons/rectselecticon.png"),
     };
 
     private static readonly Dictionary<Type, Rectangle> buttonPositions = new()
@@ -36,17 +36,17 @@ public static class ButtonCreator
         { typeof(LoadButton), new Rectangle(NonToolButtonX, 190, Button.ButtonSize, Button.ButtonSize) },
         { typeof(SettingsButton), new Rectangle(NonToolButtonX, 280, Button.ButtonSize, Button.ButtonSize) },
         { typeof(OpenLayersButton), new Rectangle(NonToolButtonX - 140, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) },
-        //{ typeof(UndoRedoButton), new Rectangle(NonToolButtonX - 230, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) },
-        //{ typeof(UndoRedoButton), new Rectangle(NonToolButtonX - 320, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) }
+        { typeof(RedoButton), new Rectangle(NonToolButtonX - 230, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) },
+        { typeof(UndoButton), new Rectangle(NonToolButtonX - 320, Canvas.CanvasHeight + 10, Button.ButtonSize, Button.ButtonSize) }
     };
 
     public static List<IMouseInteractable> GenerateButtons(ProgramManager program, ToolFolder inputTools, Canvas canvas, UserPrefs userPrefs)
     {
         var interactableList = new List<IMouseInteractable>();
 
-        for (int i = 0; i < inputTools.toolList.Count(); i++)
+        for (int i = 0; i < toolNames.Count(); i++)
         {
-            var toolButton = new ToolButton(program, new Rectangle(i * 90 + ButtonPadding, Canvas.CanvasHeight + ButtonPadding, Button.ButtonSize, Button.ButtonSize), toolNames[i], toolIcons[i])
+            ToolButton toolButton = new(program, new Rectangle(i * 90 + ButtonPadding, Canvas.CanvasHeight + ButtonPadding, Button.ButtonSize, Button.ButtonSize), toolNames[i], toolIcons[i])
             {
                 tool = inputTools.toolList[i]
             };
@@ -56,16 +56,12 @@ public static class ButtonCreator
         foreach (var buttonType in buttonPositions.Keys)
         {
             Button button;
-            if (buttonType == typeof(LoadButton) || buttonType == typeof(OpenLayersButton))
+            if (buttonType == typeof(LoadButton) || buttonType == typeof(OpenLayersButton)
+                || buttonType == typeof(UndoButton)|| buttonType == typeof(RedoButton))
                 button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType], canvas);
 
             else if (buttonType == typeof(CloseButton))
                 button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType], userPrefs);
-
-            else if (buttonType == typeof(UndoRedoButton))
-                button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType], 
-                () => canvas.layers[canvas.currentLayer].canvasImg = canvas.layers[canvas.currentLayer].UndoStroke());
-
 
             else button = (Button)CreateInstance(buttonType, program, buttonPositions[buttonType]);
 

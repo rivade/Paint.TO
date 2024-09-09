@@ -1,15 +1,14 @@
 using DrawingProgram;
 using System.Text.Json;
 using System.IO.Compression;
-using System.Linq.Expressions;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v2.531";
+    public const string CurrentVersion = "v2.532";
     public static readonly string[] PatchNotes =
     {
-        "-Bug fixes",
-        "-Made user settings save between sessions (v2.53)"
+        "-Added redo function & undo/redo buttons",
+        "-Bug fixes"
     };
 
     private static string latestVersion;
@@ -35,7 +34,6 @@ public static class VersionControl
         {
             try
             {
-
                 string url = "https://api.github.com/repos/rivade/Paint.TO/releases/latest";
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("request");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("token", GitHubToken);
