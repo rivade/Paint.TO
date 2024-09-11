@@ -74,7 +74,7 @@ public class Layer
     {
         try
         {
-            if (program.popupWindow == null)
+            if (program.popupWindow == null && strokes.Count > 0)
             {
                 undos.Push(Raylib.ImageCopy(canvasImg));
                 canvasImg = strokes.Pop();
@@ -87,7 +87,7 @@ public class Layer
     {
         try
         {
-            if (program.popupWindow == null)
+            if (program.popupWindow == null && undos.Count > 0)
             {
                 strokes.Push(Raylib.ImageCopy(canvasImg));
                 canvasImg = undos.Pop();
