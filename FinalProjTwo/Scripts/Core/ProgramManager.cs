@@ -9,9 +9,11 @@ public class ProgramManager
     public Canvas canvas;
     private ToolFolder tools = new ToolFolder();
     private UserPrefs userPrefs;
+    private PerspectiveCamera camera;
 
     private List<IMouseInteractable> interactables;
     private List<IDrawable> drawables;
+    private List<IDrawable> guiAssets;
 
     public ITool currentTool;
     public PopupWindow popupWindow;
@@ -26,11 +28,13 @@ public class ProgramManager
         Raylib.SetWindowIcon(icon);
         Raylib.UnloadImage(icon);
 
-        canvas = new(this);
+        camera = new();
+        canvas = new(this, camera);
         userPrefs = new();
         interactables = ButtonCreator.GenerateButtons(this, tools, canvas, userPrefs);
-        drawables = [canvas, new ToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect)), new GUIarea()];
-        drawables.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
+        drawables = [canvas, new ToolPreviews(this, (RectangleSelect)tools.toolList.Find(t => t is RectangleSelect), camera)];
+        guiAssets = [new GUIarea()];
+        guiAssets.AddRange(interactables.Where(i => i is IDrawable).Cast<IDrawable>());
 
         popupWindow = new StartPopup(this, 800, 300, []);
         currentTool = tools.toolList[0];
@@ -49,7 +53,11 @@ public class ProgramManager
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.White);
 
+        Raylib.BeginMode2D(camera.c);
         drawables.ForEach(d => d.Draw());
+        Raylib.EndMode2D();
+
+        guiAssets.ForEach(g => g.Draw());
         popupWindow?.Draw();
 
         Raylib.EndDrawing();
@@ -59,18 +67,20 @@ public class ProgramManager
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
+        camera.Logic(mousePos);
+
         if (Raylib.IsMouseButtonPressed(MouseButton.Left)) isMouseInputEnabled = true;
 
         popupWindow?.Logic(canvas, mousePos);
         if (popupWindow == null && isMouseInputEnabled)
-            canvas.Update(mousePos, currentTool);
+            canvas.Update(camera.projectCameraPointToCanvas(mousePos), currentTool);
 
         interactables.ForEach(i => i.OnHover(mousePos));
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Escape))
             popupWindow = null;
 
-        DrawTool.UpdateLastMousePos(mousePos);
+        DrawTool.UpdateLastMousePos(camera.projectCameraPointToCanvas(mousePos));
     }
 
     public void Run()

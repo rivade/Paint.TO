@@ -29,9 +29,10 @@ public class Layer
         }
     }
 
-    public void Logic(Vector2 mousePos, ITool tool)
+    public void Logic(Vector2 mousePos, ITool tool, PerspectiveCamera camera)
     {
-        if (IsCursorOnCanvas(mousePos))
+        if (IsCursorOnCanvas
+        (mousePos, camera.relativeCanvasWidth + camera.c.Target.X, camera.relativeCanvasHeight + camera.c.Target.Y))
         {
             PreStrokeSaveCanvas(canvasImg);
             tool.Update(canvasImg, mousePos + Vector2.One * Canvas.CanvasOffset);
@@ -45,9 +46,9 @@ public class Layer
         if(Raylib.IsKeyDown(KeyboardKey.LeftShift) && Raylib.IsKeyPressed(KeyboardKey.Z)) RedoStroke();
     }
 
-    private bool IsCursorOnCanvas(Vector2 mousePos)
+    private bool IsCursorOnCanvas(Vector2 mousePos, float relativeCanvasWidth, float relativeCanvasHeight)
     {
-        return mousePos.X < Canvas.CanvasWidth && mousePos.Y < Canvas.CanvasHeight;
+        return mousePos.X < relativeCanvasWidth && mousePos.Y < relativeCanvasHeight;
     }
 
     Stack<Image> CleanupStrokeStack(Stack<Image> strokes)

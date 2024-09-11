@@ -21,10 +21,12 @@ public class Canvas : IDrawable
     public static Color backgroundColor;
 
     private ProgramManager program;
+    private PerspectiveCamera camera;
 
-    public Canvas(ProgramManager programInstance)
+    public Canvas(ProgramManager programInstance, PerspectiveCamera cameraInstance)
     {
         program = programInstance;
+        camera = cameraInstance;
         layers.Add(new(program));
         backgroundColor = Color.White;
         backgroundImg = Raylib.GenImageColor(CanvasWidth, CanvasHeight, backgroundColor);
@@ -33,10 +35,11 @@ public class Canvas : IDrawable
     }
 
 
-    public void Update(Vector2 mousePos, ITool tool) => layers[currentLayer].Logic(mousePos, tool);
+    public void Update(Vector2 mousePos, ITool tool) => layers[currentLayer].Logic(mousePos, tool, camera);
 
     public void SaveProject(string fileName, string directory)
     {
+        camera.c.Zoom = 1;
         string path = directory + @"\" + fileName;
         Image temp = Raylib.ImageCopy(backgroundImg);
         Raylib.ImageDraw(ref temp, CropCanvas(FuseLayers(layers), Raylib.GenImageColor(CanvasWidth, CanvasHeight, Color.Blank)), new(0, 0, CanvasWidth, CanvasHeight), new(0, 0, CanvasWidth, CanvasHeight), Color.White);

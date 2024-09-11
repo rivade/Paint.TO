@@ -8,11 +8,13 @@ public class ToolPreviews : IDrawable
     private Rectangle previewRect;
     private Circle previewCircle;
     private Line previewLine;
+    private PerspectiveCamera camera;
 
-    public ToolPreviews(ProgramManager programInstance, RectangleSelect selectionToolInstance)
+    public ToolPreviews(ProgramManager programInstance, RectangleSelect selectionToolInstance, PerspectiveCamera cameraExtern)
     {
         program = programInstance;
         selectionTool = selectionToolInstance;
+        camera = cameraExtern;
     }
 
     private void SetPreviewShapes()
@@ -56,7 +58,7 @@ public class ToolPreviews : IDrawable
                 break;
 
             case PaintBrush: case Eraser: case Checker:
-                Vector2 mousePos = Raylib.GetMousePosition();
+                Vector2 mousePos = camera.projectCameraPointToCanvas(Raylib.GetMousePosition());
                 Raylib.DrawCircleLines((int)mousePos.X, (int)mousePos.Y, DrawTool.brushRadius, Color.Black);
                 break;
 

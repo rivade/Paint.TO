@@ -4,11 +4,11 @@ using System.IO.Compression;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v2.532";
+    public const string CurrentVersion = "3.0";
     public static readonly string[] PatchNotes =
     {
-        "-Added redo function & undo/redo buttons",
-        "-Bug fixes"
+        "-Added ability to zoom (up & down arrows)",
+        "-While zoomed it is possible to move cam with WASD"
     };
 
     private static string latestVersion;
