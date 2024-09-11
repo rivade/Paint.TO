@@ -4,7 +4,7 @@ using System.IO.Compression;
 
 public static class VersionControl
 {
-    public const string CurrentVersion = "v3.0";
+    public const string CurrentVersion = "v3.01";
     public static readonly string[] PatchNotes =
     {
         "-Added ability to zoom (up & down arrows)",
