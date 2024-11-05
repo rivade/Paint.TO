@@ -6,6 +6,7 @@ using DrawingProgram;
 
 public class APIKey
 {
+    // (i know this shouldnt be on github i included it for my girlfriend lmao)
     // Security is not important here, the key only allows for reading of public repositories
     // GitHub wouldn't let me submit with the API token written plainly in the code lol
     private const string EncryptedKey = "CPtoaPtsz9+JlIyQ7sFPShDWgtN6suuu1mZOMqTjvP+jcT8pQ9dMQ2WIyaIjdnDp";
